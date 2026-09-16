@@ -1,0 +1,35 @@
+# ====================================================================
+# SAJIM Quantitative Strategy Manifest Template
+# Drop this file into any strategy folder to automatically register,
+# benchmark, and stress-test your strategy in the SAJIM platform.
+# ====================================================================
+
+name: "Template_Alpha_Strategy"
+version: "1.0.0"
+author: "SAJIM Quant Lab"
+description: "High-expectancy momentum or mean-reversion strategy template."
+
+# Runtime Engine:
+# Options: "python:backtrader" | "python:custom" | "mt5:headless" | "pine:imported" | "deriv:websocket"
+engine: "python:backtrader"
+
+# Entrypoint script or compiled binary
+entrypoint: "strategy.py"
+
+# Baseline Instrument & Timeframe
+symbol: "EURUSD"
+timeframe: "H1"
+
+# Risk & Execution Parameters
+parameters:
+  fast_period: 14
+  slow_period: 50
+  risk_per_trade_pct: 1.0
+  stop_loss_atr_mult: 1.5
+  take_profit_atr_mult: 3.0
+
+# Execution Assumptions
+assumptions:
+  spread_model: "floating"       # "floating" | "constant"
+  slippage_pips: 0.2
+  commission_per_lot: 6.00

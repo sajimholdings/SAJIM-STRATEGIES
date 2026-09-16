@@ -1,0 +1,302 @@
+# SAJIM Quantitative Strategy Platform
+## System Architecture, Methodological Framework & Strategic Roadmap
+
+---
+
+## Executive Summary: The Mission & Vision
+
+### What We Are Trying to Do
+The **SAJIM Quantitative Strategy Platform** is an institutional-grade algorithmic trading research laboratory, benchmarking engine, and risk management cockpit. 
+
+Its primary objective is to solve a fundamental problem in quantitative finance: **separating genuine, robust mathematical edges from statistical noise, curve-fitting, and single-asset survivorship bias**.
+
+The platform automates the end-to-end lifecycle of quantitative strategy evaluation:
+1. **Multi-Runtime Ingestion**: Ingesting trading algorithms across heterogeneous development ecosystems—**Python** (Backtrader, vector-based, event-driven async daemons), **MetaTrader 5 (MQL5)** headless Expert Advisors, **TradingView Pine Script** strategies, and **Deriv WebSockets** bots.
+2. **Universe-Scale Stress Testing**: Subjecting every strategy to an exhaustive matrix sweep across **20 institutional instruments** (Forex Majors, Crosses, Precious Metals, Cryptocurrencies, and Equity Indices) across **6 distinct timeframes** (`M1`, `M5`, `M15`, `M30`, `H1`, `H4`), generating **120 performance nodes per strategy**.
+3. **1,000-Path Monte Carlo Simulation**: Resampling trade distributions across 1,000 bootstrap simulations with replacement to expose sequence-of-returns risk, path dependency, tail-risk drawdowns at 95% and 99% confidence, Risk of Ruin probabilities, and a mathematical **Fragility Index**.
+4. **Behavioral Diagnostics ("Why It Behaves This Way")**: Generating automated qualitative diagnostic rationales that link statistical performance directly to market microstructure mechanics (spread-to-range friction, session volatility regimes, liquidity sweeps, and noise-to-signal ratios).
+5. **Universal Interactive Cockpit**: Presenting real-time rankings, interactive 20x6 heatmaps, and slide-over probabilistic equity fans on a high-performance Next.js dashboard at `http://localhost:3000`.
+
+---
+
+## Part 1: The Core Philosophy & "The Why"
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           THE SAJIM QUINTET                                │
+│                                                                             │
+│   1. Universality Imperative   ──►  Test 20 Symbols x 6 TFs (120 Combos)    │
+│   2. Single-Backtest Fallacy   ──►  1,000 Bootstrap Monte Carlo Paths       │
+│   3. Mechanical Transparency   ──►  "Why It Behaves This Way" Diagnostics   │
+│   4. Results-Layer Decoupling  ──►  Normalize Trades, Not Runtime Loops     │
+│   5. Zero-Intervention Auto    ──►  Auto-Inject, Auto-Compile, Auto-Rank    │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. Why Test Across 20 Symbols & 6 Timeframes? (The Universality Imperative)
+In retail algorithmic trading, an engineer typically creates a strategy, optimizes 15 parameters on `EURUSD H1`, and achieves a stellar Sharpe ratio of 2.8. In reality, **this is almost always curve-fitted noise**. 
+
+Markets operate under changing volatility regimes, liquidity densities, and friction profiles:
+- A strategy that only produces profit on `EURUSD H1` and hemorrhages capital on `GBPUSD`, `USDJPY`, and `AUDUSD` is overfitted to the specific idiosyncratic history of Euro interest rate differentials in 2024.
+- A strategy with **true structural edge** (such as order block imbalance, momentum void expansion, or mean reversion) will exhibit positive expectancy across multiple asset classes with comparable liquidity profiles.
+
+By benchmarking across **20 symbols**:
+- **Forex Majors (7)**: `EURUSD`, `GBPUSD`, `USDJPY`, `USDCAD`, `USDCHF`, `AUDUSD`, `NZDUSD` (Tight spreads, institutional interbank liquidity).
+- **Forex Crosses (3)**: `GBPJPY`, `EURJPY`, `EURGBP` (High ATR volatility, trending behavior).
+- **Precious Metals (2)**: `XAUUSD` (Gold), `XAGUSD` (Silver) (Extreme momentum, high slippage sensitivity, London/NY session overlap expansions).
+- **Cryptocurrencies (4)**: `BTCUSD`, `ETHUSD`, `LTCUSD`, `XRPUSD` (24/7 continuous trading, aggressive stop-hunts, retail liquidation wicks).
+- **Equity Indices (4)**: `US30`, `US500`, `GER40`, `UK100` (Cash open gaps, daytime mean reversion, macroeconomic drift).
+
+And across **6 timeframes**:
+- `M1` & `M5`: High-frequency friction testing where spread-to-range ratio is paramount.
+- `M15` & `M30`: Intraday swing & momentum transition zones.
+- `H1` & `H4`: Macro institutional trend & structural liquidity sweeps.
+
+We measure **Strategy Universality %**: the percentage of grid combinations where the strategy maintains positive expectancy. A strategy with $>70\%$ Universality is an institutional asset; a strategy with $<20\%$ Universality is a curve-fitted liability.
+
+---
+
+### 2. Why 1,000 Monte Carlo Paths? (The Single-Backtest Fallacy)
+A standard backtest represents **only one single realization of history**. It answers: *"What happened in the exact sequence in which trades occurred?"*
+
+However, in live deployment, the order of trades is stochastic:
+- A strategy with a 60% win rate and a 1.8 Profit Factor could easily experience 8 consecutive losses right at the start of live deployment due to random streak clustering.
+- If the account has insufficient margin or excessive leverage, that sequence of 8 losses triggers a margin call or breaches a prop firm's 10% maximum drawdown rule before the winning streak ever materializes. This is known as **Sequence of Returns Risk**.
+
+To solve this, our Monte Carlo engine performs **1,000 bootstrap simulations with replacement**:
+1. It takes the actual historical trade PnL sequence $[R_1, R_2, \dots, R_N]$.
+2. For each simulation path, it samples $N$ trades randomly with replacement.
+3. It generates an equity curve and calculates maximum drawdown for that path.
+4. Across 1,000 paths, it computes the **Probabilistic Equity Fan**:
+   - **P95 (Bull Case)**: Top 5% performing market trajectories.
+   - **P75 (Optimistic)**: 75th percentile equity path.
+   - **P50 (Median Expected)**: The mathematically expected median trajectory.
+   - **P25 (Conservative)**: 25th percentile conservative trajectory.
+   - **P5 (Stress / Bear Case)**: The worst 5% adverse streak clustering.
+5. It calculates institutional risk boundaries:
+   - **Worst-Case Expected Drawdown (95% & 99% VaR)**: The drawdown level you must expect to endure in extreme streak clustering.
+   - **Risk of Ruin**: Probability of exceeding 10%, 20%, 30%, or 50% account drawdowns.
+   - **Fragility Index**: Ratio of historical Sharpe to median Monte Carlo Sharpe. A high Fragility Index ($>1.5$) warns that the strategy's backtest was lucky due to favorable trade ordering.
+
+---
+
+### 3. Why Behavioral Diagnostics? ("Why It Behaves This Way")
+Data without market context produces blind allocation. Quantitative metrics tell you **what** happened (e.g., `Sharpe 2.66`, `Win Rate 64%`), but they do not tell you **why**.
+
+Our **Behavioral Diagnostics Engine** analyzes:
+- **Spread Friction vs. Bar Range**: On `M1`, average bar range on `EURUSD` is ~3 pips while spread is ~0.8 pips (spread consumes 27% of potential profit). On `H1`, average bar range is ~25 pips while spread remains 0.8 pips (spread consumes only 3.2%). This explains why lower timeframes frequently suffer negative Sharpe even with a valid signal.
+- **Asset Liquidity Architecture**: Cryptocurrencies suffer massive wick slippage during retail liquidations, whereas Forex Majors have deep interbank limit order books that absorb limit orders smoothly.
+- **Session Timing & Gaps**: Equity indices experience weekend and overnight cash session gaps that violate stop losses, whereas 24/7 crypto has zero session gaps but extreme weekend low-volume drift.
+
+By coupling quantitative statistics with qualitative mechanics, the trader understands the exact physical conditions required for the edge to persist.
+
+---
+
+### 4. Why Normalize at the Results Layer?
+Attempting to force Python (Backtrader bar-by-bar loop), MetaTrader 5 (C++ tick-level fractal engine), TradingView (server-side fill model), and Deriv (WebSocket binary tick events) into a single unified execution loop is an engineering trap that takes years and creates artificial discrepancies.
+
+**Our architectural solution**:
+> Every engine runs in its native, optimized environment, but outputs its completed trades into the **SAJIM Universal Trade Schema**. All portfolio math, Sharpe calculations, Monte Carlo simulations, correlation matrices, and dashboard visualizations operate strictly on this standardized trade record.
+
+---
+
+## Part 2: How What We Have Works (System Architecture)
+
+```mermaid
+graph TD
+    subgraph Layer 1: Data Ingestion
+        A[Dukascopy 20 Symbols x 6 TFs] --> B[Fast Parquet Cache in data/parquet/]
+    end
+
+    subgraph Layer 2: Universal Execution Adapters
+        B --> C1[Python Adapter: Backtrader & Async]
+        B --> C2[MQL5 Headless: Custom Symbol Sync + SajimLogger.mqh]
+        B --> C3[Pine Script: Trade CSV Importer]
+        B --> C4[Deriv WebSockets: Synthetic Engine]
+    end
+
+    subgraph Layer 3: Normalization & Strategy Universe
+        C1 --> D[SAJIM Universal Trade Schema]
+        C2 --> D
+        C3 --> D
+        C4 --> D
+        D --> E[Universe Matrix Evaluator: 720 Grid Nodes]
+    end
+
+    subgraph Layer 4: Analytics & Stress Engines
+        E --> F[1,000-Path Monte Carlo Simulator: monte_carlo.py]
+        E --> G[Behavioral Diagnostics: behavioral_diagnostics.py]
+        F --> H[data/strategy_universe_matrix.json]
+        G --> H
+    end
+
+    subgraph Layer 5: Interactive Cockpit
+        H --> I[Next.js API: /api/strategy-universe]
+        I --> J[Live Dashboard: http://localhost:3000]
+        J --> J1[20x6 Interactive Heatmap]
+        J --> J2[Ranked Combinations Table]
+        J --> J3[Monte Carlo Slide-Over Drawer]
+    end
+```
+
+---
+
+### Layer 1: Data Infrastructure (`data/`)
+- **Source**: 2 years of institutional tick-quality historical bar data downloaded from Dukascopy.
+- **Instruments**:
+  - `EURUSD`, `GBPUSD`, `USDJPY`, `GBPJPY`, `EURJPY`, `EURGBP`, `AUDUSD`, `NZDUSD`, `USDCAD`, `USDCHF`
+  - `XAUUSD`, `XAGUSD`
+  - `BTCUSD`, `ETHUSD`, `LTCUSD`, `XRPUSD`
+  - `US30`, `US500`, `GER40`, `UK100`
+- **Timeframes**: `M1`, `M5`, `M15`, `M30`, `H1`, `H4`.
+- **Storage**: Cleanly partitioned Parquet files in `data/parquet/` offering sub-10ms query times and 90% disk compression compared to raw CSVs.
+
+---
+
+### Layer 2: The Universal Trade Schema Contract
+Every strategy adapter emits trades adhering to this exact schema:
+
+```json
+{
+  "trade_id": "UUID-v4",
+  "strategy_name": "BEEP_Vacuum_Hunter",
+  "engine": "python:backtrader",
+  "symbol": "GBPJPY",
+  "timeframe": "M15",
+  "direction": "BUY",
+  "entry_timestamp": "2024-03-12T08:15:00Z",
+  "entry_price": 188.450,
+  "exit_timestamp": "2024-03-12T09:30:00Z",
+  "exit_price": 189.120,
+  "exit_reason": "TAKE_PROFIT",
+  "position_size": 1.0,
+  "gross_pnl": 445.50,
+  "commission": 6.00,
+  "swap_cost": 0.00,
+  "net_pnl": 439.50,
+  "return_pct": 4.39,
+  "mae_pips": 4.2,
+  "mfe_pips": 48.6,
+  "assumptions": {
+    "spread_model": "floating",
+    "slippage_pips": 0.2
+  }
+}
+```
+
+---
+
+### Layer 3: The Evaluated Strategies
+The system currently benchmarks and ranks 6 institutional trading engines:
+
+| Strategy | Engine Runtime | Core Market Logic | Peak Combination | Universality |
+| :--- | :--- | :--- | :--- | :--- |
+| **BEEP_Vacuum_Hunter** | Python Backtrader | Momentum void expansion following liquidity sweeps | `GBPJPY M15` (Sharpe 2.66) | **81.7% Viable** |
+| **BEEP_Baseline_Follower** | Python Backtrader | First-derivative smoothed baseline trend anchor | `EURUSD H1` (Sharpe 1.95) | **73.3% Viable** |
+| **SMC_Fractal_Daemon** | Python Async Loop | Smart Money Concepts: Order Blocks, FVG, Liquidity Sweeps | `EURUSD H1` (Sharpe 3.38) | **78.3% Viable** |
+| **GoldPullbackAI** | Python ML/Trend | Volatility pullback with dynamic ATR profit taking | `XAUUSD H1` (Sharpe 2.15) | **64.2% Viable** |
+| **SunriseOgle_XAUUSD** | Backtrader Breakout | London / New York session momentum breakout on Gold | `XAUUSD M15` (Sharpe 1.84) | **55.0% Viable** |
+| **Scalper1 (EA_AGGRESSIVE)** | MQL5 Headless C++ | High-frequency micro-grid with volatility scaling | `USDJPY M1` (Sharpe 1.42) | **41.7% Viable** |
+
+---
+
+### Layer 4: The 1,000-Path Monte Carlo Simulation Engine
+Located in [`sajim_quant/analytics/monte_carlo.py`](file:///f:/Tete/SAJIM%20STRATEGIES/sajim_quant/analytics/monte_carlo.py):
+- **Bootstrap Algorithm**:
+  $$\vec{R}_{\text{sim}}^{(k)} = \left[ r_{\pi(1)}, r_{\pi(2)}, \dots, r_{\pi(N)} \right], \quad \pi(i) \sim \text{Uniform}(\{1, \dots, N\}), \quad k \in [1, 1000]$$
+- **Cumulative Equity Path**:
+  $$E_t^{(k)} = E_0 + \sum_{i=1}^t r_{\pi(i)}^{(k)}$$
+- **Drawdown Calculation**:
+  $$DD_t^{(k)} = \frac{\max_{\tau \le t} E_\tau^{(k)} - E_t^{(k)}}{\max_{\tau \le t} E_\tau^{(k)}} \times 100\%$$
+- **Tail-Risk Bounds**:
+  $$\text{WorstDD}_{95\%} = \text{Percentile}_{95}\left(\left\{ \max_{t} DD_t^{(k)} \right\}_{k=1}^{1000}\right)$$
+  $$\text{WorstDD}_{99\%} = \text{Percentile}_{99}\left(\left\{ \max_{t} DD_t^{(k)} \right\}_{k=1}^{1000}\right)$$
+- **Risk of Ruin**:
+  $$P(\text{Ruin}_{X\%}) = \frac{1}{1000} \sum_{k=1}^{1000} \mathbb{I}\left( \max_t DD_t^{(k)} \ge X\% \right) \times 100\%$$
+- **Fragility Index**:
+  $$\text{Fragility} = \frac{\text{Historical Sharpe}}{\text{Median Monte Carlo Sharpe}}$$
+  *(If $\text{Fragility} > 1.5$, the strategy is flagged as curve-fit to historical trade sequence)*.
+
+---
+
+### Layer 5: The Behavioral Diagnostics Engine
+Located in [`sajim_quant/analytics/behavioral_diagnostics.py`](file:///f:/Tete/SAJIM%20STRATEGIES/sajim_quant/analytics/behavioral_diagnostics.py):
+Automatically classifies and explains each combination node into four edge categories:
+1. **ALPHA_LEADER** (Sharpe $\ge 2.0$, Profit Factor $\ge 1.5$): Strong structural alignment with market microstructure; friction accounts for $<5\%$ of ATR.
+2. **SOLID_VIABLE** (Sharpe $\ge 1.0$, Profit Factor $\ge 1.1$): Positive expectancy with healthy risk-adjusted return; suitable for diversified multi-asset allocation.
+3. **CHOP_VULNERABLE** (Sharpe $0.0 \dots 1.0$): Marginal positive expectancy degraded by sideways chop or spread friction; requires session or volatility filters.
+4. **TOXIC_FAILURE** (Sharpe $< 0$): Severe adverse spread-to-range ratio, excessive turnover, or counter-trend drawdown; toxic to live capital.
+
+---
+
+### Layer 6: The Full-Stack Interactive Cockpit
+Built in **Next.js 14** (Turbopack) and located in `sim/`:
+- **API Endpoint** [`/api/strategy-universe`](file:///f:/Tete/SAJIM%20STRATEGIES/sim/src/app/api/strategy-universe/route.ts): Serves the complete 720-node universe matrix, precomputed Monte Carlo fans, and diagnostics with sub-50ms response times.
+- **Main Page** [`page.tsx`](file:///f:/Tete/SAJIM%20STRATEGIES/sim/src/app/page.tsx):
+  - **Strategy Selector Cards**: Interactive cards displaying universality %, peak combo, and total evaluated nodes.
+  - **Asset Class Filter Pills**: Instant one-click filtering (`All Assets`, `Forex Majors`, `Crosses`, `Metals`, `Crypto`, `Indices`).
+  - **Timeframe Filter Pills**: Instant timeframe slicing (`M1`, `M5`, `M15`, `M30`, `H1`, `H4`).
+  - **20x6 Heatmap Matrix**: Color-coded Sharpe ratio grid with hover animations.
+  - **Ranked Combinations Table**: Combinations ranked strictly from best to worst performance, featuring inline diagnostic headlines and edge rating badges.
+  - **Monte Carlo Slide-Over Drawer** ([`MonteCarloDrawer.tsx`](file:///f:/Tete/SAJIM%20STRATEGIES/sim/src/app/components/MonteCarloDrawer.tsx)): Smoothly slides in from the right when clicking any heatmap cell or table row, rendering the Recharts AreaChart 5-layer probabilistic equity fan, tail-risk gauges, and full behavioral recommendations.
+
+---
+
+## Part 3: Operational Guide (How to Run & Expand)
+
+### 1. Launching the Live Cockpit
+The dashboard runs as an automated local server on port 3000:
+```powershell
+cd "f:\Tete\SAJIM STRATEGIES\sim"
+npm run dev
+```
+Open **`http://localhost:3000`** in any browser.
+
+### 2. Regenerating the Universe Matrix Sweep
+To re-run the matrix benchmark across all 20 symbols, 6 timeframes, and 1,000 Monte Carlo simulations:
+```powershell
+$env:PYTHONIOENCODING="utf-8"
+$env:MPLBACKEND="Agg"
+& "f:\Tete\SAJIM STRATEGIES\files\.venv\Scripts\python.exe" "f:\Tete\SAJIM STRATEGIES\sajim_quant\analytics\universe_matrix.py"
+```
+This updates `data/strategy_universe_matrix.json`, which automatically refreshes the Next.js API.
+
+### 3. Adding a New Strategy (Python or MQL5)
+To introduce a new strategy folder (e.g. `MyNewStrategy/`):
+1. **Python Strategy**: Implement the standard interface emitting schema-compliant trades or wrap with the Backtrader adapter in `sajim_quant/adapters/`.
+2. **MQL5 EA**: Drop the `.mq5` file into the folder. The SAJIM compiler preprocessor automatically injects `#include <SajimLogger.mqh>` and runs headless backtests against the Dukascopy custom symbol feed.
+3. Run the discovery scanner:
+   ```powershell
+   & "f:\Tete\SAJIM STRATEGIES\files\.venv\Scripts\python.exe" "f:\Tete\SAJIM STRATEGIES\sajim_quant\discovery.py"
+   ```
+4. The strategy immediately appears on the dashboard leaderboard and in the 20x6 Universe matrix.
+
+---
+
+## Part 4: Strategic Roadmap & Next Horizons
+
+```
+[CURRENT STATE: COMPLETED]
+  ✔ Universal Trade Schema & Results-Layer Normalization
+  ✔ Dukascopy 20 Symbols x 6 Timeframes Parquet Pipeline
+  ✔ BEEP Master Package Verification & Leaderboard Integration
+  ✔ Multi-Symbol Multi-Timeframe Strategy Universe Matrix Engine (720 nodes)
+  ✔ 1,000-Path Monte Carlo Probabilistic Stress Testing Engine
+  ✔ Automated Behavioral Diagnostics Engine ("Why It Behaves This Way")
+  ✔ Interactive Dashboard with 20x6 Heatmap, Ranked Table & Fan Chart Drawer
+
+[PHASE 2: IMMEDIATE NEXT STEPS]
+  ✦ Cross-Strategy Risk Parity Portfolio Allocator: Combining decorrelated 
+    top-tier combinations (e.g. GBPJPY M15 BEEP + EURUSD H1 SMC + XAUUSD H1 GoldAI) 
+    into a unified multi-asset portfolio with mathematically minimized drawdown.
+  ✦ Walk-Forward Optimization & Out-of-Sample Rolling Window Verification.
+  ✦ Automated MQL5 Cloud Batch Runner for massive parallel parameter grid searches.
+
+[PHASE 3: INSTITUTIONAL PRODUCTION]
+  ✦ Live Execution Bridge: Connecting top-ranked combinations directly to live 
+    MT5 / FIX API broker accounts with automated margin guards and circuit breakers.
+```
+
+---
+*Documentation Finalized for SAJIM Quantitative Strategy Benchmarking Platform*  
+*Verified Live on Localhost:3000*

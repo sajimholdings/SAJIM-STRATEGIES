@@ -1,0 +1,97 @@
+"""
+SAJIM Quant - Institutional Tear Sheet Generator
+
+Generates executive-level markdown and ASCII performance tear sheets from PerformanceMetrics.
+"""
+
+from __future__ import annotations
+
+from typing import Optional
+from sajim_quant.analytics.metrics import PerformanceMetrics
+
+
+def generate_text_tear_sheet(m: PerformanceMetrics) -> str:
+    lines = [
+        "=" * 70,
+        f"  SAJIM QUANT PERFORMANCE TEAR SHEET: {m.strategy_name.upper()}",
+        f"  Engine: {m.engine} | Symbol: {m.symbol} | Timeframe: {m.timeframe}",
+        "=" * 70,
+        f"  Initial Balance:      ${m.initial_balance:>12,.2f}   Total Trades:       {m.total_trades:>8}",
+        f"  Final Balance:        ${m.final_balance:>12,.2f}   Win Rate:           {m.win_rate_pct:>7.1f}%",
+        f"  Net Profit:           ${m.net_profit:>12,.2f}   Profit Factor:      {m.profit_factor:>8.2f}",
+        f"  Total Return:          {m.return_pct:>12.2f}%   Expectancy:         ${m.expectancy:>7.2f}",
+        f"  CAGR:                  {m.cagr_pct:>12.2f}%   Win/Loss Ratio:     {m.win_loss_ratio:>8.2f}",
+        "-" * 70,
+        "  RISK & DRAWDOWN METRICS",
+        "-" * 70,
+        f"  Max Drawdown ($):     ${m.max_drawdown_amount:>12,.2f}   Sharpe Ratio:       {m.sharpe_ratio:>8.2f}",
+        f"  Max Drawdown (%):      {m.max_drawdown_pct:>12.2f}%   Sortino Ratio:      {m.sortino_ratio:>8.2f}",
+        f"  Recovery Factor:       {m.recovery_factor:>12.2f}    Calmar Ratio:       {m.calmar_ratio:>8.2f}",
+        "-" * 70,
+        "  TRADE PROFILE & EXECUTION",
+        "-" * 70,
+        f"  Winning Trades:        {m.winning_trades:>12}    Avg Win:            ${m.avg_win:>7.2f}",
+        f"  Losing Trades:         {m.losing_trades:>12}    Avg Loss:           ${m.avg_loss:>7.2f}",
+        f"  Max Cons. Wins:        {m.max_consecutive_wins:>12}    Max Cons. Losses:   {m.max_consecutive_losses:>8}",
+        f"  Avg Duration (min):    {m.avg_duration_minutes:>12.1f}    Total Commission:   ${m.total_commission:>7.2f}",
+    ]
+    if m.avg_mae is not None and m.avg_mfe is not None:
+        lines.append(f"  Avg MAE (Adverse):    ${m.avg_mae:>12.2f}    Avg MFE (Favorable):${m.avg_mfe:>7.2f}")
+
+    lines.append("=" * 70)
+    return "\n".join(lines)
+
+
+def generate_markdown_tear_sheet(m: PerformanceMetrics, assumptions: Optional[dict] = None) -> str:
+    assump_str = ""
+    if assumptions:
+        assump_str = " | ".join([f"**{k}**: `{v}`" for k, v in assumptions.items()])
+
+    md = f"""# SAJIM Benchmark Tear Sheet: {m.strategy_name}
+
+> **Engine**: `{m.engine}` | **Symbol**: `{m.symbol}` | **Timeframe**: `{m.timeframe}`  
+> {assump_str}
+
+---
+
+## 1. Executive Performance Summary
+
+| Metric | Strategy Value | Benchmark Target | Status |
+| :--- | :--- | :--- | :---: |
+| **Total Net Profit** | **${m.net_profit:,.2f}** | > $0.00 | {'🟢 PASS' if m.net_profit > 0 else '🔴 FAIL'} |
+| **Total Return** | **{m.return_pct:.2f}%** | > 20.0% | {'🟢 PASS' if m.return_pct >= 20 else '🟡 WATCH'} |
+| **CAGR** | **{m.cagr_pct:.2f}%** | > 15.0% | {'🟢 PASS' if m.cagr_pct >= 15 else '🟡 WATCH'} |
+| **Profit Factor** | **{m.profit_factor:.2f}** | > 1.50 | {'🟢 PASS' if m.profit_factor >= 1.5 else '🟡 MARGINAL'} |
+| **Win Rate** | **{m.win_rate_pct:.1f}%** | > 50.0% | {'🟢 PASS' if m.win_rate_pct >= 50 else '⚪ ACCEPTABLE'} |
+| **Expectancy per Trade** | **${m.expectancy:.2f}** | > $0.00 | {'🟢 PASS' if m.expectancy > 0 else '🔴 NEGATIVE'} |
+
+---
+
+## 2. Risk & Drawdown Profile
+
+| Risk Metric | Value | Risk Rating |
+| :--- | :--- | :--- |
+| **Max Drawdown ($)** | ${m.max_drawdown_amount:,.2f} | — |
+| **Max Drawdown (%)** | **{m.max_drawdown_pct:.2f}%** | {'🟢 LOW (<10%)' if m.max_drawdown_pct < 10 else ('🟡 MODERATE (<20%)' if m.max_drawdown_pct < 20 else '🔴 HIGH (>20%)')} |
+| **Sharpe Ratio (Ann.)** | **{m.sharpe_ratio:.2f}** | {'🟢 EXCELLENT (>2.0)' if m.sharpe_ratio >= 2.0 else ('🟡 GOOD (>1.0)' if m.sharpe_ratio >= 1.0 else '🔴 POOR (<1.0)')} |
+| **Sortino Ratio** | **{m.sortino_ratio:.2f}** | Downside deviation risk-adjusted return |
+| **Calmar Ratio** | **{m.calmar_ratio:.2f}** | CAGR / Max DD |
+| **Recovery Factor** | **{m.recovery_factor:.2f}** | Net Profit / Max DD Amount |
+
+---
+
+## 3. Trade Execution Statistics
+
+| Dimension | Value | Notes |
+| :--- | :--- | :--- |
+| **Total Trades** | {m.total_trades} | Statistically {'Valid (>100)' if m.total_trades >= 100 else 'Small (<100)'} |
+| **Winning Trades / Losing Trades** | {m.winning_trades} / {m.losing_trades} | Ratio: {m.win_loss_ratio:.2f} |
+| **Average Win / Average Loss** | ${m.avg_win:.2f} / ${m.avg_loss:.2f} | Reward-to-Risk profile |
+| **Max Consecutive Wins / Losses** | {m.max_consecutive_wins} / {m.max_consecutive_losses} | Run clustering |
+| **Average Trade Duration** | {m.avg_duration_minutes:.1f} minutes | Intraday / Swing classification |
+| **Total Commissions & Fees** | ${m.total_commission + m.total_swap:.2f} | Execution friction cost |
+
+---
+*Report Generated by SAJIM Quant Benchmarking Platform*
+"""
+    return md

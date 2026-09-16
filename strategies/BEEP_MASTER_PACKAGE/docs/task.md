@@ -1,0 +1,4 @@
+- `[/]` Execute Phase 13: Temporal Optimization
+  - `[ ]` Write `optimize_time_mt5.py`
+  - `[ ]` Test temporal heatmaps for each individual pair
+  - `[ ]` Inject the proven `TRADING_HOURS` matrix into the live bot

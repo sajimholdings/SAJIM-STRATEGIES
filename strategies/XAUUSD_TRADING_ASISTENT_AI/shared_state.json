@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-06-01T11:05:04.522472",
+  "account": {
+    "balance": 749.66,
+    "equity": 747.18,
+    "margin_level": 830.8462137217836,
+    "free_margin": 657.25
+  },
+  "open_positions": [
+    {
+      "ticket": 460716327,
+      "symbol": "XAUUSD",
+      "type": "BUY",
+      "volume": 0.01,
+      "open": 4496.51,
+      "current": 4495.26,
+      "sl": 4491.93,
+      "tp": 4503.93,
+      "profit": -1.25
+    },
+    {
+      "ticket": 460716375,
+      "symbol": "XAUUSD",
+      "type": "BUY",
+      "volume": 0.01,
+      "open": 4496.32,
+      "current": 4495.26,
+      "sl": 4491.91,
+      "tp": 4503.91,
+      "profit": -1.06
+    },
+    {
+      "ticket": 460716435,
+      "symbol": "XAUUSD",
+      "type": "SELL",
+      "volume": 0.01,
+      "open": 4495.46,
+      "current": 4495.63,
+      "sl": 4499.58,
+      "tp": 4487.58,
+      "profit": -0.17
+    }
+  ],
+  "recent_trades": [],
+  "daily_profit": 0.0,
+  "ai": {
+    "thought": "Open trade #460716327 running. Waiting for exit...",
+    "signal": {
+      "action": "BUY",
+      "confidence": 0.95
+    },
+    "error": [
+      "10:51:36 - Order failed, retcode: 10027",
+      "10:52:07 - Order failed, retcode: 10027",
+      "10:52:40 - Order failed, retcode: 10027",
+      "10:53:33 - Order failed, retcode: 10027",
+      "10:54:07 - Order failed, retcode: 10027"
+    ]
+  },
+  "latency": {
+    "last_ai_call_ms": 753,
+    "aborted_trades": 0,
+    "total_signals": 28,
+    "avg_drift_pips": 24.0
+  }
+}

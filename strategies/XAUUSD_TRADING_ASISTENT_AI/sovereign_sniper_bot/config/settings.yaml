@@ -1,0 +1,15 @@
+system:
+  environment: "production"
+  tick_polling_interval_seconds: 60
+
+risk_management:
+  max_risk_per_trade_percent: 1.0
+  max_daily_loss_percent: 5.0
+  max_account_drawdown_percent: 15.0
+  circuit_breaker_consecutive_losses: 3
+  cooldown_period_minutes: 60
+
+execution_defaults:
+  slippage_max_pips: 3
+  retry_attempts: 3
+  use_one_cancels_all: true

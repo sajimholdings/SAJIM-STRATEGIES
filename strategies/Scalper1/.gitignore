@@ -1,0 +1,232 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+.codex/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.pid
+
+# Local state files
+.hbs_rng_state.json
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+
+# Large binary files (optional)
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test outputs
+test_output/
+*.test
+
+# Reports (keep structure but ignore large outputs)
+Reports/Test_Results/*.json
+Reports/Performance/*.json
+
+# Cache
+.cache/
+*.cache
+
+# Node modules (if any)
+node_modules/
+
+# Compiled files
+*.ex4
+*.ex5
+
+# MetaTrader files
+*.set
+*.tpl
+*.hst
+*.fxt
+MQL5/compile_log.txt
+
+# Large data files
+*.xlsx
+*.xls
+
+# Sensitive information
+*.key
+*.pem
+*.p12
+config.ini
+secrets.json
+.env
+.env.local
+.env.production
+.env.development
+
+# Local model artifacts / training outputs (keep out of repo)
+models/scaler.pkl
+models/*.pkl
+
+# API Keys and Tokens (CRITICAL SECURITY)
+*personal_access_token*
+*github_token*
+*api_key*
+*secret_key*
+ghp_*
+gho_*
+ghu_*
+ghs_*
+ghr_*
+
+# Configuration files with credentials
+configs/*_config*.json
+configs/*_secrets*.json
+*.config.json
+.mcp*.json
+claude*.json
+
+# Any file containing sensitive tokens
+**/*token*.json
+**/*credential*.json
+**/*secret*.json
+
+# Local helper binaries / symlinks
+tools/bin/
+
+# External vendored repos (symlinks)
+external/
+
+# Vendored g3 build output
+tools/g3/target/
+
+# Local g3 config (contains API keys)
+tools/g3/config.local.toml
+
+# Factory storage (contains auth tokens)
+.storage/
+
+# RAG Database (large files)
+.rag-db/lancedb/
+.rag-db/models/
+
+# Scraped documentation (can be regenerated)
+DOCS/SCRAPED/reference/
+DOCS/SCRAPED/book/
+DOCS/SCRAPED/articles/
+
+# Cloned research repositories (external Git repos, not tracked here)
+DOCS/RESEARCH/repos/
+
+# Local email accounts configuration (contains credentials)
+tools/email_manager/accounts.json
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+
+# Temp files
+temp_*
+*.log
+
+# Cold storage (large files)
+DOCS/_COLD_STORAGE/
+
+# Archives (already compressed)
+_ARCHIVE/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local data (backup policy)
+# This repo is PUBLIC; keep only the canonical backtest dataset under data/raw/full_parquet.
+# Everything else under data/ stays local unless you explicitly opt-in.
+
+data/raw/*
+!data/raw/full_parquet/
+!data/raw/full_parquet/xauusd_2003_2025_stride20_full.parquet
+!data/raw/*.metadata.json
+
+data/catalog_native/
+data/catalog_native_sessions/
+data/catalog_native_smoke_test_full/
+data/derived/
+data/session_csvs
+data/test_models/
+nautilus_gold_scalper/data/test_models/
+
+# Experiment artifacts
+experiments/
+
+# Large local git bundles (handled outside repo)
+EA_SCALPER_XAUUSD_backup_*.bundle
+
+# Node lockfile not used here
+package-lock.json
+
+# Python hub local data
+Python_Agent_Hub/app/data/
+Python_Agent_Hub/ml_pipeline/data/
+
+# Local session outputs
+.tmp_session_catalogs*/
+.tmp_session_out/
+.tmp_session_catalogs2/
+
+!data/config.yaml
+!data/README.md
+
+# Nautilus scalper local datasets (keep out of repo)
+nautilus_gold_scalper/data/raw/
+
+# Local Claude state
+.claude/_disabled/
+
+# Parquet datasets
+
+
+# RAG database symlink
+.rag-db
+
+# Scratch test files
+teste.py

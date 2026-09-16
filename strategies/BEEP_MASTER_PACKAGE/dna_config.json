@@ -1,0 +1,45 @@
+{
+  "version": 3,
+  "last_updated": "2026-08-19 19:30:00",
+  "min_mass_forex": 25.0,
+  "min_mass_indices_metals": 50.0,
+  "trading_hours": [11, 15, 19, 20, 21, 23],
+  "min_velocity_floor": {
+    "EURUSD": 0.00001,
+    "GBPUSD": 0.00001,
+    "USDJPY": 0.001,
+    "AUDUSD": 0.00001,
+    "USDCAD": 0.00001,
+    "GBPJPY": 0.001,
+    "XAUUSD": 0.01,
+    "BTCUSD": 1.0,
+    "US30": 0.5,
+    "NDX100": 0.5,
+    "USOIL": 0.005
+  },
+  "death_avoidance_risk": {
+    "BTCUSD": 0.01,
+    "XAUUSD": 0.005,
+    "US30": 0.01,
+    "NDX100": 0.01,
+    "USOIL": 0.015,
+    "GBPUSD": 0.02,
+    "EURUSD": 0.02,
+    "GBPJPY": 0.01
+  },
+  "dna_thresholds": {
+    "EURUSD": [2.5, 1.5],
+    "GBPUSD": [2.5, 1.5],
+    "USDJPY": [2.0, 1.2],
+    "AUDUSD": [2.5, 1.5],
+    "USDCAD": [4.0, 2.5],
+    "BTCUSD": [2.0, 1.2],
+    "ETHUSD": [2.0, 1.2],
+    "XAUUSD": [2.5, 1.5],
+    "US30": [2.5, 1.5],
+    "NDX100": [3.0, 2.0],
+    "USOIL": [2.0, 1.2],
+    "GBPJPY": [2.5, 1.5]
+  },
+  "hermes_notes": "Version 3 (Aug 19): Hard-coded entry protections now MATCH config. Hourly gates [11,15,19,20,21,23] local time — derived from playbook: 11h +49.75/56%WR, 15h +39.68/80%WR, 20h +294/100%WR, 23h +15.31; kills the 00-08h dead zone and 12-14h/16-18h bleed window (today's -214 came from 16-18h machine-gun entries). Added anti-chop |Vel_M5| velocity floor per symbol. Added 15-min post-close cooldown per symbol + max 2 entries/symbol/hour burst cap (was 8 entries in 3 min on GBPUSD). Added MAX_LOT 0.10 hard cap + 50-tick min SL distance (was sizing 0.3-0.6 lots on tight baselines -> -653 USDCAD, -330 US30 blowups). GBPUSD/GBPJPY DNA tightened to (2.5,1.5) so 80% partial fires at Z 2.5 instead of never."
+}

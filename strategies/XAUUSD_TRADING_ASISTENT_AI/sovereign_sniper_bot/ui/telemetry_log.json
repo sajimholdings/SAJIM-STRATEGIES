@@ -1,0 +1,2202 @@
+[
+  {
+    "Timestamp": "2026-06-02 06:15:25",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 42.984210477278694,
+      "pullback_count": 0,
+      "last_price": 4487.78,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15002.71,
+      "balance": 15003.59,
+      "drawdown_percent": 0.005865262913749433,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:14:25",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 38.589867151727745,
+      "pullback_count": 0,
+      "last_price": 4487.11,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15002.04,
+      "balance": 15003.59,
+      "drawdown_percent": 0.01033086081397367,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:13:25",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 40.957980669771196,
+      "pullback_count": 0,
+      "last_price": 4487.46,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15002.39,
+      "balance": 15003.59,
+      "drawdown_percent": 0.007998085791472091,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:12:25",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 35.450866071267114,
+      "pullback_count": 0,
+      "last_price": 4486.68,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15001.61,
+      "balance": 15003.59,
+      "drawdown_percent": 0.01319684155591804,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:11:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 24.607779738139715,
+      "pullback_count": 0,
+      "last_price": 4485.41,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15000.34,
+      "balance": 15003.59,
+      "drawdown_percent": 0.021661482351890447,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:10:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 30.199405175880944,
+      "pullback_count": 0,
+      "last_price": 4486.03,
+      "atr_value": 17.765714285714303,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15000.96,
+      "balance": 15003.59,
+      "drawdown_percent": 0.01752913802630583,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:09:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 28.54619073104562,
+      "pullback_count": 0,
+      "last_price": 4485.84,
+      "atr_value": 17.696428571428573,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15000.77,
+      "balance": 15003.59,
+      "drawdown_percent": 0.01879550160994608,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:08:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 44.30413406049185,
+      "pullback_count": 0,
+      "last_price": 4488.0,
+      "atr_value": 17.688571428571386,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15002.93,
+      "balance": 15003.59,
+      "drawdown_percent": 0.004398947185306013,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:07:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 48.13783761805468,
+      "pullback_count": 0,
+      "last_price": 4488.7,
+      "atr_value": 17.688571428571386,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.63,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:06:24",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "IN_TRADE",
+      "ema_slope_degrees": 41.98721249581666,
+      "pullback_count": 0,
+      "last_price": 4487.62,
+      "atr_value": 17.688571428571386,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15002.55,
+      "balance": 15003.59,
+      "drawdown_percent": 0.006931674352610762,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:05:23",
+    "Phase": "IN_TRADE",
+    "Action": "HOLD",
+    "Reason": "Already have 1 open positions. Waiting for resolution.",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": 45.11436268148663,
+      "pullback_count": 0,
+      "last_price": 4488.14,
+      "atr_value": 17.688571428571386,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.07,
+      "balance": 15003.59,
+      "drawdown_percent": 0.003465837176305381,
+      "open_trades": 1,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:04:23",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_LONG",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": 47.46575899499681,
+      "pullback_count": 1,
+      "last_price": 4488.57,
+      "atr_value": 17.688571428571386,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:03:21",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:02:17",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:01:17",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 06:00:17",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:59:17",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:58:17",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:57:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:56:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:55:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:54:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:53:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:52:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:51:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:50:15",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "Gatekeeper API Error: HTTPSConnectionPool(host='api.groq.com', port=443): Max retries exceeded with url: /openai/v1/chat/completions (Caused by NameResolutionError(\"HTTPSConnection(host='api.groq.com', port=443): Failed to resolve 'api.groq.com' ([Errno 11001] getaddrinfo failed)\"))",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -63.549083690901234,
+      "pullback_count": 1,
+      "last_price": 4475.68,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:49:15",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -64.87139606204073,
+      "pullback_count": 1,
+      "last_price": 4475.07,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:48:14",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -64.47296232029781,
+      "pullback_count": 1,
+      "last_price": 4475.26,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:47:13",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -59.47543596306013,
+      "pullback_count": 1,
+      "last_price": 4477.25,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:46:11",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -55.95406264339703,
+      "pullback_count": 1,
+      "last_price": 4478.33,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:45:10",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -56.797248130721755,
+      "pullback_count": 1,
+      "last_price": 4478.09,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:44:08",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -62.68233819354594,
+      "pullback_count": 1,
+      "last_price": 4476.05,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:43:06",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -57.7025588232795,
+      "pullback_count": 1,
+      "last_price": 4477.82,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:42:05",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -53.267173335509895,
+      "pullback_count": 1,
+      "last_price": 4479.03,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:41:02",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -58.81235346197058,
+      "pullback_count": 1,
+      "last_price": 4477.47,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:40:00",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees is not greater than 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -46.614322550637596,
+      "pullback_count": 1,
+      "last_price": 4480.44,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:38:58",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -23.17092476035419,
+      "pullback_count": 0,
+      "last_price": 4483.59,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:37:47",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -7.7447105464159565,
+      "pullback_count": 3,
+      "last_price": 4485.05,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:37:47",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -12.625836878906123,
+      "pullback_count": 2,
+      "last_price": 4484.61,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:37:38",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -30.794942113341044,
+      "pullback_count": 3,
+      "last_price": 4482.75,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:36:44",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -23.267704810053434,
+      "pullback_count": 2,
+      "last_price": 4483.58,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:36:44",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -23.845428666674714,
+      "pullback_count": 1,
+      "last_price": 4483.52,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:36:34",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -25.82698212361218,
+      "pullback_count": 2,
+      "last_price": 4483.31,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:35:42",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -35.4508660712602,
+      "pullback_count": 2,
+      "last_price": 4482.17,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:35:41",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -34.760648002821334,
+      "pullback_count": 1,
+      "last_price": 4482.26,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:35:32",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees is less than 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -35.75388725443263,
+      "pullback_count": 2,
+      "last_price": 4482.13,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:34:40",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -32.21092772367077,
+      "pullback_count": 2,
+      "last_price": 4482.58,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:34:39",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -32.21092772367077,
+      "pullback_count": 1,
+      "last_price": 4482.58,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:34:29",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -29.0740593715065,
+      "pullback_count": 1,
+      "last_price": 4482.95,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:33:36",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees is not greater than 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -39.55670648765023,
+      "pullback_count": 1,
+      "last_price": 4481.6,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:33:26",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -36.50144112050498,
+      "pullback_count": 1,
+      "last_price": 4482.03,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:32:33",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -23.653418757045745,
+      "pullback_count": 1,
+      "last_price": 4483.54,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:32:22",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -11.42007416747021,
+      "pullback_count": 1,
+      "last_price": 4484.72,
+      "atr_value": 18.145714285714217,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:31:30",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees (10.314930203185193) is not greater than 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": 10.314930203185193,
+      "pullback_count": 1,
+      "last_price": 4486.64,
+      "atr_value": 18.128571428571313,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:31:30",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees (6.842773412635051) is not greater than 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": 6.842773412635051,
+      "pullback_count": 0,
+      "last_price": 4486.33,
+      "atr_value": 18.128571428571313,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:31:15",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -1.2603038464998395,
+      "pullback_count": 1,
+      "last_price": 4485.62,
+      "atr_value": 18.12571428571417,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:30:27",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -3.8901244040531076,
+      "pullback_count": 1,
+      "last_price": 4485.39,
+      "atr_value": 18.12571428571417,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:30:27",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -3.4336303624422144,
+      "pullback_count": 0,
+      "last_price": 4485.43,
+      "atr_value": 18.12571428571417,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:30:12",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -6.164052442828407,
+      "pullback_count": 1,
+      "last_price": 4485.19,
+      "atr_value": 18.12571428571417,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:29:24",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -17.327921777235915,
+      "pullback_count": 1,
+      "last_price": 4484.17,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:29:23",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -17.84855854977954,
+      "pullback_count": 0,
+      "last_price": 4484.12,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:29:09",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -6.842773412624776,
+      "pullback_count": 1,
+      "last_price": 4485.13,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:28:20",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -13.928341939151334,
+      "pullback_count": 1,
+      "last_price": 4484.49,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:28:19",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -10.092939831975569,
+      "pullback_count": 0,
+      "last_price": 4484.84,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:28:03",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -7.7447105464159565,
+      "pullback_count": 1,
+      "last_price": 4485.05,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:27:16",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -0.229181895748681,
+      "pullback_count": 1,
+      "last_price": 4485.71,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:27:15",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -0.229181895748681,
+      "pullback_count": 0,
+      "last_price": 4485.71,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:27:00",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -17.01411070807173,
+      "pullback_count": 1,
+      "last_price": 4484.2,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:26:10",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -16.69924423399362,
+      "pullback_count": 0,
+      "last_price": 4484.23,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:25:58",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -17.432288600576324,
+      "pullback_count": 1,
+      "last_price": 4484.16,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:25:06",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -5.25641494143531,
+      "pullback_count": 1,
+      "last_price": 4485.27,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:25:05",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -8.530765609948133,
+      "pullback_count": 0,
+      "last_price": 4484.98,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:24:55",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -9.536635758450895,
+      "pullback_count": 1,
+      "last_price": 4484.89,
+      "atr_value": 18.083571428571368,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:24:02",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -3.7760449848941784,
+      "pullback_count": 0,
+      "last_price": 4485.4,
+      "atr_value": 18.067857142857065,
+      "market_structure": "BULLISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:23:56",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -8.418662877797201,
+      "pullback_count": 1,
+      "last_price": 4484.99,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:23:53",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -8.642802579996792,
+      "pullback_count": 1,
+      "last_price": 4484.97,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:22:59",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -14.788677614162056,
+      "pullback_count": 0,
+      "last_price": 4484.41,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:22:53",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -13.387333645647802,
+      "pullback_count": 1,
+      "last_price": 4484.54,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:22:49",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -13.27883630236624,
+      "pullback_count": 1,
+      "last_price": 4484.55,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:21:56",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -16.594056579974893,
+      "pullback_count": 0,
+      "last_price": 4484.24,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:21:50",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -17.223436191123856,
+      "pullback_count": 1,
+      "last_price": 4484.18,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:21:43",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "ARMED",
+      "ema_slope_degrees": -15.109575122334636,
+      "pullback_count": 1,
+      "last_price": 4484.38,
+      "atr_value": 18.030714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:20:51",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -18.675253259653363,
+      "pullback_count": 0,
+      "last_price": 4484.04,
+      "atr_value": 17.960714285714207,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:20:46",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -23.364344476058218,
+      "pullback_count": 0,
+      "last_price": 4483.57,
+      "atr_value": 17.90785714285708,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:20:40",
+    "Phase": "ARMED",
+    "Action": "EXECUTE_SHORT",
+    "Reason": "ema_slope_degrees > 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -24.322968397157958,
+      "pullback_count": 0,
+      "last_price": 4483.47,
+      "atr_value": 17.905714285714176,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:19:49",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -34.52797165613525,
+      "pullback_count": 0,
+      "last_price": 4482.29,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:19:43",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -33.901100750355084,
+      "pullback_count": 0,
+      "last_price": 4482.37,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:19:38",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -33.66361518274641,
+      "pullback_count": 0,
+      "last_price": 4482.4,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:18:47",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -32.12882096219394,
+      "pullback_count": 0,
+      "last_price": 4482.59,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:18:42",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -32.61924307119134,
+      "pullback_count": 0,
+      "last_price": 4482.53,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:18:37",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -32.61924307119134,
+      "pullback_count": 0,
+      "last_price": 4482.53,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:17:46",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -28.810793742973058,
+      "pullback_count": 0,
+      "last_price": 4482.98,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:17:40",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -25.919751903741616,
+      "pullback_count": 0,
+      "last_price": 4483.3,
+      "atr_value": 17.892142857142776,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:17:35",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -43.16763304046423,
+      "pullback_count": 0,
+      "last_price": 4481.04,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:16:45",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -43.71135521483605,
+      "pullback_count": 0,
+      "last_price": 4480.95,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:16:39",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -44.421274434390114,
+      "pullback_count": 0,
+      "last_price": 4480.83,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:16:33",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -46.39718102729638,
+      "pullback_count": 0,
+      "last_price": 4480.48,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:15:43",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -47.51807720416164,
+      "pullback_count": 0,
+      "last_price": 4480.27,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:15:37",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -48.086754209235245,
+      "pullback_count": 0,
+      "last_price": 4480.16,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  },
+  {
+    "Timestamp": "2026-06-02 05:15:32",
+    "Phase": "SCANNING",
+    "Action": "HOLD",
+    "Reason": "ema_slope_degrees < 20",
+    "MarketData": {
+      "symbol": "XAUUSD",
+      "current_phase": "SCANNING",
+      "ema_slope_degrees": -39.420204697004976,
+      "pullback_count": 0,
+      "last_price": 4481.62,
+      "atr_value": 17.84499999999993,
+      "market_structure": "BEARISH"
+    },
+    "RiskMetrics": {
+      "equity": 15003.59,
+      "balance": 15003.59,
+      "drawdown_percent": 0.0,
+      "open_trades": 0,
+      "consecutive_losses": 0
+    }
+  }
+]

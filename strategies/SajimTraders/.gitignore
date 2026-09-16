@@ -1,0 +1,62 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Private IP Vault (Strictly protected by BEEP Licensing Agreement)
+vault/
+
+# Logs & Runtime telemetry dumps
+*.log
+overnight_execution.log
+
+# Large Archives & Binaries
+*.zip
+*.tar.gz
+
+# Environment variables & Private Keys
+.env
+.env*
+**/.env*
+*.pem
+*.key
+
+# Private Proprietary BEEP Core IP & Quant Engines (Strictly Licensed)
+core/beep_*
+core/tick_beep_engine.py
+
+# Confidential Agreements & Internal Math Theory
+docs/BEEP_*
+docs/SAJIM_HOLDINGS_AGREEMENT.md
+docs/GRAND_CONFLUENCE_AUDIT_REPORT.md
+
+# Sensitive Broker & User Credentials
+config/broker_config.json
+config/telegram_config.json
+config/client_accounts.json
+
+# Private BEEP Math Tests
+test/*beep*
+tests/*beep*
+
+# IDE / Editor artifacts
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Node & Next.js build artifacts
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+next-env.d.ts
+

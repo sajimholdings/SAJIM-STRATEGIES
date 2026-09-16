@@ -1,0 +1,46 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+.tox/
+
+# Logs
+*.log
+
+# Data
+# data/ # Commented out to ensure data is included if needed by Claude
+
+python_env/
+*env*/
+
+
+*.exe
+
+
+*.tmp
+*.csv
+*.parquet
+data/
+

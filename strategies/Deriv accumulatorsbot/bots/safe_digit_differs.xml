@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml xmlns="http://www.w3.org/1999/xhtml" collection="false">
+  <variables>
+    <variable type="" id="v_init">Initial Stake</variable>
+    <variable type="" id="v_cur">Current Stake</variable>
+    <variable type="" id="v_mult">Martingale Mult</variable>
+    <variable type="" id="v_maxloss">Max Loss USD</variable>
+    <variable type="" id="v_total">Total Profit</variable>
+    <variable type="" id="v_profit">Last Profit</variable>
+  </variables>
+
+  <!-- ══ MAIN TRADE BLOCK ══ -->
+  <block type="trade" id="trade" x="-200" y="-100">
+    <field name="MARKET_LIST">synthetic_index</field>
+    <field name="SUBMARKET_LIST">random_index</field>
+    <field name="SYMBOL_LIST">R_100</field>
+    <field name="TRADETYPECAT_LIST">digits</field>
+    <field name="TRADETYPE_LIST">matchesdiffers</field>
+    <field name="TYPE_LIST">both</field>
+    <field name="CANDLEINTERVAL_LIST">60</field>
+    <field name="TIME_MACHINE_ENABLED">FALSE</field>
+    <field name="RESTARTONERROR">TRUE</field>
+
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="i1">
+        <field name="VAR" id="v_init" variabletype="">Initial Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="n1"><field name="NUM">1</field></block>
+        </value>
+        <next>
+          <block type="variables_set" id="i2">
+            <field name="VAR" id="v_cur" variabletype="">Current Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="n2"><field name="NUM">1</field></block>
+            </value>
+            <next>
+              <block type="variables_set" id="i3">
+                <field name="VAR" id="v_mult" variabletype="">Martingale Mult</field>
+                <value name="VALUE">
+                  <block type="math_number" id="n3"><field name="NUM">2.1</field></block>
+                </value>
+                <next>
+                  <block type="variables_set" id="i4">
+                    <field name="VAR" id="v_maxloss" variabletype="">Max Loss USD</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="n4"><field name="NUM">20</field></block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="i5">
+                        <field name="VAR" id="v_total" variabletype="">Total Profit</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="n5"><field name="NUM">0</field></block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <statement name="SUBMARKET">
+      <block type="tradeOptions" id="opts">
+        <field name="DURATIONTYPE_LIST">t</field>
+        <field name="CURRENCY_LIST">USD</field>
+        <field name="BARRIEROFFSETTYPE_LIST">+</field>
+        <field name="SECONDBARRIEROFFSETTYPE_LIST">-</field>
+        <value name="DURATION">
+          <block type="math_number" id="dur"><field name="NUM">1</field></block>
+        </value>
+        <value name="AMOUNT">
+          <block type="variables_get" id="amt_ref">
+            <field name="VAR" id="v_cur" variabletype="">Current Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <block type="math_number" id="pred"><field name="NUM">7</field></block>
+        </value>
+      </block>
+    </statement>
+
+    <statement name="BEFORE_PURCHASE">
+      <block type="purchase" id="buy_differs">
+        <field name="PURCHASE_LIST">DIGITDIFF</field>
+      </block>
+    </statement>
+
+    <statement name="AFTER_PURCHASE">
+      <block type="variables_set" id="ap1">
+        <field name="VAR" id="v_profit" variabletype="">Last Profit</field>
+        <value name="VALUE">
+          <block type="contract_check" id="cc1">
+            <field name="CONTRACT_CHECK">profit</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="ap2">
+            <field name="VAR" id="v_total" variabletype="">Total Profit</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="add_tot">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <block type="variables_get" id="tot_a">
+                    <field name="VAR" id="v_total" variabletype="">Total Profit</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="prft_b">
+                    <field name="VAR" id="v_profit" variabletype="">Last Profit</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="winloss">
+                <mutation else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="cmp_win">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="variables_get" id="p_a">
+                        <field name="VAR" id="v_profit" variabletype="">Last Profit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="zero"><field name="NUM">0</field></block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="win_reset">
+                    <field name="VAR" id="v_cur" variabletype="">Current Stake</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="init_ref">
+                        <field name="VAR" id="v_init" variabletype="">Initial Stake</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="controls_if" id="check_maxloss">
+                    <value name="IF0">
+                      <block type="logic_compare" id="cmp_max">
+                        <field name="OP">GT</field>
+                        <value name="A">
+                          <block type="variables_get" id="maxloss_ref">
+                            <field name="VAR" id="v_maxloss" variabletype="">Max Loss USD</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_arithmetic" id="neg_tot">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <block type="variables_get" id="tot_ref">
+                                <field name="VAR" id="v_total" variabletype="">Total Profit</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="neg1"><field name="NUM">-1</field></block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="variables_set" id="apply_mg">
+                        <field name="VAR" id="v_cur" variabletype="">Current Stake</field>
+                        <value name="VALUE">
+                          <block type="math_arithmetic" id="mg_math">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <block type="variables_get" id="cur_a">
+                                <field name="VAR" id="v_cur" variabletype="">Current Stake</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="variables_get" id="mult_b">
+                                <field name="VAR" id="v_mult" variabletype="">Martingale Mult</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+  </block>
+</xml>

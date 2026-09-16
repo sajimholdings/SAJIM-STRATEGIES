@@ -1,0 +1,154 @@
+{
+  "audit_date": "2026-09-15",
+  "audit_version": "2.0-CANONICAL-DUKASCOPY-MT5",
+  "lead_architect": "Jimmy Mathu",
+  "description": "Empirical Edge Whitelist and Blacklist filter synchronized from the 20-symbol Canonical BEEP Dukascopy sweep & MT5 live audit.",
+  "approved_edges": {
+    "XAUUSD.c": ["M15", "M30", "H4"],
+    "XAUUSD": ["M15", "M30", "H4"],
+    "XRPUSD.c": ["M15"],
+    "XRPUSD": ["M15"],
+    "US500.c": ["M15"],
+    "US500": ["M15"],
+    "GER40.c": ["M15"],
+    "GER40": ["M15"],
+    "BTCUSD.c": ["M15"],
+    "BTCUSD": ["M15"],
+    "USDJPY.c": ["M5", "M15"],
+    "USDJPY": ["M5", "M15"],
+    "XAGUSD.c": ["M15", "H4"],
+    "XAGUSD": ["M15", "H4"],
+    "ETHUSD.c": ["M15"],
+    "ETHUSD": ["M15"],
+    "EURUSD.c": ["M15", "M30"],
+    "EURUSD": ["M15", "M30"],
+    "USDCAD.c": ["M15", "M30", "H4"],
+    "USDCAD": ["M15", "M30", "H4"],
+    "US30.c": ["M15"],
+    "US30": ["M15"],
+    "EURJPY.c": ["M5", "M15"],
+    "EURJPY": ["M5", "M15"],
+    "GBPJPY.c": ["M5", "M15", "M30", "H1"],
+    "GBPJPY": ["M5", "M15", "M30", "H1"],
+    "GBPUSD.c": ["M15"],
+    "GBPUSD": ["M15"],
+    "NZDUSD.c": ["M15", "H4"],
+    "NZDUSD": ["M15", "H4"],
+    "UK100.c": ["M15"],
+    "UK100": ["M15"],
+    "CADJPY.c": ["M5", "H1"],
+    "CADJPY": ["M5", "H1"],
+    "AUDJPY.c": ["M5", "H4"],
+    "AUDJPY": ["M5", "H4"],
+    "CHFJPY.c": ["M5"],
+    "CHFJPY": ["M5"],
+    "NZDJPY.c": ["M30", "H1"],
+    "NZDJPY": ["M30", "H1"]
+  },
+  "top_institutional_edges": [
+    {
+      "symbol": "XAUUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.46,
+      "win_rate_pct": 37.0,
+      "expectancy_r": 0.213,
+      "net_pnl_r": 334.4,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "XRPUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.44,
+      "win_rate_pct": 36.5,
+      "expectancy_r": 0.201,
+      "net_pnl_r": 356.4,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "US500",
+      "timeframe": "M15",
+      "profit_factor": 1.42,
+      "win_rate_pct": 39.1,
+      "expectancy_r": 0.195,
+      "net_pnl_r": 306.2,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "GER40",
+      "timeframe": "M15",
+      "profit_factor": 1.41,
+      "win_rate_pct": 36.7,
+      "expectancy_r": 0.187,
+      "net_pnl_r": 282.5,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "BTCUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.40,
+      "win_rate_pct": 36.8,
+      "expectancy_r": 0.192,
+      "net_pnl_r": 270.6,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "USDJPY",
+      "timeframe": "M15",
+      "profit_factor": 1.37,
+      "win_rate_pct": 35.8,
+      "expectancy_r": 0.149,
+      "net_pnl_r": 202.7,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "XAGUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.34,
+      "win_rate_pct": 35.1,
+      "expectancy_r": 0.148,
+      "net_pnl_r": 206.0,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "ETHUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.33,
+      "win_rate_pct": 34.3,
+      "expectancy_r": 0.166,
+      "net_pnl_r": 184.9,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "EURUSD",
+      "timeframe": "M15",
+      "profit_factor": 1.32,
+      "win_rate_pct": 38.8,
+      "expectancy_r": 0.111,
+      "net_pnl_r": 136.1,
+      "status": "ELITE"
+    },
+    {
+      "symbol": "USDCAD",
+      "timeframe": "M15",
+      "profit_factor": 1.31,
+      "win_rate_pct": 36.5,
+      "expectancy_r": 0.107,
+      "net_pnl_r": 126.9,
+      "status": "ELITE"
+    }
+  ],
+  "toxic_bleeders_summary": {
+    "total_bleeders_count": 159,
+    "worst_assets": [
+      "LTCUSD on M15 (PF: 0.77, Net: -370.1R)",
+      "EURGBP on M15 (PF: 0.79, Net: -63.7R)",
+      "EURNZD.c (PF: 0.31)",
+      "XPTUSD.c (PF: 0.33)",
+      "EURCHF.c (PF: 0.34)",
+      "USDCHF.c (PF: 0.34)",
+      "AUDUSD.c on M1 (PF: 0.35)",
+      "GBPUSD.c on M1/M5 (PF: 0.41 - 0.63)"
+    ],
+    "universal_rule": "Reject all M1 timeframe setups and reject any asset where spread > 12% of ATR."
+  }
+}

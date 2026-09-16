@@ -1,0 +1,7 @@
+node_modules/
+.env
+.next/
+dashboard/node_modules/
+dashboard/.next/
+*.log
+__pycache__/

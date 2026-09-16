@@ -1,0 +1,12 @@
+{
+    "instrument": "ETHUSDT",
+    "timeframe": "1h",
+    "body_atr_multiplier": 2.0,
+    "trailing_stop_atr_multiplier": 4.0,
+    "initial_balance": 100.0,
+    "risk_per_trade": 0.01,
+    "leverage": 100,
+    "fee": 0.001,
+    "db_name": "trading_data.db",
+    "webhook_url": ""
+}

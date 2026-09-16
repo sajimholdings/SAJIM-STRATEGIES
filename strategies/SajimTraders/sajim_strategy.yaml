@@ -1,0 +1,28 @@
+# ====================================================================
+# SAJIM Quantitative Strategy Manifest - SajimTraders Suite
+# ====================================================================
+
+name: "SajimTraders_Suite"
+version: "2.0.0"
+author: "Sajim Holdings Quant Labs"
+description: "Scalable Institutional Trading Infrastructure & Autonomous Bot Engines (BEEP v2 Dual Bot, Mirage Liquidity Sweep, Young Surge Continuation, Exhaustion Mean Reversion)."
+
+engine: "python:sajim_v2"
+entrypoint: "run.py"
+
+symbol: "XAUUSD"
+timeframe: "M15"
+
+modules:
+  - name: "Sajim_V2_Dual_Bot"
+    path: "v2/sajim_v2_dual_bot.py"
+  - name: "Mirage_Liquidity_Sweep"
+    path: "v2/strategies/mirage_liquidity_sweep.py"
+  - name: "Young_Surge_Continuation"
+    path: "v2/strategies/young_surge_continuation.py"
+  - name: "Exhaustion_Mean_Reversion"
+    path: "v2/strategies/exhaustion_mean_reversion.py"
+
+assumptions:
+  spread_model: "floating"
+  slippage_pips: 0.2

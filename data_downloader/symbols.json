@@ -1,0 +1,22 @@
+[
+  {"symbol": "EURUSD",  "instrument_const": "INSTRUMENT_FX_MAJORS_EUR_USD",          "category": "forex_major", "description": "Euro / US Dollar"},
+  {"symbol": "GBPUSD",  "instrument_const": "INSTRUMENT_FX_MAJORS_GBP_USD",          "category": "forex_major", "description": "British Pound / US Dollar"},
+  {"symbol": "USDJPY",  "instrument_const": "INSTRUMENT_FX_MAJORS_USD_JPY",          "category": "forex_major", "description": "US Dollar / Japanese Yen"},
+  {"symbol": "USDCHF",  "instrument_const": "INSTRUMENT_FX_MAJORS_USD_CHF",          "category": "forex_major", "description": "US Dollar / Swiss Franc"},
+  {"symbol": "AUDUSD",  "instrument_const": "INSTRUMENT_FX_MAJORS_AUD_USD",          "category": "forex_major", "description": "Australian Dollar / US Dollar"},
+  {"symbol": "USDCAD",  "instrument_const": "INSTRUMENT_FX_MAJORS_USD_CAD",          "category": "forex_major", "description": "US Dollar / Canadian Dollar"},
+  {"symbol": "NZDUSD",  "instrument_const": "INSTRUMENT_FX_MAJORS_NZD_USD",          "category": "forex_major", "description": "New Zealand Dollar / US Dollar"},
+  {"symbol": "EURGBP",  "instrument_const": "INSTRUMENT_FX_CROSSES_EUR_GBP",         "category": "forex_cross", "description": "Euro / British Pound"},
+  {"symbol": "GBPJPY",  "instrument_const": "INSTRUMENT_FX_CROSSES_GBP_JPY",         "category": "forex_cross", "description": "British Pound / Japanese Yen"},
+  {"symbol": "EURJPY",  "instrument_const": "INSTRUMENT_FX_CROSSES_EUR_JPY",         "category": "forex_cross", "description": "Euro / Japanese Yen"},
+  {"symbol": "BTCUSD",  "instrument_const": "INSTRUMENT_VCCY_BTC_USD",               "category": "crypto",      "description": "Bitcoin / US Dollar"},
+  {"symbol": "ETHUSD",  "instrument_const": "INSTRUMENT_VCCY_ETH_USD",               "category": "crypto",      "description": "Ethereum / US Dollar"},
+  {"symbol": "LTCUSD",  "instrument_const": "INSTRUMENT_VCCY_LTC_USD",               "category": "crypto",      "description": "Litecoin / US Dollar"},
+  {"symbol": "XRPUSD",  "instrument_const": "INSTRUMENT_VCCY_XRP_USD",               "category": "crypto",      "description": "Ripple / US Dollar"},
+  {"symbol": "XAUUSD",  "instrument_const": "INSTRUMENT_FX_METALS_XAU_USD",          "category": "commodity",   "description": "Gold / US Dollar"},
+  {"symbol": "XAGUSD",  "instrument_const": "INSTRUMENT_FX_METALS_XAG_USD",          "category": "commodity",   "description": "Silver / US Dollar"},
+  {"symbol": "US500",   "instrument_const": "INSTRUMENT_IDX_AMERICA_E_SANDP_500",    "category": "index",       "description": "S&P 500 Index"},
+  {"symbol": "US30",    "instrument_const": "INSTRUMENT_IDX_AMERICA_E_D_J_IND",      "category": "index",       "description": "Dow Jones 30 Index"},
+  {"symbol": "GER40",   "instrument_const": "INSTRUMENT_IDX_EUROPE_E_DAAX",          "category": "index",       "description": "DAX 40 Index"},
+  {"symbol": "UK100",   "instrument_const": "INSTRUMENT_IDX_EUROPE_E_FUTSEE_100",    "category": "index",       "description": "FTSE 100 Index"}
+]

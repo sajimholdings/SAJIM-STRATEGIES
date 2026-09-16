@@ -1,0 +1,16 @@
+{
+  "name": "deriv-updown",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test_token.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ws": "^8.21.0"
+  }
+}

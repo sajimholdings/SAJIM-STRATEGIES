@@ -1,0 +1,89 @@
+{
+  "_meta": {
+    "title": "SAJIM QUANT LABS - SINGLE SOURCE OF TRUTH MASTER TRADING WHITELIST",
+    "architect": "Jimmy Mathu",
+    "description": "Any change in this JSON file is automatically and immediately hot-reloaded across Sajim V1, V2, Confluence Ensemble, and all Strategy Cartridges.",
+    "last_empirical_audit": "2026-09-09 Headway Real MT5 Grand Confluence Audit (docs/GRAND_CONFLUENCE_AUDIT_REPORT.md)"
+  },
+  "live_trading_whitelist": [
+    "XAUUSD",
+    "EURJPY",
+    "USDJPY",
+    "GBPJPY",
+    "EURUSD",
+    "GBPUSD",
+    "BTCUSD"
+  ],
+  "paper_testing_watchlist": [
+    "CADJPY",
+    "AUDUSD",
+    "AUDJPY",
+    "EURGBP",
+    "XAGUSD"
+  ],
+  "toxic_blacklist": [
+    "XAUGBP",
+    "CADCHF",
+    "AUDCHF",
+    "NZDCHF",
+    "AUDNZD",
+    "GBPCHF",
+    "NZDJPY",
+    "GBPUSD_M15",
+    "GBPJPY_M15",
+    "AUDJPY_H1",
+    "EURUSD_M1",
+    "GBPUSD_M1",
+    "AUDUSD_M1",
+    "USDCAD_M1",
+    "USDCHF_M1",
+    "CADJPY_M1"
+  ],
+  "strategies": {
+    "V1_BEEP": {
+      "XAUUSD": ["M1", "M5", "M15"],
+      "NASDAQ-100": ["M1", "M5"],
+      "DJ30": ["M1", "M5"],
+      "USDJPY": ["M1", "M5"],
+      "EURJPY": ["M1", "M5"],
+      "GBPJPY": ["M5", "M15"],
+      "BTCUSD": ["M5", "M15"]
+    },
+    "MirageLiquiditySweep": {
+      "XAUUSD": ["M1", "M5", "M15"],
+      "NASDAQ-100": ["M1", "M5", "M15"],
+      "DJ30": ["M1", "M5", "M15"],
+      "USDJPY": ["M1", "M5", "M15"],
+      "EURJPY": ["M1", "M5", "M15"],
+      "GBPJPY": ["M5", "M15"],
+      "BTCUSD": ["M5", "M15"]
+    },
+    "YoungSurgeContinuation": {
+      "XAUUSD": ["M1", "M5", "M15"],
+      "NASDAQ-100": ["M1", "M5", "M15"],
+      "DJ30": ["M1", "M5", "M15"],
+      "USDJPY": ["M1", "M5", "M15"],
+      "EURJPY": ["M1", "M5", "M15"],
+      "GBPJPY": ["M5", "M15"],
+      "BTCUSD": ["M5", "M15"]
+    },
+    "ExhaustionMeanReversion": {
+      "XAUUSD": ["M1", "M5"],
+      "NASDAQ-100": ["M1", "M5"],
+      "DJ30": ["M1", "M5"],
+      "USDJPY": ["M1", "M5"],
+      "EURJPY": ["M1", "M5"],
+      "GBPJPY": ["M5"],
+      "BTCUSD": ["M5"]
+    },
+    "GrandConfluence": {
+      "XAUUSD": ["M1", "M5", "M15"],
+      "NASDAQ-100": ["M1", "M5", "M15"],
+      "DJ30": ["M1", "M5", "M15"],
+      "USDJPY": ["M1", "M5", "M15"],
+      "EURJPY": ["M1", "M5", "M15"],
+      "GBPJPY": ["M5", "M15"],
+      "BTCUSD": ["M5", "M15"]
+    }
+  }
+}

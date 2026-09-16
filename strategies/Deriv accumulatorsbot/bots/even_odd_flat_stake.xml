@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml xmlns="http://www.w3.org/1999/xhtml" collection="false">
+  <variables>
+    <variable type="" id="eo_init">Initial Stake</variable>
+    <variable type="" id="eo_cur">Current Stake</variable>
+    <variable type="" id="eo_total">Total Profit</variable>
+    <variable type="" id="eo_profit">Last Profit</variable>
+    <variable type="" id="eo_maxloss">Max Loss USD</variable>
+  </variables>
+
+  <!-- ══ MAIN TRADE BLOCK ══ -->
+  <block type="trade" id="trade" x="-200" y="-100">
+    <field name="MARKET_LIST">synthetic_index</field>
+    <field name="SUBMARKET_LIST">random_index</field>
+    <field name="SYMBOL_LIST">1HZ100V</field>
+    <field name="TRADETYPECAT_LIST">digits</field>
+    <field name="TRADETYPE_LIST">evenodd</field>
+    <field name="TYPE_LIST">both</field>
+    <field name="CANDLEINTERVAL_LIST">60</field>
+    <field name="TIME_MACHINE_ENABLED">FALSE</field>
+    <field name="RESTARTONERROR">TRUE</field>
+
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="i1">
+        <field name="VAR" id="eo_init" variabletype="">Initial Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="n1"><field name="NUM">1</field></block>
+        </value>
+        <next>
+          <block type="variables_set" id="i2">
+            <field name="VAR" id="eo_cur" variabletype="">Current Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="n2"><field name="NUM">1</field></block>
+            </value>
+            <next>
+              <block type="variables_set" id="i3">
+                <field name="VAR" id="eo_total" variabletype="">Total Profit</field>
+                <value name="VALUE">
+                  <block type="math_number" id="n3"><field name="NUM">0</field></block>
+                </value>
+                <next>
+                  <block type="variables_set" id="i4">
+                    <field name="VAR" id="eo_maxloss" variabletype="">Max Loss USD</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="n4"><field name="NUM">10</field></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <statement name="SUBMARKET">
+      <block type="tradeOptions" id="opts">
+        <field name="DURATIONTYPE_LIST">t</field>
+        <field name="CURRENCY_LIST">USD</field>
+        <field name="BARRIEROFFSETTYPE_LIST">+</field>
+        <field name="SECONDBARRIEROFFSETTYPE_LIST">-</field>
+        <value name="DURATION">
+          <block type="math_number" id="dur"><field name="NUM">1</field></block>
+        </value>
+        <value name="AMOUNT">
+          <block type="variables_get" id="amt_ref">
+            <field name="VAR" id="eo_cur" variabletype="">Current Stake</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+
+    <statement name="BEFORE_PURCHASE">
+      <block type="purchase" id="buy_even">
+        <field name="PURCHASE_LIST">DIGITEVEN</field>
+      </block>
+    </statement>
+
+    <statement name="AFTER_PURCHASE">
+      <block type="variables_set" id="ap1">
+        <field name="VAR" id="eo_profit" variabletype="">Last Profit</field>
+        <value name="VALUE">
+          <block type="contract_check" id="cc1">
+            <field name="CONTRACT_CHECK">profit</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="ap2">
+            <field name="VAR" id="eo_total" variabletype="">Total Profit</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="add_tot">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <block type="variables_get" id="tot_a">
+                    <field name="VAR" id="eo_total" variabletype="">Total Profit</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="prft_b">
+                    <field name="VAR" id="eo_profit" variabletype="">Last Profit</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="stop_check">
+                <value name="IF0">
+                  <block type="logic_compare" id="cmp_stop">
+                    <field name="OP">LT</field>
+                    <value name="A">
+                      <block type="variables_get" id="tot_ref">
+                        <field name="VAR" id="eo_total" variabletype="">Total Profit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_arithmetic" id="neg_max">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                          <block type="variables_get" id="maxloss_ref">
+                            <field name="VAR" id="eo_maxloss" variabletype="">Max Loss USD</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="neg1"><field name="NUM">-1</field></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="bot_notification" id="notify_stop">
+                    <field name="NOTIFICATION_TYPE">error</field>
+                    <value name="MESSAGE">
+                      <block type="text" id="msg_stop">
+                        <field name="TEXT">Max loss reached. Bot stopped.</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+  </block>
+</xml>

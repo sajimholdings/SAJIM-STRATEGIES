@@ -1,0 +1,79 @@
+# =================================================================
+# .gitignore for the Backtrader ATR Stop-Loss Strategy
+#
+# This file specifies intentionally untracked files that Git
+# should ignore. The goal is to keep the repository clean from
+# generated logs, reports, and environment-specific files.
+#
+# The 'data/' directory is INTENTIONALLY NOT ignored so that
+# the repository is self-contained and ready to run.
+# =================================================================
+
+# Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE and editor configuration files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Generated log and report directories from strategy execution.
+# These folders are created dynamically by the script and contain
+# user-specific output that should not be in version control.
+debug/
+temp_reports/
+src/strategy/temp_reports/
+
+# Internal documentation and setup guides
+# These are personal reference files, not for public repository
+GITHUB_UPLOAD_GUIDE.md
+GITHUB_READY_SUMMARY.md
+PRE_UPLOAD_CHECKLIST.md
+GITHUB_CLEANUP_SUMMARY.md
+docs/GITHUB_UPLOAD_GUIDE.md
+docs/GITHUB_CLEANUP_SUMMARY.md
+docs/PRE_UPLOAD_CHECKLIST.md
+docs/GITHUB_TOPICS.md
+docs/README_OLD.md
+backtest_results.txt
+performance_output.txt
+generate_performance_metrics.py
+README_backup_old.md
+README_OLD_BACKUP.md
+README_FIX_SUMMARY.md
+FILES_REVIEW.md
+*_backup*.md
+*_OLD*.md
+
+# Note: docs/CONTRIBUTING.md is PUBLIC (useful for contributors)
+
+# Virtual environment folders
+venv/
+env/
+.env
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/

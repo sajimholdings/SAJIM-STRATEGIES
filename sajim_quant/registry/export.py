@@ -36,9 +36,6 @@ EXPORT_FILES = ("leaderboard.json", "registry.json", "correlation.json", "strate
 
 def default_dashboard_public_dir() -> Path:
     root = find_repo_root()
-    for candidate in (root / "apps" / "dashboard" / "public", root / "sim" / "public"):
-        if candidate.exists():
-            return candidate
     return root / "apps" / "dashboard" / "public"
 
 

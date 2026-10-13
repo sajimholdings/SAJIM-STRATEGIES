@@ -48,3 +48,32 @@ python_env/
 /sim/data/
 /apps/dashboard/data/
 
+
+# ---- Vendor / generated payload that must never be tracked again ----
+# Full MetaTrader 5 terminal install (keep it locally, outside git)
+apps/sajim_holdings_sandbox/MT5_Sajim/
+# Downloaded Deriv bots, PDFs and videos
+strategies/Deriv\ accumulatorsbot/reference/
+# Scalper1 agent tooling, planning dumps and stdlib backups
+strategies/Scalper1/.bmad/
+strategies/Scalper1/bmad/
+strategies/Scalper1/.factory/
+strategies/Scalper1/.claude/
+strategies/Scalper1/.prompts/
+strategies/Scalper1/.planning/
+strategies/Scalper1/MQL5/Include/_stdlib_backup/
+strategies/Scalper1/CLIPROXY/
+strategies/Scalper1/get-pip.py
+strategies/Scalper1/=*
+strategies/Scalper1/infrastructure/terraform/secrets.tf
+# One-off dumps
+/temp_reports/
+/*.pdf
+*.zip
+broadcast_stream.jsonl
+# Office lock files and tester scratch
+~$*
+_sajim_tmp/
+# Scratch output of runner scripts
+/tests/test_output.*
+/tests/sample_tradingview_trades.csv

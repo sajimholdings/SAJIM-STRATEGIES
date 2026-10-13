@@ -31,6 +31,6 @@ strategies/
 3. **Trigger Automatic Discovery**:
    Run the scanner to immediately benchmark and rank your strategy:
    ```powershell
-   & "f:\Tete\SAJIM STRATEGIES\files\.venv\Scripts\python.exe" "f:\Tete\SAJIM STRATEGIES\sajim_quant\core\discovery.py"
+python -m sajim_quant.core.discovery
    ```
 4. View results on the live dashboard at `http://localhost:3000`.

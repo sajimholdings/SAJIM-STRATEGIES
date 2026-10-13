@@ -1,0 +1,8 @@
+{
+  "headline": "Negative Expectancy / Drift",
+  "regime_classification": "UNPROFITABLE",
+  "structural_cause": "Strategy assumptions are fundamentally mismatched with SYNTH's price action on H1.",
+  "mechanics_detail": "Losses accumulate steadily due to spread friction and false breakouts.",
+  "recommendation": "Do not trade this combination.",
+  "edge_rating": "TOXIC_FAILURE"
+}

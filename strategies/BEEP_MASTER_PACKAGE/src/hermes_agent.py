@@ -16,13 +16,11 @@ import requests
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-# API Configuration - Validates and falls back to real key
-DEFAULT_DEEPSEEK_KEY = "sk-79a2dbfb8eea4658a9079632208f035c"
-_env_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
-if _env_key and not _env_key.startswith("sk-your_") and len(_env_key) > 20:
-    DEEPSEEK_API_KEY = _env_key
-else:
-    DEEPSEEK_API_KEY = DEFAULT_DEEPSEEK_KEY
+# API Configuration - keys come from the environment only (never commit a key here).
+# The previously hardcoded fallback key was removed; rotate it on the DeepSeek console.
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+if not DEEPSEEK_API_KEY or DEEPSEEK_API_KEY.startswith("sk-your_"):
+    print("[HERMES] DEEPSEEK_API_KEY is not set; DeepSeek calls will fail until it is exported.")
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 

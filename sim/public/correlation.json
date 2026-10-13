@@ -1,0 +1,9 @@
+{
+  "generated_at": "2026-10-13T03:52:50+00:00",
+  "strategies": [
+    "DEMO_SMA_Cross_SyntheticData"
+  ],
+  "matrix": {},
+  "diversification_ratio": null,
+  "note": "Correlation needs at least two recorded runs with trades."
+}

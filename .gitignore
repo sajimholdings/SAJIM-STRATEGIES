@@ -33,7 +33,6 @@ htmlcov/
 # data/ # Commented out to ensure data is included if needed by Claude
 
 python_env/
-*env*/
 
 
 *.exe
@@ -42,5 +41,10 @@ python_env/
 *.tmp
 *.csv
 *.parquet
-data/
+# Registry artifacts are small and must be versioned
+!/results/**/*.csv
+# Market data caches only (NOT python packages named data/)
+/data/
+/sim/data/
+/apps/dashboard/data/
 

@@ -58,6 +58,9 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
         strategy_name: Optional[str] = None,
         terminal_exe_path: Optional[Path] = None,
         common_files_path: Optional[Path] = None,
+        account_login: Optional[int] = None,
+        account_password: Optional[str] = None,
+        account_server: Optional[str] = None,
     ):
         self.mq5_path = Path(mq5_source_path).resolve()
         strat_name = strategy_name or self.mq5_path.stem
@@ -73,8 +76,11 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
             if common_files_path
             else Path(os.path.expanduser(r"~\AppData\Roaming\MetaQuotes\Terminal\Common\Files"))
         )
-        self.account_login = 112597392
-        self.account_server = "MetaQuotes-Demo"
+        # Credentials are never stored in source. Set SAJIM_MT5_LOGIN / SAJIM_MT5_PASSWORD /
+        # SAJIM_MT5_SERVER in the environment (or a local .env) before running headless tests.
+        self.account_login = account_login if account_login is not None else int(os.environ.get("SAJIM_MT5_LOGIN", "0") or 0)
+        self.account_password = account_password if account_password is not None else os.environ.get("SAJIM_MT5_PASSWORD", "")
+        self.account_server = account_server or os.environ.get("SAJIM_MT5_SERVER", "MetaQuotes-Demo")
         self.preprocessor = Mql5Preprocessor()
         self.syncer = CustomSymbolSync()
 
@@ -99,8 +105,8 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
         tf_str = self.PERIOD_MAP.get(timeframe.upper(), "H1")
 
         content = f"""[Common]
-Login=112701746
-Password=MyAiL-O6
+Login={self.account_login}
+Password={self.account_password}
 Server={self.account_server}
 ProxyEnable=0
 

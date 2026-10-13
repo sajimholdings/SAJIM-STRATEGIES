@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SAJIM dashboard (`apps/dashboard`)
 
-## Getting Started
-
-First, run the development server:
+Next.js cockpit that renders the results registry. It never computes a metric itself: everything it
+shows comes from the JSON files written by `sajim export` into `public/` plus the per-run artifacts
+under `results/` at the repository root.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# from the repo root, after recording runs
+sajim export                 # writes public/{leaderboard,registry,correlation,strategy_universe_matrix}.json
+cd apps/dashboard
+npm ci
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tabs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Leaderboard** – one row per strategy (its primary run), sortable, filter by runtime / tier, "verified only".
+- **Strategies** – every recorded run, grouped by strategy or flat. Click a run for the detail drawer.
+- **Universe grid** – symbol × timeframe Sharpe heatmap per strategy. Only cells with a real run are filled.
+- **Correlation** – daily-PnL correlation across primary runs that have trade lists.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The detail drawer shows the realized equity curve, 1,000-path Monte Carlo fan (P5/P25/P50/P75/P95),
+risk-of-ruin, fragility, the behavioural diagnosis, run assumptions, the markdown tear sheet and a
+`trades.csv` download. Rows tagged **LEGACY** were transcribed from the old hand-written leaderboard
+and have no trade list, so those panels explain what is missing instead of inventing a chart.
 
-## Learn More
+API routes (all read-only): `/api/leaderboard`, `/api/registry`, `/api/registry/[strategyId]/[runId]`,
+`/api/registry/[strategyId]/[runId]/trades`, `/api/strategy-universe`, `/api/correlation`.
+Set `SAJIM_RESULTS_DIR` to point the detail routes at a results folder outside the repo.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Checks: `npm run lint`, `npx tsc --noEmit`, `npm run build`.

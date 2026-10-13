@@ -37,7 +37,9 @@ class StrategyDiscoveryScanner:
     EXCLUDED_DIRS = {
         ".git", ".venv", "node_modules", ".next", "__pycache__",
         "python_env", ".tmp_session_catalogs", ".tmp_session_catalogs2",
-        "temp_reports", "logs", "data", "sim", "docs", "tests", "sajim_quant", "files"
+        "temp_reports", "logs", "data", "docs", "tests", "sajim_quant", "results",
+        "scripts", "tools", "archive", "dashboard", "MT5_Sajim", "frontend", "web", "supabase",
+        "reference", ".planning", ".bmad", "bmad", ".factory", ".claude", ".prompts",
     }
 
     def __init__(self, workspace_root: Path):

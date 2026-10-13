@@ -65,6 +65,7 @@ class BehavioralDiagnosticsEngine:
         win_rate: float,
         max_dd_pct: float,
         trades: int,
+        net_pnl: float = 0.0,
     ) -> BehavioralDiagnosis:
         """
         Synthesizes metrics into a clear physical diagnostic narrative.

@@ -1,0 +1,1507 @@
+{
+  "last_updated": "2026-10-13T03:52:50+00:00",
+  "total_strategies": 16,
+  "total_runs": 35,
+  "strategies": [
+    {
+      "strategy_id": "beep_baseline_follower",
+      "name": "BEEP_Baseline_Follower",
+      "folder": "",
+      "engine": "unknown",
+      "description": "Peak performance: continuous 1st derivative baseline tracking on high-volatility Yen cross.",
+      "runs": [
+        {
+          "run_id": "legacy_GBPJPY_H1",
+          "strategy_id": "beep_baseline_follower",
+          "name": "BEEP_Baseline_Follower",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "GBPJPY",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 344,
+          "win_rate_pct": 33.1,
+          "profit_factor": 1.68,
+          "net_pnl": 6757.9,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 3.4,
+          "sharpe_ratio": 2.15,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 1: ELITE",
+          "edge_rating": "UNRATED",
+          "description": "Peak performance: continuous 1st derivative baseline tracking on high-volatility Yen cross.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:OPTIMAL"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_EURUSD_H1",
+          "strategy_id": "beep_baseline_follower",
+          "name": "BEEP_Baseline_Follower",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "EURUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 325,
+          "win_rate_pct": 34.8,
+          "profit_factor": 1.52,
+          "net_pnl": 3633.55,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 2.9,
+          "sharpe_ratio": 1.75,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Clean continuous trend-following with multi-pass noise elimination.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_GBPUSD_H1",
+          "strategy_id": "beep_baseline_follower",
+          "name": "BEEP_Baseline_Follower",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "GBPUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 347,
+          "win_rate_pct": 33.4,
+          "profit_factor": 1.28,
+          "net_pnl": 1213.96,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 3.8,
+          "sharpe_ratio": 1.15,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Consistent positive expectancy; minor chop sensitivity during London/NY transition.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_GBPJPY_H1",
+      "tier": "TIER 1: ELITE"
+    },
+    {
+      "strategy_id": "beep_vacuum_hunter",
+      "name": "BEEP_Vacuum_Hunter",
+      "folder": "",
+      "engine": "unknown",
+      "description": "11-Pass recursive asymptotic vacuum hunter triggers entries exclusively into thin order book voids.",
+      "runs": [
+        {
+          "run_id": "legacy_GBPUSD_M5",
+          "strategy_id": "beep_vacuum_hunter",
+          "name": "BEEP_Vacuum_Hunter",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "GBPUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 175,
+          "win_rate_pct": 38.3,
+          "profit_factor": 1.84,
+          "net_pnl": 2215.43,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 2.85,
+          "sharpe_ratio": 1.95,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 1: ELITE",
+          "edge_rating": "UNRATED",
+          "description": "11-Pass recursive asymptotic vacuum hunter triggers entries exclusively into thin order book voids.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:OPTIMAL"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_GBPUSD_M1_Gates_M5_M15",
+          "strategy_id": "beep_vacuum_hunter",
+          "name": "BEEP_Vacuum_Hunter",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "GBPUSD",
+          "timeframe": "M1 (Gates: M5/M15)",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 88,
+          "win_rate_pct": 37.5,
+          "profit_factor": 0.88,
+          "net_pnl": -314.76,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 5.2,
+          "sharpe_ratio": 0.95,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Sub-minute noise elevates slippage friction; M5 entry provides superior signal-to-noise ratio.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:FAST_SCALPER"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_GBPUSD_M5",
+      "tier": "TIER 1: ELITE"
+    },
+    {
+      "strategy_id": "beep_gold_vacuum",
+      "name": "BEEP_Gold_Vacuum",
+      "folder": "",
+      "engine": "unknown",
+      "description": "Void gravity captures rapid Gold liquidity ejections with dynamic death-avoidance risk sizing.",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_M5",
+          "strategy_id": "beep_gold_vacuum",
+          "name": "BEEP_Gold_Vacuum",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "XAUUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 162,
+          "win_rate_pct": 40.1,
+          "profit_factor": 1.42,
+          "net_pnl": 649.15,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 1.95,
+          "sharpe_ratio": 1.35,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Void gravity captures rapid Gold liquidity ejections with dynamic death-avoidance risk sizing.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:OPTIMAL"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_M5",
+      "tier": "TIER 2: VIABLE"
+    },
+    {
+      "strategy_id": "btc_volatility_breakout",
+      "name": "BTC_Volatility_Breakout",
+      "folder": "",
+      "engine": "unknown",
+      "description": "Whipsawed by 15M consolidation ranges. Frequent false breakouts.",
+      "runs": [
+        {
+          "run_id": "legacy_BTCUSDT_4H",
+          "strategy_id": "btc_volatility_breakout",
+          "name": "BTC_Volatility_Breakout",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "BTCUSDT",
+          "timeframe": "4H",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 18,
+          "win_rate_pct": 55.6,
+          "profit_factor": 1.85,
+          "net_pnl": 1420.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 2.1,
+          "sharpe_ratio": 1.45,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Macro trend alignment. Very low false breakout rate, but sparse trade count.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_BTCUSDT_1H",
+          "strategy_id": "btc_volatility_breakout",
+          "name": "BTC_Volatility_Breakout",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "BTCUSDT",
+          "timeframe": "1H",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 42,
+          "win_rate_pct": 45.2,
+          "profit_factor": 1.18,
+          "net_pnl": 840.5,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 3.8,
+          "sharpe_ratio": 0.72,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "Substantial improvement over 15M. Allows breakout momentum to develop into full swings.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_BTCUSDT_15M",
+          "strategy_id": "btc_volatility_breakout",
+          "name": "BTC_Volatility_Breakout",
+          "folder": "",
+          "engine": "unknown",
+          "symbol": "BTCUSDT",
+          "timeframe": "15M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 354,
+          "win_rate_pct": 33.6,
+          "profit_factor": 0.48,
+          "net_pnl": -288.75,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 6.42,
+          "sharpe_ratio": -1.45,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Whipsawed by 15M consolidation ranges. Frequent false breakouts.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:UNPROFITABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_BTCUSDT_4H",
+      "tier": "TIER 2: VIABLE"
+    },
+    {
+      "strategy_id": "smc_fractal_daemon",
+      "name": "SMC_Fractal_Daemon",
+      "folder": "smc_daemon_project",
+      "engine": "python:smc_daemon",
+      "description": "5-phase institutional SMC state machine (Liquidity Sweep -> BOS -> Inducement Trap -> 0.25 Impulse Retracement -> BE Trail)",
+      "runs": [
+        {
+          "run_id": "legacy_EURUSD_H1_M5",
+          "strategy_id": "smc_fractal_daemon",
+          "name": "SMC_Fractal_Daemon",
+          "folder": "smc_daemon_project",
+          "engine": "python:smc_daemon",
+          "symbol": "EURUSD",
+          "timeframe": "H1/M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 14,
+          "win_rate_pct": 64.3,
+          "profit_factor": 5.74,
+          "net_pnl": 4209.61,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.76,
+          "sharpe_ratio": 3.38,
+          "sortino_ratio": 6.75,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "5-phase institutional SMC state machine (Liquidity Sweep -> BOS -> Inducement Trap -> 0.25 Impulse Retracement -> BE Trail)",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 1: ELITE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "smc_fractal_daemon/legacy_EURUSD_H1_M5/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_EURUSD_M30_M5",
+          "strategy_id": "smc_fractal_daemon",
+          "name": "SMC_Fractal_Daemon",
+          "folder": "smc_daemon_project",
+          "engine": "python:smc_daemon",
+          "symbol": "EURUSD",
+          "timeframe": "M30/M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 28,
+          "win_rate_pct": 46.4,
+          "profit_factor": 1.45,
+          "net_pnl": 1120.4,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 2.85,
+          "sharpe_ratio": 1.18,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Frequent false internal structure breaks on M30 reduce edge compared to H1 anchor.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:MARGINAL"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_EURUSD_H4_H1",
+          "strategy_id": "smc_fractal_daemon",
+          "name": "SMC_Fractal_Daemon",
+          "folder": "smc_daemon_project",
+          "engine": "python:smc_daemon",
+          "symbol": "EURUSD",
+          "timeframe": "H4/H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 5,
+          "win_rate_pct": 80.0,
+          "profit_factor": 6.8,
+          "net_pnl": 3150.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.52,
+          "sharpe_ratio": 2.9,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: INSUFFICIENT DATA",
+          "edge_rating": "UNRATED",
+          "description": "Ultra-pure macro liquidity sweeps. Low frequency but phenomenal win rate (80%).",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:SWING_ELITE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_EURUSD_H1_M15",
+          "strategy_id": "smc_fractal_daemon",
+          "name": "SMC_Fractal_Daemon",
+          "folder": "smc_daemon_project",
+          "engine": "python:smc_daemon",
+          "symbol": "EURUSD",
+          "timeframe": "H1/M15",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 9,
+          "win_rate_pct": 66.7,
+          "profit_factor": 4.12,
+          "net_pnl": 2840.1,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.95,
+          "sharpe_ratio": 2.65,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: INSUFFICIENT DATA",
+          "edge_rating": "UNRATED",
+          "description": "Clean institutional entries with slightly lower frequency. Excellent for lower slippage.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_EURUSD_H1_M5",
+      "tier": "TIER 2: VIABLE"
+    },
+    {
+      "strategy_id": "sunriseogle_xauusd",
+      "name": "SunriseOgle_XAUUSD",
+      "folder": "backtrader-pullback-window-xauusd",
+      "engine": "python:backtrader",
+      "description": "Volatility Expansion Channel with pullback depth confirmation in Backtrader",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_M15",
+          "strategy_id": "sunriseogle_xauusd",
+          "name": "SunriseOgle_XAUUSD",
+          "folder": "backtrader-pullback-window-xauusd",
+          "engine": "python:backtrader",
+          "symbol": "XAUUSD",
+          "timeframe": "M15",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 19,
+          "win_rate_pct": 68.4,
+          "profit_factor": 1.42,
+          "net_pnl": 385.4,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.85,
+          "sharpe_ratio": 1.12,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: VIABLE",
+          "edge_rating": "UNRATED",
+          "description": "Sweet spot for channel expansion. Larger ATR targets overcome spread drag cleanly.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:OPTIMAL"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_M5",
+          "strategy_id": "sunriseogle_xauusd",
+          "name": "SunriseOgle_XAUUSD",
+          "folder": "backtrader-pullback-window-xauusd",
+          "engine": "python:backtrader",
+          "symbol": "XAUUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 13,
+          "win_rate_pct": 61.5,
+          "profit_factor": 0.97,
+          "net_pnl": -2.05,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.03,
+          "sharpe_ratio": -0.08,
+          "sortino_ratio": -0.07,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "Volatility Expansion Channel with pullback depth confirmation in Backtrader",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 2: MARGINAL"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "sunriseogle_xauusd/legacy_XAUUSD_M5/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_H1",
+          "strategy_id": "sunriseogle_xauusd",
+          "name": "SunriseOgle_XAUUSD",
+          "folder": "backtrader-pullback-window-xauusd",
+          "engine": "python:backtrader",
+          "symbol": "XAUUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 7,
+          "win_rate_pct": 57.1,
+          "profit_factor": 1.2,
+          "net_pnl": 210.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 1.1,
+          "sharpe_ratio": 0.85,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: INSUFFICIENT DATA",
+          "edge_rating": "UNRATED",
+          "description": "Wider channels require deeper pullbacks, resulting in fewer triggered entries.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_M15",
+      "tier": "TIER 2: VIABLE"
+    },
+    {
+      "strategy_id": "demo_sma_cross_synthetic",
+      "name": "DEMO_SMA_Cross_SyntheticData",
+      "folder": "scripts/run_demo_synthetic.py",
+      "engine": "python:backtrader",
+      "description": "Pipeline demo: 10/30 SMA cross on synthetic random-walk bars. Exists only to show the registry, Monte Carlo and dashboard wiring.",
+      "runs": [
+        {
+          "run_id": "SYNTH_H1_demo",
+          "strategy_id": "demo_sma_cross_synthetic",
+          "name": "DEMO_SMA_Cross_SyntheticData",
+          "folder": "scripts/run_demo_synthetic.py",
+          "engine": "python:backtrader",
+          "symbol": "SYNTH",
+          "timeframe": "H1",
+          "start_date": "2024-01-01 00:00:00",
+          "end_date": "2024-06-15 15:00:00",
+          "initial_balance": 10000.0,
+          "trades": 83,
+          "win_rate_pct": 39.76,
+          "profit_factor": 0.92,
+          "net_pnl": -67.1,
+          "return_pct": -0.67,
+          "max_drawdown_pct": 3.96,
+          "sharpe_ratio": -0.37,
+          "sortino_ratio": -0.53,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "TOXIC_FAILURE",
+          "description": "Pipeline demo: 10/30 SMA cross on synthetic random-walk bars. Exists only to show the registry, Monte Carlo and dashboard wiring.",
+          "tags": [
+            "demo",
+            "synthetic-data"
+          ],
+          "assumptions": {
+            "spread_model": "floating",
+            "spread_pips": null,
+            "commission_model": "zero",
+            "commission_rate": 0.0,
+            "slippage_pips": 0.0,
+            "notes": "DEMO on synthetic random-walk bars. Not a market result."
+          },
+          "monte_carlo_summary": {
+            "num_simulations": 1000,
+            "worst_drawdown_95_pct": 5.69,
+            "worst_drawdown_99_pct": 6.79,
+            "risk_of_ruin_20_pct": 0.0,
+            "fragility_index": 1.0,
+            "is_robust": true,
+            "terminal_median_balance": 9942.19
+          },
+          "artifacts": {
+            "result.json": "demo_sma_cross_synthetic/SYNTH_H1_demo/result.json",
+            "trades.csv": "demo_sma_cross_synthetic/SYNTH_H1_demo/trades.csv",
+            "metrics.json": "demo_sma_cross_synthetic/SYNTH_H1_demo/metrics.json",
+            "monte_carlo.json": "demo_sma_cross_synthetic/SYNTH_H1_demo/monte_carlo.json",
+            "diagnosis.json": "demo_sma_cross_synthetic/SYNTH_H1_demo/diagnosis.json",
+            "tear_sheet.md": "demo_sma_cross_synthetic/SYNTH_H1_demo/tear_sheet.md"
+          },
+          "source": "registry",
+          "primary": true,
+          "created_at": "2026-10-13T03:52:50+00:00"
+        }
+      ],
+      "primary_run_id": "SYNTH_H1_demo",
+      "tier": "TIER 2: MARGINAL"
+    },
+    {
+      "strategy_id": "deriv_updown_momentum",
+      "name": "Deriv_UpDown_Momentum",
+      "folder": "Deriv UpDown",
+      "engine": "deriv:binary_options",
+      "description": "Short-term momentum continuation Rise/Fall contracts on 5M Volatility 100 Index with EMA/RSI triggers",
+      "runs": [
+        {
+          "run_id": "legacy_SYNTHETICS_1H",
+          "strategy_id": "deriv_updown_momentum",
+          "name": "Deriv_UpDown_Momentum",
+          "folder": "Deriv UpDown",
+          "engine": "deriv:binary_options",
+          "symbol": "SYNTHETICS",
+          "timeframe": "1H",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 13461,
+          "win_rate_pct": 51.1,
+          "profit_factor": 0.99,
+          "net_pnl": -351.87,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 4.5,
+          "sharpe_ratio": 1.15,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "Best binary option performance. High timeframe momentum overcomes broker fee haircut.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:NEGATIVE_DRIFT"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_SYNTHETICS_1M",
+          "strategy_id": "deriv_updown_momentum",
+          "name": "Deriv_UpDown_Momentum",
+          "folder": "Deriv UpDown",
+          "engine": "deriv:binary_options",
+          "symbol": "SYNTHETICS",
+          "timeframe": "1M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 13264,
+          "win_rate_pct": 52.1,
+          "profit_factor": 1.03,
+          "net_pnl": 2195.79,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 10.5,
+          "sharpe_ratio": -3.5,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "High noise floor; negative mathematical expectancy.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_SYNTHETICS_5M",
+          "strategy_id": "deriv_updown_momentum",
+          "name": "Deriv_UpDown_Momentum",
+          "folder": "Deriv UpDown",
+          "engine": "deriv:binary_options",
+          "symbol": "SYNTHETICS",
+          "timeframe": "5M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 13217,
+          "win_rate_pct": 51.3,
+          "profit_factor": 1.0,
+          "net_pnl": 25.64,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 10.5,
+          "sharpe_ratio": -3.5,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Unfavorable due to chop and 100% loss vs 95% win asymmetry.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:NEGATIVE_DRIFT"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_SYNTHETICS_15M",
+          "strategy_id": "deriv_updown_momentum",
+          "name": "Deriv_UpDown_Momentum",
+          "folder": "Deriv UpDown",
+          "engine": "deriv:binary_options",
+          "symbol": "SYNTHETICS",
+          "timeframe": "15M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 13248,
+          "win_rate_pct": 51.3,
+          "profit_factor": 1.0,
+          "net_pnl": -25.97,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 10.5,
+          "sharpe_ratio": -3.5,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Near breakeven; signals degrade under short-duration execution.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:NEGATIVE_DRIFT"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_1HZ100V_5M",
+          "strategy_id": "deriv_updown_momentum",
+          "name": "Deriv_UpDown_Momentum",
+          "folder": "Deriv UpDown",
+          "engine": "deriv:binary_options",
+          "symbol": "1HZ100V",
+          "timeframe": "5M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 2628,
+          "win_rate_pct": 49.66,
+          "profit_factor": 0.94,
+          "net_pnl": -832.5,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 10.07,
+          "sharpe_ratio": -5.27,
+          "sortino_ratio": -6.1,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Short-term momentum continuation Rise/Fall contracts on 5M Volatility 100 Index with EMA/RSI triggers",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 3: NEGATIVE DRIFT"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "deriv_updown_momentum/legacy_1HZ100V_5M/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_SYNTHETICS_1H",
+      "tier": "TIER 2: MARGINAL"
+    },
+    {
+      "strategy_id": "deriv_v3_fullytuned",
+      "name": "Deriv_V3_FullyTuned",
+      "folder": "Deriv trading",
+      "engine": "deriv:websocket_bot",
+      "description": "High-frequency volatility index momentum scalper on Deriv WebSocket API",
+      "runs": [
+        {
+          "run_id": "legacy_SYNTHETICS_TICK",
+          "strategy_id": "deriv_v3_fullytuned",
+          "name": "Deriv_V3_FullyTuned",
+          "folder": "Deriv trading",
+          "engine": "deriv:websocket_bot",
+          "symbol": "SYNTHETICS",
+          "timeframe": "TICK",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 254,
+          "win_rate_pct": 49.6,
+          "profit_factor": 0.98,
+          "net_pnl": -0.72,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 1.82,
+          "sharpe_ratio": -0.12,
+          "sortino_ratio": -0.1,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "High-frequency volatility index momentum scalper on Deriv WebSocket API",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 2: MARGINAL"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "deriv_v3_fullytuned/legacy_SYNTHETICS_TICK/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_SYNTHETICS_TICK",
+      "tier": "TIER 2: MARGINAL"
+    },
+    {
+      "strategy_id": "goldpullbackai",
+      "name": "GoldPullbackAI",
+      "folder": "XAUUSD_TRADING_ASISTENT_AI",
+      "engine": "python:sovereign_sniper",
+      "description": "Structural EMA slope angle filter combined with dynamic ATR pullback counter",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_H1",
+          "strategy_id": "goldpullbackai",
+          "name": "GoldPullbackAI",
+          "folder": "XAUUSD_TRADING_ASISTENT_AI",
+          "engine": "python:sovereign_sniper",
+          "symbol": "XAUUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 291,
+          "win_rate_pct": 40.2,
+          "profit_factor": 1.02,
+          "net_pnl": 3606.88,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 4.85,
+          "sharpe_ratio": 0.84,
+          "sortino_ratio": 1.12,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "Structural EMA slope angle filter combined with dynamic ATR pullback counter",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 2: VIABLE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "goldpullbackai/legacy_XAUUSD_H1/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_H4",
+          "strategy_id": "goldpullbackai",
+          "name": "GoldPullbackAI",
+          "folder": "XAUUSD_TRADING_ASISTENT_AI",
+          "engine": "python:sovereign_sniper",
+          "symbol": "XAUUSD",
+          "timeframe": "H4",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 93,
+          "win_rate_pct": 46.2,
+          "profit_factor": 1.03,
+          "net_pnl": 27.8,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.28,
+          "sharpe_ratio": 0.22,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 2: MARGINAL",
+          "edge_rating": "UNRATED",
+          "description": "Low signal frequency; wide stop-loss requirement.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:VIABLE"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_M30",
+          "strategy_id": "goldpullbackai",
+          "name": "GoldPullbackAI",
+          "folder": "XAUUSD_TRADING_ASISTENT_AI",
+          "engine": "python:sovereign_sniper",
+          "symbol": "XAUUSD",
+          "timeframe": "M30",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 244,
+          "win_rate_pct": 38.1,
+          "profit_factor": 0.64,
+          "net_pnl": -408.48,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.84,
+          "sharpe_ratio": -4.67,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Solid structural follow-through with clean R:R.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:DEGRADED"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_M15",
+          "strategy_id": "goldpullbackai",
+          "name": "GoldPullbackAI",
+          "folder": "XAUUSD_TRADING_ASISTENT_AI",
+          "engine": "python:sovereign_sniper",
+          "symbol": "XAUUSD",
+          "timeframe": "M15",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 216,
+          "win_rate_pct": 37.0,
+          "profit_factor": 0.33,
+          "net_pnl": -587.02,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 1.17,
+          "sharpe_ratio": -10.52,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "High trade frequency but spread drag erodes net profit.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:DEGRADED"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_M5",
+          "strategy_id": "goldpullbackai",
+          "name": "GoldPullbackAI",
+          "folder": "XAUUSD_TRADING_ASISTENT_AI",
+          "engine": "python:sovereign_sniper",
+          "symbol": "XAUUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 161,
+          "win_rate_pct": 25.5,
+          "profit_factor": 0.2,
+          "net_pnl": -421.4,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.85,
+          "sharpe_ratio": -12.8,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "High trade frequency but spread drag erodes net profit.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:DEGRADED"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_H1",
+      "tier": "TIER 2: MARGINAL"
+    },
+    {
+      "strategy_id": "goldorb_orb",
+      "name": "GoldOrb_ORB",
+      "folder": "GoldOrb",
+      "engine": "mt5:headless",
+      "description": "MQL5 Opening Range Breakout strategy executed headlessly on MT5 Strategy Tester",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_H1",
+          "strategy_id": "goldorb_orb",
+          "name": "GoldOrb_ORB",
+          "folder": "GoldOrb",
+          "engine": "mt5:headless",
+          "symbol": "XAUUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 2,
+          "win_rate_pct": 50.0,
+          "profit_factor": 2.14,
+          "net_pnl": 160.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0.28,
+          "sharpe_ratio": 1.15,
+          "sortino_ratio": 1.4,
+          "tier": "TIER 3: INSUFFICIENT DATA",
+          "edge_rating": "UNRATED",
+          "description": "MQL5 Opening Range Breakout strategy executed headlessly on MT5 Strategy Tester",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 2: VIABLE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "goldorb_orb/legacy_XAUUSD_H1/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_H1",
+      "tier": "TIER 3: INSUFFICIENT DATA"
+    },
+    {
+      "strategy_id": "pine_luxalgo_smartmoney",
+      "name": "Pine_LuxAlgo_SmartMoney",
+      "folder": "tests",
+      "engine": "pine:imported",
+      "description": "TradingView Pine Script Strategy Tester List of Trades export",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_H1",
+          "strategy_id": "pine_luxalgo_smartmoney",
+          "name": "Pine_LuxAlgo_SmartMoney",
+          "folder": "tests",
+          "engine": "pine:imported",
+          "symbol": "XAUUSD",
+          "timeframe": "H1",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 3,
+          "win_rate_pct": 66.7,
+          "profit_factor": 5.0,
+          "net_pnl": 4000.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 1.05,
+          "sharpe_ratio": 2.1,
+          "sortino_ratio": 3.4,
+          "tier": "TIER 3: INSUFFICIENT DATA",
+          "edge_rating": "UNRATED",
+          "description": "TradingView Pine Script Strategy Tester List of Trades export",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 1: ELITE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "pine_luxalgo_smartmoney/legacy_XAUUSD_H1/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_H1",
+      "tier": "TIER 3: INSUFFICIENT DATA"
+    },
+    {
+      "strategy_id": "btc_breakout_15m",
+      "name": "BTC_Breakout_15M",
+      "folder": "BTC data collector",
+      "engine": "python:breakout_system",
+      "description": "Volatility breakout system on crypto intraday bars",
+      "runs": [
+        {
+          "run_id": "legacy_BTCUSDT_15M",
+          "strategy_id": "btc_breakout_15m",
+          "name": "BTC_Breakout_15M",
+          "folder": "BTC data collector",
+          "engine": "python:breakout_system",
+          "symbol": "BTCUSDT",
+          "timeframe": "15M",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 354,
+          "win_rate_pct": 33.6,
+          "profit_factor": 0.48,
+          "net_pnl": -288.75,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 6.42,
+          "sharpe_ratio": -1.45,
+          "sortino_ratio": -1.3,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Volatility breakout system on crypto intraday bars",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 3: UNPROFITABLE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "btc_breakout_15m/legacy_BTCUSDT_15M/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_BTCUSDT_15M",
+      "tier": "TIER 3: UNPROFITABLE"
+    },
+    {
+      "strategy_id": "ea_aggressive_scalper",
+      "name": "EA_AGGRESSIVE_SCALPER",
+      "folder": "Scalper1",
+      "engine": "mt5:headless",
+      "description": "High-frequency M5 scalper with Bayesian adaptive learning",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_M15",
+          "strategy_id": "ea_aggressive_scalper",
+          "name": "EA_AGGRESSIVE_SCALPER",
+          "folder": "Scalper1",
+          "engine": "mt5:headless",
+          "symbol": "XAUUSD",
+          "timeframe": "M15",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 312,
+          "win_rate_pct": 48.2,
+          "profit_factor": 0.85,
+          "net_pnl": -4120.0,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 18.5,
+          "sharpe_ratio": -1.4,
+          "sortino_ratio": 0.0,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Drawdown reduced by 55%, but grid recovery remains fundamentally negative expectation.",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "timeframe-matrix",
+            "legacy-status:DEGRADED"
+          ],
+          "assumptions": {
+            "note": "Transcribed from the pre-registry timeframe matrix; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {},
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        },
+        {
+          "run_id": "legacy_XAUUSD_M5",
+          "strategy_id": "ea_aggressive_scalper",
+          "name": "EA_AGGRESSIVE_SCALPER",
+          "folder": "Scalper1",
+          "engine": "mt5:headless",
+          "symbol": "XAUUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 1173,
+          "win_rate_pct": 40.5,
+          "profit_factor": 0.56,
+          "net_pnl": -20903.88,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 41.8,
+          "sharpe_ratio": -3.12,
+          "sortino_ratio": -2.9,
+          "tier": "TIER 3: TOXIC DD",
+          "edge_rating": "UNRATED",
+          "description": "High-frequency M5 scalper with Bayesian adaptive learning",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 3: TOXIC DD"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "ea_aggressive_scalper/legacy_XAUUSD_M5/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": false,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_M15",
+      "tier": "TIER 3: UNPROFITABLE"
+    },
+    {
+      "strategy_id": "eurusd_breakout_1h",
+      "name": "EURUSD_Breakout_1H",
+      "folder": "BTC data collector",
+      "engine": "python:breakout_system",
+      "description": "Breakout continuation system on EURUSD H1",
+      "runs": [
+        {
+          "run_id": "legacy_EURUSD_1H",
+          "strategy_id": "eurusd_breakout_1h",
+          "name": "EURUSD_Breakout_1H",
+          "folder": "BTC data collector",
+          "engine": "python:breakout_system",
+          "symbol": "EURUSD",
+          "timeframe": "1H",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 90,
+          "win_rate_pct": 20.0,
+          "profit_factor": 0.08,
+          "net_pnl": -86.6,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 4.1,
+          "sharpe_ratio": -2.85,
+          "sortino_ratio": -2.5,
+          "tier": "TIER 3: UNPROFITABLE",
+          "edge_rating": "UNRATED",
+          "description": "Breakout continuation system on EURUSD H1",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 3: UNPROFITABLE"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "eurusd_breakout_1h/legacy_EURUSD_1H/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_EURUSD_1H",
+      "tier": "TIER 3: UNPROFITABLE"
+    },
+    {
+      "strategy_id": "ea_ultra_aggressive",
+      "name": "EA_ULTRA_AGGRESSIVE",
+      "folder": "Scalper1",
+      "engine": "mt5:headless",
+      "description": "Fibonacci swing crossover with 2% risk sizing",
+      "runs": [
+        {
+          "run_id": "legacy_XAUUSD_M5",
+          "strategy_id": "ea_ultra_aggressive",
+          "name": "EA_ULTRA_AGGRESSIVE",
+          "folder": "Scalper1",
+          "engine": "mt5:headless",
+          "symbol": "XAUUSD",
+          "timeframe": "M5",
+          "start_date": "",
+          "end_date": "",
+          "initial_balance": 0.0,
+          "trades": 24,
+          "win_rate_pct": 29.2,
+          "profit_factor": 0.42,
+          "net_pnl": -38624.68,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 77.25,
+          "sharpe_ratio": -4.8,
+          "sortino_ratio": -4.2,
+          "tier": "TIER 3: TOXIC DD",
+          "edge_rating": "UNRATED",
+          "description": "Fibonacci swing crossover with 2% risk sizing",
+          "tags": [
+            "legacy",
+            "manual-entry",
+            "legacy-tier:TIER 3: TOXIC DD"
+          ],
+          "assumptions": {
+            "note": "Metrics transcribed from the pre-registry leaderboard; no trade list available."
+          },
+          "monte_carlo_summary": {},
+          "artifacts": {
+            "tear_sheet.md": "ea_ultra_aggressive/legacy_XAUUSD_M5/tear_sheet.md"
+          },
+          "source": "legacy_manual",
+          "primary": true,
+          "created_at": "2026-10-13T03:49:50+00:00"
+        }
+      ],
+      "primary_run_id": "legacy_XAUUSD_M5",
+      "tier": "TIER 3: TOXIC DD"
+    }
+  ]
+}

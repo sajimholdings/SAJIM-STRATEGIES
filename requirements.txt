@@ -1,0 +1,9 @@
+# Core engine (pip install -e .[dev] is equivalent)
+numpy>=1.26
+pandas>=2.1
+pyarrow>=14
+pyyaml>=6
+pytest>=8
+# Optional runtimes
+backtrader>=1.9.78
+# MetaTrader5>=5.0.45   # Windows only; needed for the MT5 headless adapter

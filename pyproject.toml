@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sajim-quant"
+version = "0.2.0"
+description = "SAJIM strategy benchmarking engine: universal trade schema, adapters, analytics, results registry"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=14",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+backtrader = ["backtrader>=1.9.78"]
+mt5 = ["MetaTrader5>=5.0.45; sys_platform == 'win32'"]
+data = ["dukascopy-python>=4.0", "tqdm", "colorama"]
+dev = ["pytest>=8", "pytest-cov"]
+
+[project.scripts]
+sajim = "sajim_quant.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sajim_quant*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

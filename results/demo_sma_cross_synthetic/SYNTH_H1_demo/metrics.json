@@ -1,0 +1,550 @@
+{
+  "strategy_name": "DEMO_SMA_Cross_SyntheticData",
+  "engine": "python:backtrader",
+  "symbol": "SYNTH",
+  "timeframe": "H1",
+  "initial_balance": 10000.0,
+  "final_balance": 9932.9,
+  "net_profit": -67.1,
+  "return_pct": -0.67,
+  "cagr_pct": -1.47,
+  "total_trades": 83,
+  "winning_trades": 33,
+  "losing_trades": 50,
+  "win_rate_pct": 39.76,
+  "profit_factor": 0.92,
+  "expectancy": -0.81,
+  "avg_trade_pnl": -0.81,
+  "avg_win": 24.46,
+  "avg_loss": 17.48,
+  "win_loss_ratio": 1.4,
+  "max_drawdown_amount": 399.48,
+  "max_drawdown_pct": 3.96,
+  "recovery_factor": -0.17,
+  "sharpe_ratio": -0.37,
+  "sortino_ratio": -0.53,
+  "calmar_ratio": -0.37,
+  "max_consecutive_wins": 3,
+  "max_consecutive_losses": 6,
+  "avg_duration_minutes": 1426.3,
+  "total_commission": 0.0,
+  "total_swap": 0.0,
+  "avg_mae": null,
+  "avg_mfe": null,
+  "equity_series": [
+    {
+      "time": "2024-01-01 00:00:00",
+      "equity": 10000.0,
+      "drawdown_pct": 0.0
+    },
+    {
+      "time": "2024-01-02T19:00:00+00:00",
+      "equity": 9985.86,
+      "drawdown_pct": 0.14,
+      "trade_id": "BT_1"
+    },
+    {
+      "time": "2024-01-04T00:00:00+00:00",
+      "equity": 9964.54,
+      "drawdown_pct": 0.35,
+      "trade_id": "BT_2"
+    },
+    {
+      "time": "2024-01-05T12:00:00+00:00",
+      "equity": 9968.41,
+      "drawdown_pct": 0.32,
+      "trade_id": "BT_3"
+    },
+    {
+      "time": "2024-01-08T15:00:00+00:00",
+      "equity": 9965.44,
+      "drawdown_pct": 0.35,
+      "trade_id": "BT_4"
+    },
+    {
+      "time": "2024-01-14T05:00:00+00:00",
+      "equity": 10034.0,
+      "drawdown_pct": 0.0,
+      "trade_id": "BT_5"
+    },
+    {
+      "time": "2024-01-19T08:00:00+00:00",
+      "equity": 10076.62,
+      "drawdown_pct": 0.0,
+      "trade_id": "BT_6"
+    },
+    {
+      "time": "2024-01-19T23:00:00+00:00",
+      "equity": 10077.04,
+      "drawdown_pct": 0.0,
+      "trade_id": "BT_7"
+    },
+    {
+      "time": "2024-01-21T03:00:00+00:00",
+      "equity": 10057.05,
+      "drawdown_pct": 0.2,
+      "trade_id": "BT_8"
+    },
+    {
+      "time": "2024-01-22T16:00:00+00:00",
+      "equity": 10058.78,
+      "drawdown_pct": 0.18,
+      "trade_id": "BT_9"
+    },
+    {
+      "time": "2024-01-23T07:00:00+00:00",
+      "equity": 10027.64,
+      "drawdown_pct": 0.49,
+      "trade_id": "BT_10"
+    },
+    {
+      "time": "2024-01-25T06:00:00+00:00",
+      "equity": 10039.66,
+      "drawdown_pct": 0.37,
+      "trade_id": "BT_11"
+    },
+    {
+      "time": "2024-01-26T04:00:00+00:00",
+      "equity": 10030.46,
+      "drawdown_pct": 0.46,
+      "trade_id": "BT_12"
+    },
+    {
+      "time": "2024-01-27T15:00:00+00:00",
+      "equity": 10044.61,
+      "drawdown_pct": 0.32,
+      "trade_id": "BT_13"
+    },
+    {
+      "time": "2024-01-28T05:00:00+00:00",
+      "equity": 10032.67,
+      "drawdown_pct": 0.44,
+      "trade_id": "BT_14"
+    },
+    {
+      "time": "2024-01-29T02:00:00+00:00",
+      "equity": 9996.69,
+      "drawdown_pct": 0.8,
+      "trade_id": "BT_15"
+    },
+    {
+      "time": "2024-01-31T07:00:00+00:00",
+      "equity": 9979.15,
+      "drawdown_pct": 0.97,
+      "trade_id": "BT_16"
+    },
+    {
+      "time": "2024-02-03T06:00:00+00:00",
+      "equity": 9960.13,
+      "drawdown_pct": 1.16,
+      "trade_id": "BT_17"
+    },
+    {
+      "time": "2024-02-05T05:00:00+00:00",
+      "equity": 9964.96,
+      "drawdown_pct": 1.11,
+      "trade_id": "BT_18"
+    },
+    {
+      "time": "2024-02-07T04:00:00+00:00",
+      "equity": 9974.25,
+      "drawdown_pct": 1.02,
+      "trade_id": "BT_19"
+    },
+    {
+      "time": "2024-02-08T04:00:00+00:00",
+      "equity": 9938.26,
+      "drawdown_pct": 1.38,
+      "trade_id": "BT_20"
+    },
+    {
+      "time": "2024-02-09T20:00:00+00:00",
+      "equity": 9934.59,
+      "drawdown_pct": 1.41,
+      "trade_id": "BT_21"
+    },
+    {
+      "time": "2024-02-11T20:00:00+00:00",
+      "equity": 9942.1,
+      "drawdown_pct": 1.34,
+      "trade_id": "BT_22"
+    },
+    {
+      "time": "2024-02-14T08:00:00+00:00",
+      "equity": 9918.95,
+      "drawdown_pct": 1.57,
+      "trade_id": "BT_23"
+    },
+    {
+      "time": "2024-02-16T10:00:00+00:00",
+      "equity": 9894.06,
+      "drawdown_pct": 1.82,
+      "trade_id": "BT_24"
+    },
+    {
+      "time": "2024-02-18T03:00:00+00:00",
+      "equity": 9870.44,
+      "drawdown_pct": 2.05,
+      "trade_id": "BT_25"
+    },
+    {
+      "time": "2024-02-19T01:00:00+00:00",
+      "equity": 9853.9,
+      "drawdown_pct": 2.21,
+      "trade_id": "BT_26"
+    },
+    {
+      "time": "2024-02-20T14:00:00+00:00",
+      "equity": 9846.58,
+      "drawdown_pct": 2.29,
+      "trade_id": "BT_27"
+    },
+    {
+      "time": "2024-02-22T21:00:00+00:00",
+      "equity": 9878.04,
+      "drawdown_pct": 1.97,
+      "trade_id": "BT_28"
+    },
+    {
+      "time": "2024-02-24T00:00:00+00:00",
+      "equity": 9845.75,
+      "drawdown_pct": 2.3,
+      "trade_id": "BT_29"
+    },
+    {
+      "time": "2024-02-25T05:00:00+00:00",
+      "equity": 9822.04,
+      "drawdown_pct": 2.53,
+      "trade_id": "BT_30"
+    },
+    {
+      "time": "2024-02-26T05:00:00+00:00",
+      "equity": 9803.11,
+      "drawdown_pct": 2.72,
+      "trade_id": "BT_31"
+    },
+    {
+      "time": "2024-02-27T15:00:00+00:00",
+      "equity": 9786.89,
+      "drawdown_pct": 2.88,
+      "trade_id": "BT_32"
+    },
+    {
+      "time": "2024-02-29T12:00:00+00:00",
+      "equity": 9787.88,
+      "drawdown_pct": 2.87,
+      "trade_id": "BT_33"
+    },
+    {
+      "time": "2024-03-04T01:00:00+00:00",
+      "equity": 9777.89,
+      "drawdown_pct": 2.97,
+      "trade_id": "BT_34"
+    },
+    {
+      "time": "2024-03-04T19:00:00+00:00",
+      "equity": 9761.58,
+      "drawdown_pct": 3.13,
+      "trade_id": "BT_35"
+    },
+    {
+      "time": "2024-03-05T01:00:00+00:00",
+      "equity": 9748.31,
+      "drawdown_pct": 3.26,
+      "trade_id": "BT_36"
+    },
+    {
+      "time": "2024-03-05T21:00:00+00:00",
+      "equity": 9733.19,
+      "drawdown_pct": 3.41,
+      "trade_id": "BT_37"
+    },
+    {
+      "time": "2024-03-09T04:00:00+00:00",
+      "equity": 9745.26,
+      "drawdown_pct": 3.29,
+      "trade_id": "BT_38"
+    },
+    {
+      "time": "2024-03-11T19:00:00+00:00",
+      "equity": 9760.49,
+      "drawdown_pct": 3.14,
+      "trade_id": "BT_39"
+    },
+    {
+      "time": "2024-03-14T23:00:00+00:00",
+      "equity": 9765.99,
+      "drawdown_pct": 3.09,
+      "trade_id": "BT_40"
+    },
+    {
+      "time": "2024-03-16T14:00:00+00:00",
+      "equity": 9737.06,
+      "drawdown_pct": 3.37,
+      "trade_id": "BT_41"
+    },
+    {
+      "time": "2024-03-19T10:00:00+00:00",
+      "equity": 9717.69,
+      "drawdown_pct": 3.57,
+      "trade_id": "BT_42"
+    },
+    {
+      "time": "2024-03-22T05:00:00+00:00",
+      "equity": 9723.77,
+      "drawdown_pct": 3.51,
+      "trade_id": "BT_43"
+    },
+    {
+      "time": "2024-03-23T05:00:00+00:00",
+      "equity": 9721.82,
+      "drawdown_pct": 3.53,
+      "trade_id": "BT_44"
+    },
+    {
+      "time": "2024-03-28T16:00:00+00:00",
+      "equity": 9745.34,
+      "drawdown_pct": 3.29,
+      "trade_id": "BT_45"
+    },
+    {
+      "time": "2024-03-30T03:00:00+00:00",
+      "equity": 9740.9,
+      "drawdown_pct": 3.34,
+      "trade_id": "BT_46"
+    },
+    {
+      "time": "2024-04-02T01:00:00+00:00",
+      "equity": 9723.74,
+      "drawdown_pct": 3.51,
+      "trade_id": "BT_47"
+    },
+    {
+      "time": "2024-04-03T12:00:00+00:00",
+      "equity": 9714.89,
+      "drawdown_pct": 3.59,
+      "trade_id": "BT_48"
+    },
+    {
+      "time": "2024-04-05T10:00:00+00:00",
+      "equity": 9688.8,
+      "drawdown_pct": 3.85,
+      "trade_id": "BT_49"
+    },
+    {
+      "time": "2024-04-07T22:00:00+00:00",
+      "equity": 9686.49,
+      "drawdown_pct": 3.88,
+      "trade_id": "BT_50"
+    },
+    {
+      "time": "2024-04-09T22:00:00+00:00",
+      "equity": 9677.56,
+      "drawdown_pct": 3.96,
+      "trade_id": "BT_51"
+    },
+    {
+      "time": "2024-04-14T04:00:00+00:00",
+      "equity": 9784.28,
+      "drawdown_pct": 2.91,
+      "trade_id": "BT_52"
+    },
+    {
+      "time": "2024-04-16T00:00:00+00:00",
+      "equity": 9790.83,
+      "drawdown_pct": 2.84,
+      "trade_id": "BT_53"
+    },
+    {
+      "time": "2024-04-16T18:00:00+00:00",
+      "equity": 9762.89,
+      "drawdown_pct": 3.12,
+      "trade_id": "BT_54"
+    },
+    {
+      "time": "2024-04-17T03:00:00+00:00",
+      "equity": 9736.57,
+      "drawdown_pct": 3.38,
+      "trade_id": "BT_55"
+    },
+    {
+      "time": "2024-04-18T04:00:00+00:00",
+      "equity": 9734.28,
+      "drawdown_pct": 3.4,
+      "trade_id": "BT_56"
+    },
+    {
+      "time": "2024-04-18T07:00:00+00:00",
+      "equity": 9734.83,
+      "drawdown_pct": 3.4,
+      "trade_id": "BT_57"
+    },
+    {
+      "time": "2024-04-19T11:00:00+00:00",
+      "equity": 9716.56,
+      "drawdown_pct": 3.58,
+      "trade_id": "BT_58"
+    },
+    {
+      "time": "2024-04-28T11:00:00+00:00",
+      "equity": 9842.37,
+      "drawdown_pct": 2.33,
+      "trade_id": "BT_59"
+    },
+    {
+      "time": "2024-04-29T06:00:00+00:00",
+      "equity": 9834.39,
+      "drawdown_pct": 2.41,
+      "trade_id": "BT_60"
+    },
+    {
+      "time": "2024-05-01T15:00:00+00:00",
+      "equity": 9836.15,
+      "drawdown_pct": 2.39,
+      "trade_id": "BT_61"
+    },
+    {
+      "time": "2024-05-02T13:00:00+00:00",
+      "equity": 9825.34,
+      "drawdown_pct": 2.5,
+      "trade_id": "BT_62"
+    },
+    {
+      "time": "2024-05-07T20:00:00+00:00",
+      "equity": 9857.97,
+      "drawdown_pct": 2.17,
+      "trade_id": "BT_63"
+    },
+    {
+      "time": "2024-05-10T17:00:00+00:00",
+      "equity": 9893.19,
+      "drawdown_pct": 1.82,
+      "trade_id": "BT_64"
+    },
+    {
+      "time": "2024-05-12T14:00:00+00:00",
+      "equity": 9850.7,
+      "drawdown_pct": 2.25,
+      "trade_id": "BT_65"
+    },
+    {
+      "time": "2024-05-15T15:00:00+00:00",
+      "equity": 9913.71,
+      "drawdown_pct": 1.62,
+      "trade_id": "BT_66"
+    },
+    {
+      "time": "2024-05-16T06:00:00+00:00",
+      "equity": 9906.03,
+      "drawdown_pct": 1.7,
+      "trade_id": "BT_67"
+    },
+    {
+      "time": "2024-05-17T04:00:00+00:00",
+      "equity": 9905.15,
+      "drawdown_pct": 1.71,
+      "trade_id": "BT_68"
+    },
+    {
+      "time": "2024-05-18T02:00:00+00:00",
+      "equity": 9903.5,
+      "drawdown_pct": 1.72,
+      "trade_id": "BT_69"
+    },
+    {
+      "time": "2024-05-19T20:00:00+00:00",
+      "equity": 9922.53,
+      "drawdown_pct": 1.53,
+      "trade_id": "BT_70"
+    },
+    {
+      "time": "2024-05-21T12:00:00+00:00",
+      "equity": 9929.88,
+      "drawdown_pct": 1.46,
+      "trade_id": "BT_71"
+    },
+    {
+      "time": "2024-05-23T15:00:00+00:00",
+      "equity": 9915.45,
+      "drawdown_pct": 1.6,
+      "trade_id": "BT_72"
+    },
+    {
+      "time": "2024-05-25T11:00:00+00:00",
+      "equity": 9942.64,
+      "drawdown_pct": 1.33,
+      "trade_id": "BT_73"
+    },
+    {
+      "time": "2024-05-27T01:00:00+00:00",
+      "equity": 9958.7,
+      "drawdown_pct": 1.17,
+      "trade_id": "BT_74"
+    },
+    {
+      "time": "2024-05-28T01:00:00+00:00",
+      "equity": 9925.67,
+      "drawdown_pct": 1.5,
+      "trade_id": "BT_75"
+    },
+    {
+      "time": "2024-05-30T10:00:00+00:00",
+      "equity": 9929.28,
+      "drawdown_pct": 1.47,
+      "trade_id": "BT_76"
+    },
+    {
+      "time": "2024-06-04T09:00:00+00:00",
+      "equity": 9937.01,
+      "drawdown_pct": 1.39,
+      "trade_id": "BT_77"
+    },
+    {
+      "time": "2024-06-05T01:00:00+00:00",
+      "equity": 9898.46,
+      "drawdown_pct": 1.77,
+      "trade_id": "BT_78"
+    },
+    {
+      "time": "2024-06-06T06:00:00+00:00",
+      "equity": 9863.36,
+      "drawdown_pct": 2.12,
+      "trade_id": "BT_79"
+    },
+    {
+      "time": "2024-06-07T23:00:00+00:00",
+      "equity": 9852.78,
+      "drawdown_pct": 2.23,
+      "trade_id": "BT_80"
+    },
+    {
+      "time": "2024-06-08T08:00:00+00:00",
+      "equity": 9838.88,
+      "drawdown_pct": 2.36,
+      "trade_id": "BT_81"
+    },
+    {
+      "time": "2024-06-12T22:00:00+00:00",
+      "equity": 9923.85,
+      "drawdown_pct": 1.52,
+      "trade_id": "BT_82"
+    },
+    {
+      "time": "2024-06-14T09:00:00+00:00",
+      "equity": 9932.9,
+      "drawdown_pct": 1.43,
+      "trade_id": "BT_83"
+    }
+  ],
+  "monthly_returns": {
+    "2024": {
+      "Jan": -20.84999999999998,
+      "Feb": -191.26999999999998,
+      "Mar": -46.980000000000004,
+      "Apr": 93.49,
+      "May": 94.88999999999997,
+      "Jun": 3.619999999999994
+    }
+  },
+  "tier": "TIER 2: MARGINAL"
+}

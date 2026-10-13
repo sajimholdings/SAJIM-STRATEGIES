@@ -28,6 +28,7 @@ class ExitReason(str, Enum):
     SIGNAL = "SIGNAL"
     TIMEOUT = "TIMEOUT"
     STOP_OUT = "STOP_OUT"
+    TRAILING_STOP = "TRAILING_STOP"
     MANUAL = "MANUAL"
     UNKNOWN = "UNKNOWN"
 

@@ -2,8 +2,11 @@
 Phase 3 Verification: MT5 Headless Adapter End-to-End Execution
 """
 
+import os
 import sys
 from pathlib import Path
+
+import pytest
 
 # Add project root to sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -12,9 +15,15 @@ from sajim_quant.adapters.mql5.mt5_adapter import MT5HeadlessAdapter
 from sajim_quant.analytics import calculate_metrics, generate_text_tear_sheet, generate_markdown_tear_sheet
 
 
+@pytest.mark.skipif(
+    not os.getenv("MT5_LOGIN") or not os.getenv("MT5_PASSWORD"),
+    reason="MT5_LOGIN/MT5_PASSWORD env vars not set (see .env.example). "
+           "The headless run launches and force-restarts the local MT5 terminal, "
+           "so it only runs when live credentials are provided.",
+)
 def test_mt5_headless_adapter_end_to_end():
     print("Testing MT5 Headless Adapter on GoldOrb (XAUUSD)...")
-    gold_orb_path = Path("GoldOrb/GOLD_ORB/GOLD_ORB.mq5").resolve()
+    gold_orb_path = (Path(__file__).resolve().parent.parent / "strategies" / "GoldOrb" / "GOLD_ORB" / "GOLD_ORB.mq5").resolve()
     assert gold_orb_path.exists(), f"GOLD_ORB.mq5 not found at {gold_orb_path}"
 
     adapter = MT5HeadlessAdapter(

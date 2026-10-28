@@ -73,8 +73,9 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
             if common_files_path
             else Path(os.path.expanduser(r"~\AppData\Roaming\MetaQuotes\Terminal\Common\Files"))
         )
-        self.account_login = 112597392
-        self.account_server = "MetaQuotes-Demo"
+        self.account_login = os.getenv("MT5_LOGIN", "")
+        self.account_password = os.getenv("MT5_PASSWORD", "")
+        self.account_server = os.getenv("MT5_SERVER", "MetaQuotes-Demo")
         self.preprocessor = Mql5Preprocessor()
         self.syncer = CustomSymbolSync()
 
@@ -89,9 +90,16 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
         deposit: float = 50000.0,
         leverage: int = 100,
         model: int = 1,  # 1 = 1 minute OHLC, 0 = Every tick
+        strategy_params: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         Creates the .ini configuration file passed to terminal64.exe /config:...
+
+        The file contains the MT5 account password in plaintext because that is
+        the only format the terminal's /config: flag accepts. It is written into
+        the terminal data directory (outside the repo, so .gitignore cannot help)
+        and `run()` deletes it in a finally block. Treat its lifetime as the
+        duration of one backtest.
         """
         # Format dates as YYYY.MM.DD
         t_start = pd.to_datetime(start_date).strftime("%Y.%m.%d")
@@ -99,8 +107,8 @@ class MT5HeadlessAdapter(BaseStrategyAdapter):
         tf_str = self.PERIOD_MAP.get(timeframe.upper(), "H1")
 
         content = f"""[Common]
-Login=112701746
-Password=MyAiL-O6
+Login={self.account_login}
+Password={self.account_password}
 Server={self.account_server}
 ProxyEnable=0
 
@@ -122,8 +130,31 @@ ReplaceReport=1
 ShutdownTerminal=1
 Visual=0
 """
+        if strategy_params:
+            content += "\n[TesterInputs]\n"
+            for k, v in strategy_params.items():
+                content += f"{k}={v}\n"
+
         ini_path.write_text(content, encoding="utf-8")
         logger.info(f"Generated tester INI config -> {ini_path}")
+
+    @staticmethod
+    def _shred_ini(ini_path: Path) -> None:
+        """
+        Remove the generated tester INI. It carries the MT5 login and password in
+        plaintext, so it is overwritten before unlinking rather than just deleted.
+        Failure to clean up is logged loudly but never fails a completed backtest.
+        """
+        try:
+            if ini_path.exists():
+                ini_path.write_text("", encoding="utf-8")
+                ini_path.unlink()
+                logger.debug("Removed tester INI %s", ini_path)
+        except OSError as e:
+            logger.error(
+                "Could not remove %s — it contains your MT5 password in plaintext. "
+                "Delete it manually. (%s)", ini_path, e,
+            )
 
     def run(
         self,
@@ -178,6 +209,7 @@ Visual=0
         s_date = str(start_date) if start_date else "2024-09-01"
         e_date = str(end_date) if end_date else "2026-09-01"
 
+        model = int(strategy_params.pop("model", 1))
         self._generate_ini(
             ini_path=ini_path,
             ex5_relative_path=rel_expert,
@@ -186,17 +218,42 @@ Visual=0
             start_date=s_date,
             end_date=e_date,
             deposit=initial_balance,
+            model=model,
+            strategy_params=strategy_params,
         )
 
         # 5. Launch Headless Terminal via PowerShell to properly wait for the MT5 Strategy Tester process tree
-        subprocess.run(["powershell", "-NoProfile", "-Command", "Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force"], check=False)
-        time.sleep(1.0)
+        # SAFETY: force-killing every terminal64 process would destroy any live
+        # trading session on this machine. Only kill when explicitly opted in.
+        if os.getenv("SAJIM_MT5_KILL_TERMINAL") == "1":
+            subprocess.run(["powershell", "-NoProfile", "-Command", "Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force"], check=False)
+            time.sleep(1.0)
+        else:
+            probe = subprocess.run(
+                ["powershell", "-NoProfile", "-Command", "Get-Process terminal64 -ErrorAction SilentlyContinue"],
+                capture_output=True, text=True, check=False,
+            )
+            if probe.stdout.strip():
+                logger.warning(
+                    "A terminal64 process is already running. The headless tester "
+                    "may conflict with it. Set SAJIM_MT5_KILL_TERMINAL=1 to force-stop "
+                    "running terminals before the backtest (destroys live sessions!)."
+                )
 
         ps_cmd = f'Start-Process "{str(self.terminal_exe)}" -ArgumentList "/config:{str(ini_path)}" -Wait -NoNewWindow'
-        logger.info(f"Launching headless MT5 Strategy Tester: {ps_cmd}")
+        logger.info("Launching headless MT5 Strategy Tester for %s on %s", self.strategy_name, target_symbol)
 
         t0 = time.time()
-        subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], timeout=timeout_seconds)
+        try:
+            subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], timeout=timeout_seconds)
+        except subprocess.TimeoutExpired:
+            raise RuntimeError(
+                f"MT5 Strategy Tester did not finish within {timeout_seconds}s. "
+                "The terminal may be stuck on a login/license dialog."
+            )
+        finally:
+            # The INI holds the account password in plaintext; never leave it behind.
+            self._shred_ini(ini_path)
 
         elapsed = time.time() - t0
         logger.info(f"MT5 execution finished in {elapsed:.1f}s.")
@@ -208,25 +265,28 @@ Visual=0
             with open(trades_csv, "r", encoding="utf-8", errors="ignore") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    trades.append(Trade(
-                        trade_id=row.get("trade_id", ""),
-                        strategy_name=self.strategy_name,
-                        engine=self.engine_name,
-                        symbol=row.get("symbol", target_symbol),
-                        timeframe=row.get("timeframe", timeframe),
-                        direction=Direction(row.get("direction", "BUY")),
-                        entry_time=row.get("entry_time", ""),
-                        entry_price=float(row.get("entry_price", 0.0)),
-                        position_size=float(row.get("position_size", 1.0)),
-                        exit_time=row.get("exit_time", ""),
-                        exit_price=float(row.get("exit_price", 0.0)),
-                        exit_reason=ExitReason(row.get("exit_reason", "UNKNOWN")),
-                        gross_pnl=float(row.get("gross_pnl", 0.0)),
-                        net_pnl=float(row.get("net_pnl", 0.0)),
-                        commission=float(row.get("commission", 0.0)),
-                        swap_cost=float(row.get("swap_cost", 0.0)),
-                        duration_seconds=float(row.get("duration_seconds", 0.0)) if row.get("duration_seconds") else None,
-                    ))
+                    try:
+                        trades.append(Trade(
+                            trade_id=row.get("trade_id", ""),
+                            strategy_name=self.strategy_name,
+                            engine=self.engine_name,
+                            symbol=row.get("symbol", target_symbol),
+                            timeframe=row.get("timeframe", timeframe),
+                            direction=row.get("direction", "BUY"),
+                            entry_time=row.get("entry_time", ""),
+                            entry_price=float(row.get("entry_price", 0.0)),
+                            position_size=float(row.get("position_size", 1.0)),
+                            exit_time=row.get("exit_time", ""),
+                            exit_price=float(row.get("exit_price", 0.0)),
+                            exit_reason=row.get("exit_reason", "UNKNOWN"),
+                            gross_pnl=float(row.get("gross_pnl", 0.0)),
+                            net_pnl=float(row.get("net_pnl", 0.0)),
+                            commission=float(row.get("commission", 0.0)),
+                            swap_cost=float(row.get("swap_cost", 0.0)),
+                            duration_seconds=float(row.get("duration_seconds", 0.0)) if row.get("duration_seconds") else None,
+                        ))
+                    except (ValueError, KeyError, TypeError) as e:
+                        logger.warning(f"Skipping malformed trade row ({e}): {row}")
             logger.info(f"Successfully harvested {len(trades)} trades from MT5 run.")
         else:
             logger.warning(f"No trades CSV was generated at {trades_csv}. Strategy may have generated 0 trades.")

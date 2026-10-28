@@ -1115,8 +1115,19 @@ async def main():
     symbols_env = os.environ.get("SYMBOLS", "EURUSD,GBPUSD,XAUUSD")
     symbols = [s.strip() for s in symbols_env.split(",") if s.strip()]
     
-    # Determine if mock mode is forced
-    mock_forced = os.environ.get("MOCK_MODE", "False").lower() in ("true", "1", "yes")
+    # Determine if mock mode is forced.
+    # SAFETY: MOCK_MODE is now mandatory. Previously the default was live
+    # trading ("False"), which silently placed real orders on any machine
+    # with a running MT5 terminal.
+    mock_env = os.environ.get("MOCK_MODE")
+    if mock_env is None:
+        logger.critical(
+            "[SAFETY] MOCK_MODE is not set. Refusing to start. "
+            "Set MOCK_MODE=true (simulation) or MOCK_MODE=false "
+            "(live trading — explicit opt-in, at your own risk)."
+        )
+        sys.exit(1)
+    mock_forced = mock_env.lower() in ("true", "1", "yes")
     
     # MT5 connection settings
     login_env = os.environ.get("MT5_LOGIN", "0")

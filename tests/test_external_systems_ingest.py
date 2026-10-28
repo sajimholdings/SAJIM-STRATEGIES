@@ -17,7 +17,7 @@ logger = logging.getLogger("test_ingest")
 
 def test_btc_and_deriv_ingestion():
     # 1. BTC Breakout 15M
-    btc_csv = Path("BTC data collector/BTCUSDT_15M_trades.csv").resolve()
+    btc_csv = (Path(__file__).resolve().parent.parent / "strategies" / "BTC data collector" / "BTCUSDT_15M_trades.csv").resolve()
     assert btc_csv.exists(), f"Missing {btc_csv}"
 
     logger.info("Ingesting BTCUSDT 15M Breakout trades...")
@@ -41,7 +41,7 @@ def test_btc_and_deriv_ingestion():
     Path("tests/btc_breakout_15m_tear_sheet.md").write_text(btc_report, encoding="utf-8")
 
     # 2. EURUSD 1H Breakout from BTC Collector
-    eur_csv = Path("BTC data collector/EURUSD_1H_trades.csv").resolve()
+    eur_csv = (Path(__file__).resolve().parent.parent / "strategies" / "BTC data collector" / "EURUSD_1H_trades.csv").resolve()
     assert eur_csv.exists(), f"Missing {eur_csv}"
 
     logger.info("Ingesting EURUSD 1H Breakout trades...")
@@ -65,7 +65,7 @@ def test_btc_and_deriv_ingestion():
     Path("tests/eurusd_breakout_1h_tear_sheet.md").write_text(eur_report, encoding="utf-8")
 
     # 3. Deriv Trading Bot (trades_v3_fully_tuned.log)
-    deriv_log = Path("Deriv trading/trades_v3_fully_tuned.log").resolve()
+    deriv_log = (Path(__file__).resolve().parent.parent / "strategies" / "Deriv trading" / "trades_v3_fully_tuned.log").resolve()
     assert deriv_log.exists(), f"Missing {deriv_log}"
 
     logger.info("Ingesting Deriv WebSocket Bot trades...")
@@ -87,8 +87,6 @@ def test_btc_and_deriv_ingestion():
         }
     )
     Path("tests/deriv_v3_fully_tuned_tear_sheet.md").write_text(deriv_report, encoding="utf-8")
-
-    return btc_res, eur_res, deriv_res
 
 
 if __name__ == "__main__":

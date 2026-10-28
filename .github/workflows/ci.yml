@@ -1,0 +1,66 @@
+name: CI
+
+# Runs the checks that the 2026-09-25 audit asked for and the 2026-10-10 audit
+# found still missing, so a green suite is a fact rather than something someone
+# remembered to run locally.
+
+on:
+  push:
+    branches: [main, sajim-strategies-update]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Quant engine (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        # MetaTrader5 is Windows-only and marked as such in requirements.txt, so
+        # it is skipped here. The MT5 adapter's logic is still covered: its
+        # offline tests stub the module (tests/test_phase3_mt5_offline.py).
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run test suite
+        # The live MT5 test self-skips without MT5_LOGIN/MT5_PASSWORD, and the
+        # data-dependent tests self-skip without the Parquet cache (which is
+        # gitignored). Everything else must pass.
+        run: python -m pytest tests/ -v
+
+  dashboard:
+    name: Dashboard (tsc + eslint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sim
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: sim/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint .

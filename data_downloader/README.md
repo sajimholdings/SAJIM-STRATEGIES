@@ -7,7 +7,7 @@ Dukascopy's public CDN — **no API key required**.
 ## Quick Start
 
 ```powershell
-cd f:\Tete\data_downloader
+cd "f:\Tete\SAJIM STRATEGIES\data_downloader"
 .\setup.ps1               # setup venv + full download (10 workers)
 ```
 
@@ -42,7 +42,7 @@ cd f:\Tete\data_downloader
 ## Output Structure
 
 ```
-f:\Tete\data\dukascopy\
+f:\Tete\SAJIM STRATEGIES\data\dukascopy\
   EURUSD\
     M1.csv   H1.csv
     M5.csv   H4.csv

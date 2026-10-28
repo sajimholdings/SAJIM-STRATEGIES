@@ -1,215 +1,265 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { listResultEntries, resolveResultFile } from "../../../lib/resultFiles";
+import {
+  buildMonthlyPnl,
+  computePairwiseCorrelation,
+  monthlyPnlMap,
+  parseResultJSON,
+  type ResultEntry,
+} from "../../../lib/results";
+
+/**
+ * Leaderboard, derived entirely from the real backtest result JSONs on disk.
+ *
+ * This route used to serve `data/leaderboard.json` — a hand-maintained file last
+ * edited 2026-09-15 — with ~200 lines of hardcoded metrics as a fallback. It
+ * disagreed with the engine's own output (SMC: $4,209/14 trades on the board vs
+ * $15,181/69 trades in the result file) and carried three rows (GoldOrb_ORB and
+ * both Scalper1 EAs) that had no result file at all, because the headless MT5
+ * adapter has never completed a run. Those numbers had no provenance.
+ *
+ * Now every row traces to a file: `result_file` names it and `source` says which
+ * directory it came from. A strategy with no result does not appear — the UI
+ * shows what has actually been measured, and the catalog (/api/strategies) is
+ * where you see what *could* be measured.
+ */
+
+type LeaderboardRow = {
+  id: string;
+  name: string;
+  folder: string;
+  engine: string;
+  symbol: string;
+  timeframe: string;
+  trades: number;
+  win_rate_pct: number;
+  profit_factor: number | null;
+  net_pnl: number;
+  max_drawdown_pct: number;
+  max_drawdown_pct_closed: number | null;
+  drawdown_includes_intratrade: boolean;
+  sharpe_ratio: number;
+  sortino_ratio: number | null;
+  calmar_ratio: number | null;
+  cagr_pct: number | null;
+  span_days: number | null;
+  tier: string;
+  description: string;
+  /** Execution assumptions the run was priced under (RunMetadata.notes). */
+  assumptions: string;
+  result_file: string;
+  source: ResultEntry["source"];
+};
+
+/** Catalog lookup so rows can carry a folder and description. */
+function loadCatalog(): Record<string, { folder?: string; description?: string; name?: string }> {
+  const candidates = [
+    path.resolve(process.cwd(), "..", "sajim_quant", "core", "strategy_catalog.json"),
+    path.resolve(process.cwd(), "sajim_quant", "core", "strategy_catalog.json"),
+  ];
+  for (const p of candidates) {
+    if (!fs.existsSync(p)) continue;
+    try {
+      const items = JSON.parse(fs.readFileSync(p, "utf-8")) as {
+        id: string;
+        name?: string;
+        folder?: string;
+        description?: string;
+      }[];
+      const byKey: Record<string, { folder?: string; description?: string; name?: string }> = {};
+      for (const it of items) {
+        byKey[it.id.toLowerCase()] = { folder: it.folder, description: it.description, name: it.name };
+        if (it.name) byKey[it.name.toLowerCase()] = byKey[it.id.toLowerCase()];
+      }
+      return byKey;
+    } catch (err) {
+      console.error("Failed to parse strategy_catalog.json:", err);
+    }
+  }
+  return {};
+}
+
+/**
+ * Tier from measured risk-adjusted performance.
+ *
+ * Drawdown is tested first so a profitable strategy with a punishing drawdown is
+ * labelled for the drawdown, not for the profit — mirroring
+ * `_classify_status()` in analytics/real_matrix.py. A null profit factor (no
+ * losing trades) counts as not clearing any profit-factor bar rather than as
+ * infinitely good.
+ */
+function classifyTier(
+  sharpe: number,
+  pf: number | null,
+  dd: number,
+  pnl: number
+): string {
+  if (dd >= 25) return "TIER 3: TOXIC DD";
+  const pfVal = pf ?? 0;
+  if (sharpe >= 1.8 && pfVal >= 1.5 && dd <= 5 && pnl > 0) return "TIER 1: ELITE";
+  if (sharpe >= 1.0 && pfVal >= 1.1 && pnl > 0) return "TIER 2: VIABLE";
+  if (sharpe >= 0 && pnl >= 0) return "TIER 2: MARGINAL";
+  return "TIER 3: DEGRADED";
+}
+
+function num(v: unknown, fallback = 0): number {
+  return typeof v === "number" && Number.isFinite(v) ? v : fallback;
+}
+
+function numOrNull(v: unknown): number | null {
+  return typeof v === "number" && Number.isFinite(v) ? v : null;
+}
+
+/** One leaderboard row per readable result file. */
+function buildRows(): { rows: LeaderboardRow[]; skipped: string[] } {
+  const catalog = loadCatalog();
+  const { entries, skipped } = listResultEntries();
+  const rows: LeaderboardRow[] = [];
+
+  for (const e of entries) {
+    const full = resolveResultFile(e);
+    if (!full) continue;
+    let raw: unknown;
+    try {
+      raw = JSON.parse(fs.readFileSync(full, "utf-8"));
+    } catch {
+      skipped.push(e.file);
+      continue;
+    }
+    const parsed = parseResultJSON(raw);
+    if (!parsed) {
+      skipped.push(e.file);
+      continue;
+    }
+
+    const mx = parsed.metrics;
+    const md = parsed.metadata;
+    const name = md.strategy_name || e.strategy_name || e.file.replace(/_result\.json$/i, "");
+    const meta = catalog[name.toLowerCase()] ?? {};
+
+    const netPnl = num(mx.net_profit, parsed.trades.reduce((a, t) => a + (t.net_pnl ?? 0), 0));
+    const sharpe = num(mx.sharpe_ratio);
+    const pf = numOrNull(mx.profit_factor);
+    const dd = num(mx.max_drawdown_pct);
+
+    rows.push({
+      // One row per file, so key on the file: two files can share strategy/symbol/timeframe
+      // (e.g. GoldPullbackAI_XAUUSD_H1 and Sovereign_Sniper_GoldPullbackAI_XAUUSD_H1).
+      id: e.file.replace(/_result\.json$/i, "").replace(/[^A-Za-z0-9_]/g, "_"),
+      name,
+      folder: meta.folder ?? "",
+      engine: md.engine ?? e.engine ?? "",
+      symbol: md.symbol ?? e.symbol ?? "",
+      timeframe: md.timeframe ?? e.timeframe ?? "",
+      trades: num(mx.total_trades, parsed.trades.length),
+      win_rate_pct: num(mx.win_rate_pct),
+      profit_factor: pf,
+      net_pnl: netPnl,
+      max_drawdown_pct: dd,
+      max_drawdown_pct_closed: numOrNull(mx.max_drawdown_pct_closed),
+      drawdown_includes_intratrade: mx.drawdown_includes_intratrade === true,
+      sharpe_ratio: sharpe,
+      sortino_ratio: numOrNull(mx.sortino_ratio),
+      calmar_ratio: numOrNull(mx.calmar_ratio),
+      cagr_pct: numOrNull(mx.cagr_pct),
+      span_days: numOrNull(mx.span_days),
+      tier: classifyTier(sharpe, pf, dd, netPnl),
+      description: meta.description ?? (md.notes ? String(md.notes) : ""),
+      assumptions: md.notes ? String(md.notes) : "",
+      result_file: e.file,
+      source: e.source,
+    });
+  }
+
+  // Best risk-adjusted first, then by net PnL.
+  rows.sort((a, b) => b.sharpe_ratio - a.sharpe_ratio || b.net_pnl - a.net_pnl);
+  return { rows, skipped };
+}
+
+/**
+ * Cross-strategy return correlation from real monthly PnL buckets, aligned by
+ * calendar month. Pearson r is computed only over months both strategies traded,
+ * and only when at least three overlap. Null means "not enough shared history",
+ * never zero.
+ */
+function realCorrelation(): {
+  matrix: Record<string, Record<string, number | null>>;
+  seriesCount: number;
+} | null {
+  const { entries } = listResultEntries();
+  const series: { name: string; months: Map<string, number> }[] = [];
+  for (const e of entries) {
+    const full = resolveResultFile(e);
+    if (!full) continue;
+    try {
+      const raw = JSON.parse(fs.readFileSync(full, "utf-8"));
+      if (!Array.isArray(raw?.trades) || raw.trades.length === 0) continue;
+      series.push({
+        name: e.strategy_name || e.file,
+        months: monthlyPnlMap(buildMonthlyPnl(raw.trades)),
+      });
+    } catch {
+      continue;
+    }
+  }
+  if (series.length < 2) return null;
+
+  const matrix: Record<string, Record<string, number | null>> = {};
+  for (const a of series) {
+    matrix[a.name] = {};
+    for (const b of series) {
+      if (a === b) {
+        matrix[a.name][b.name] = 1;
+        continue;
+      }
+      const shared = [...a.months.entries()].filter(([k]) => b.months.has(k));
+      matrix[a.name][b.name] =
+        shared.length >= 3
+          ? computePairwiseCorrelation(
+              shared.map(([, v]) => v),
+              shared.map(([k]) => b.months.get(k) ?? 0)
+            )
+          : null;
+    }
+  }
+  return { matrix, seriesCount: series.length };
+}
 
 export async function GET() {
   try {
-    // Attempt to read from data/leaderboard.json
-    const possiblePaths = [
-      path.join(process.cwd(), "data", "leaderboard.json"),
-      path.join(process.cwd(), "..", "data", "leaderboard.json"),
-      path.resolve(process.cwd(), "data", "leaderboard.json"),
-      path.resolve(process.cwd(), "..", "data", "leaderboard.json"),
-    ];
-    
-    let dbData = null;
-    for (const p of possiblePaths) {
-      if (fs.existsSync(p)) {
-        try {
-          const content = fs.readFileSync(p, "utf-8");
-          dbData = JSON.parse(content);
-          break;
-        } catch {
-          // continue
-        }
-      }
-    }
+    const { rows, skipped } = buildRows();
+    const real = realCorrelation();
 
-    // Fallback data if file not yet written
-    const fallbackStrategies = [
-      {
-        id: "strat_1",
-        name: "SMC_Fractal_Daemon",
-        folder: "smc_daemon_project",
-        engine: "python:smc_daemon",
-        symbol: "EURUSD",
-        timeframe: "H1/M5",
-        trades: 14,
-        win_rate_pct: 64.3,
-        profit_factor: 5.74,
-        net_pnl: 4209.61,
-        max_drawdown_pct: 0.76,
-        sharpe_ratio: 3.38,
-        sortino_ratio: 6.75,
-        tier: "TIER 1: ELITE",
-        description: "5-phase institutional SMC state machine (Liquidity Sweep -> BOS -> Inducement Trap -> 0.25 Impulse Retracement -> BE Trail)"
-      },
-      {
-        id: "strat_2",
-        name: "GoldPullbackAI",
-        folder: "XAUUSD_TRADING_ASISTENT_AI",
-        engine: "python:sovereign_sniper",
-        symbol: "XAUUSD",
-        timeframe: "H1",
-        trades: 291,
-        win_rate_pct: 40.2,
-        profit_factor: 1.02,
-        net_pnl: 3606.88,
-        max_drawdown_pct: 4.85,
-        sharpe_ratio: 0.84,
-        sortino_ratio: 1.12,
-        tier: "TIER 2: VIABLE",
-        description: "Structural EMA slope angle filter combined with dynamic ATR pullback counter"
-      },
-      {
-        id: "strat_3",
-        name: "GoldOrb_ORB",
-        folder: "GoldOrb",
-        engine: "mt5:headless",
-        symbol: "XAUUSD",
-        timeframe: "H1",
-        trades: 2,
-        win_rate_pct: 50.0,
-        profit_factor: 2.14,
-        net_pnl: 160.00,
-        max_drawdown_pct: 0.28,
-        sharpe_ratio: 1.15,
-        sortino_ratio: 1.40,
-        tier: "TIER 2: VIABLE",
-        description: "MQL5 Opening Range Breakout strategy executed headlessly on MT5 Strategy Tester"
-      },
-      {
-        id: "strat_4",
-        name: "Pine_LuxAlgo_SmartMoney",
-        folder: "tests",
-        engine: "pine:imported",
-        symbol: "XAUUSD",
-        timeframe: "H1",
-        trades: 3,
-        win_rate_pct: 66.7,
-        profit_factor: 5.00,
-        net_pnl: 4000.00,
-        max_drawdown_pct: 1.05,
-        sharpe_ratio: 2.10,
-        sortino_ratio: 3.40,
-        tier: "TIER 1: ELITE",
-        description: "TradingView Pine Script Strategy Tester List of Trades export"
-      },
-      {
-        id: "strat_5",
-        name: "SunriseOgle_XAUUSD",
-        folder: "backtrader-pullback-window-xauusd",
-        engine: "python:backtrader",
-        symbol: "XAUUSD",
-        timeframe: "M5",
-        trades: 13,
-        win_rate_pct: 61.5,
-        profit_factor: 0.97,
-        net_pnl: -2.05,
-        max_drawdown_pct: 0.03,
-        sharpe_ratio: -0.08,
-        sortino_ratio: -0.07,
-        tier: "TIER 2: MARGINAL",
-        description: "Volatility Expansion Channel with pullback depth confirmation in Backtrader"
-      },
-      {
-        id: "strat_6",
-        name: "Deriv_V3_FullyTuned",
-        folder: "Deriv trading",
-        engine: "deriv:websocket_bot",
-        symbol: "SYNTHETICS",
-        timeframe: "TICK",
-        trades: 254,
-        win_rate_pct: 49.6,
-        profit_factor: 0.98,
-        net_pnl: -0.72,
-        max_drawdown_pct: 1.82,
-        sharpe_ratio: -0.12,
-        sortino_ratio: -0.10,
-        tier: "TIER 2: MARGINAL",
-        description: "High-frequency volatility index momentum scalper on Deriv WebSocket API"
-      },
-      {
-        id: "strat_7",
-        name: "EA_AGGRESSIVE_SCALPER",
-        folder: "Scalper1",
-        engine: "mt5:headless",
-        symbol: "XAUUSD",
-        timeframe: "M5",
-        trades: 1173,
-        win_rate_pct: 40.5,
-        profit_factor: 0.56,
-        net_pnl: -20903.88,
-        max_drawdown_pct: 41.80,
-        sharpe_ratio: -3.12,
-        sortino_ratio: -2.90,
-        tier: "TIER 3: TOXIC DD",
-        description: "High-frequency M5 scalper with Bayesian adaptive learning"
-      },
-      {
-        id: "strat_8",
-        name: "EA_ULTRA_AGGRESSIVE",
-        folder: "Scalper1",
-        engine: "mt5:headless",
-        symbol: "XAUUSD",
-        timeframe: "M5",
-        trades: 24,
-        win_rate_pct: 29.2,
-        profit_factor: 0.42,
-        net_pnl: -38624.68,
-        max_drawdown_pct: 77.25,
-        sharpe_ratio: -4.80,
-        sortino_ratio: -4.20,
-        tier: "TIER 3: TOXIC DD",
-        description: "Fibonacci swing crossover with 2% risk sizing"
-      }
-    ];
+    const sharpes = rows.map((r) => r.sharpe_ratio);
+    const pfs = rows.map((r) => r.profit_factor).filter((v): v is number => v !== null);
 
-    const strategies = dbData ? dbData.strategies : fallbackStrategies;
-
-    const correlationMatrix = {
-      "SMC_Fractal_Daemon": { "SMC_Fractal_Daemon": 1.0, "GoldPullbackAI": 0.04, "GoldOrb_ORB": -0.02, "SunriseOgle": -0.01, "Deriv_V3": 0.01 },
-      "GoldPullbackAI": { "SMC_Fractal_Daemon": 0.04, "GoldPullbackAI": 1.0, "GoldOrb_ORB": 0.18, "SunriseOgle": 0.12, "Deriv_V3": -0.02 },
-      "GoldOrb_ORB": { "SMC_Fractal_Daemon": -0.02, "GoldPullbackAI": 0.18, "GoldOrb_ORB": 1.0, "SunriseOgle": 0.08, "Deriv_V3": 0.0 },
-      "SunriseOgle": { "SMC_Fractal_Daemon": -0.01, "GoldPullbackAI": 0.12, "GoldOrb_ORB": 0.08, "SunriseOgle": 1.0, "Deriv_V3": 0.02 },
-      "Deriv_V3": { "SMC_Fractal_Daemon": 0.01, "GoldPullbackAI": -0.02, "GoldOrb_ORB": 0.0, "SunriseOgle": 0.02, "Deriv_V3": 1.0 }
-    };
-
-    // Load timeframe matrix
-    const tfPaths = [
-      path.join(process.cwd(), "data", "timeframe_matrix.json"),
-      path.join(process.cwd(), "..", "data", "timeframe_matrix.json"),
-      path.join(process.cwd(), "public", "timeframe_matrix.json"),
-    ];
-    let timeframeData: any = null;
-    for (const p of tfPaths) {
-      if (fs.existsSync(p)) {
-        try {
-          timeframeData = JSON.parse(fs.readFileSync(p, "utf-8"));
-          break;
-        } catch {}
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      last_updated: dbData ? dbData.last_updated : new Date().toISOString(),
-      strategies,
-      correlationMatrix,
-      timeframeMatrix: timeframeData ? timeframeData.combinations : [],
-      portfolioSummary: {
-        totalStrategies: strategies.length,
-        profitableStrategies: strategies.filter((s: any) => s.net_pnl > 0).length,
-        topSharpe: Math.max(...strategies.map((s: any) => s.sharpe_ratio)),
-        topProfitFactor: Math.max(...strategies.map((s: any) => s.profit_factor)),
-        totalVolumeTrades: strategies.reduce((acc: number, s: any) => acc + (s.trades || 0), 0)
-      }
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        // Every row is traceable to a file on disk; nothing here is seeded or
+        // hand-maintained. The UI shows this as its provenance badge.
+        source: "data/results",
+        last_updated: new Date().toISOString(),
+        result_count: rows.length,
+        skipped_files: skipped,
+        strategies: rows,
+        correlationMatrix: real ? real.matrix : {},
+        correlationSource: real ? "real" : "insufficient",
+        correlationResultCount: real ? real.seriesCount : 0,
+        portfolioSummary: {
+          totalStrategies: rows.length,
+          profitableStrategies: rows.filter((r) => r.net_pnl > 0).length,
+          topSharpe: sharpes.length > 0 ? Math.max(...sharpes) : null,
+          topProfitFactor: pfs.length > 0 ? Math.max(...pfs) : null,
+          totalVolumeTrades: rows.reduce((acc, r) => acc + r.trades, 0),
+        },
+      },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch (error) {
     console.error("Leaderboard API error:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
 }

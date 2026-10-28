@@ -3,27 +3,40 @@
 import React from "react";
 import {
   X,
-  ShieldAlert,
   Sparkles,
   TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
   Info,
-  Clock,
-  Coins,
 } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import MonteCarloFan from "./MonteCarloFan";
+import type { MonteCarloPayload } from "../../lib/results";
+
+type DiagnosisPayload = {
+  edge_rating?: string;
+  headline?: string;
+  structural_cause?: string;
+  mechanics_detail?: string;
+  recommendation?: string;
+};
+
+/**
+ * One matrix cell. Mirrors `UniverseNode` in lib/universe.ts; `profit_factor`
+ * is nullable because a run with no losing trades has no profit factor, and a
+ * node with status NO_DATA/PENDING_ADAPTER/ERROR has no metrics at all.
+ */
+type MatrixNode = {
+  symbol?: string;
+  timeframe?: string;
+  trades?: number;
+  win_rate_pct?: number;
+  profit_factor?: number | null;
+  sharpe_ratio?: number;
+  max_drawdown_pct?: number;
+  monte_carlo?: MonteCarloPayload | null;
+  diagnosis?: DiagnosisPayload | null;
+};
 
 interface MonteCarloDrawerProps {
-  node: any;
+  node: MatrixNode;
   strategyName: string;
   onClose: () => void;
 }
@@ -38,16 +51,76 @@ export default function MonteCarloDrawer({
   const mc = node.monte_carlo;
   const diag = node.diagnosis;
 
-  // Prepare data for the Monte Carlo Fan Chart
-  const fanChartData = (mc.trade_steps || []).map((step: number, idx: number) => ({
-    step: `T+${step}`,
-    tradeNum: step,
-    p5: mc.p5_curve ? mc.p5_curve[idx] : 10000,
-    p25: mc.p25_curve ? mc.p25_curve[idx] : 10000,
-    p50: mc.p50_curve ? mc.p50_curve[idx] : 10000,
-    p75: mc.p75_curve ? mc.p75_curve[idx] : 10000,
-    p95: mc.p95_curve ? mc.p95_curve[idx] : 10000,
-  }));
+  // Guard: cells without Monte Carlo payloads (e.g. imported/derived nodes or
+  // strategies the matrix never stress-tested) previously crashed the whole
+  // dashboard by dereferencing mc.trade_steps on undefined.
+  if (!mc) {
+    return (
+      <div className="fixed inset-0 z-50 flex justify-end bg-black/75 backdrop-blur-sm">
+        <div className="w-full max-w-2xl bg-slate-950 border-l border-slate-800 h-full overflow-y-auto p-6 flex flex-col justify-between">
+          <div className="space-y-6">
+            <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                    {strategyName}
+                  </span>
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-cyan-300">
+                    {node.symbol}
+                  </span>
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-amber-300">
+                    {node.timeframe}
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold text-white tracking-tight">
+                  Monte Carlo Stress Analysis & Telemetry
+                </h2>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+                aria-label="Close drawer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 flex flex-col items-center text-center space-y-3">
+              <Info className="w-8 h-8 text-amber-400" />
+              <h3 className="text-sm font-semibold text-white">
+                No Monte Carlo telemetry for this cell
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+                This strategy was catalogued without a stress-test payload. Run the
+                real matrix builder (<span className="font-mono text-cyan-300">python -m sajim_quant matrix</span>)
+                with Monte Carlo enabled to populate fan-chart and drawdown data.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 text-[11px] font-mono text-slate-400">
+                <span className="px-2 py-1 rounded bg-slate-800/80 border border-slate-700">
+                  trades: {node.trades ?? "—"}
+                </span>
+                <span className="px-2 py-1 rounded bg-slate-800/80 border border-slate-700">
+                  win rate: {node.win_rate_pct ?? "—"}%
+                </span>
+                <span className="px-2 py-1 rounded bg-slate-800/80 border border-slate-700">
+                  PF: {node.profit_factor ?? "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-800 flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition"
+            >
+              Close Telemetry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const edgeBadgeStyles: Record<string, string> = {
     ALPHA_LEADER: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
@@ -57,7 +130,7 @@ export default function MonteCarloDrawer({
   };
 
   const badgeClass =
-    edgeBadgeStyles[diag?.edge_rating] ||
+    edgeBadgeStyles[diag?.edge_rating ?? ""] ||
     "bg-slate-800 text-slate-400 border-slate-700";
 
   return (
@@ -111,7 +184,7 @@ export default function MonteCarloDrawer({
             </div>
 
             <div className="text-sm font-medium text-purple-300 font-mono">
-              "{diag?.headline || "Systematic Edge Analysis"}"
+              &quot;{diag?.headline || "Systematic Edge Analysis"}&quot;
             </div>
 
             <div className="text-xs text-slate-300 leading-relaxed space-y-2">
@@ -148,17 +221,17 @@ export default function MonteCarloDrawer({
               </div>
               <div
                 className={`text-lg font-bold mt-0.5 ${
-                  mc.worst_drawdown_95_pct > 20
+                  (mc.worst_drawdown_95_pct ?? 0) > 20
                     ? "text-rose-400"
-                    : mc.worst_drawdown_95_pct > 10
+                    : (mc.worst_drawdown_95_pct ?? 0) > 10
                     ? "text-amber-400"
                     : "text-emerald-400"
                 }`}
               >
-                {mc.worst_drawdown_95_pct}%
+                {mc.worst_drawdown_95_pct ?? 0}%
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
-                99% Bound: {mc.worst_drawdown_99_pct}%
+                99% Bound: {mc.worst_drawdown_99_pct ?? 0}%
               </div>
             </div>
 
@@ -168,17 +241,17 @@ export default function MonteCarloDrawer({
               </div>
               <div
                 className={`text-lg font-bold mt-0.5 ${
-                  mc.risk_of_ruin_20_pct > 10
+                  (mc.risk_of_ruin_20_pct ?? 0) > 10
                     ? "text-rose-400"
-                    : mc.risk_of_ruin_20_pct > 0
+                    : (mc.risk_of_ruin_20_pct ?? 0) > 0
                     ? "text-amber-400"
                     : "text-emerald-400"
                 }`}
               >
-                {mc.risk_of_ruin_20_pct}%
+                {mc.risk_of_ruin_20_pct ?? 0}%
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
-                &gt;10% DD: {mc.risk_of_ruin_10_pct}%
+                &gt;10% DD: {mc.risk_of_ruin_10_pct ?? 0}%
               </div>
             </div>
 
@@ -205,116 +278,15 @@ export default function MonteCarloDrawer({
               <div>
                 <h3 className="text-sm font-semibold text-white flex items-center gap-1.5">
                   <TrendingUp className="w-4 h-4 text-cyan-400" />
-                  Probabilistic Equity Fan (1,000 Resampled Paths)
+                  Probabilistic Equity Fan
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Shuffles and resamples trades with replacement across 1,000 simulations.
+                  Resampled equity paths from the real Monte Carlo simulation for this cell.
                 </p>
               </div>
-              <div className="text-xs font-mono text-slate-400">
-                Starting Capital: $10,000
-              </div>
             </div>
 
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={fanChartData}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="mcBullGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
-                    </linearGradient>
-                    <linearGradient id="mcMedianGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05} />
-                    </linearGradient>
-                    <linearGradient id="mcBearGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis
-                    dataKey="tradeNum"
-                    stroke="#64748b"
-                    fontSize={11}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    stroke="#64748b"
-                    fontSize={11}
-                    tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`}
-                    tickLine={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#020617",
-                      borderColor: "#334155",
-                      borderRadius: "0.5rem",
-                      fontSize: "11px",
-                    }}
-                    formatter={(val: any, name: string | undefined) => [
-                      `$${Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-                      name === "p95"
-                        ? "P95 (Top 5% Bull)"
-                        : name === "p75"
-                        ? "P75 (Optimistic)"
-                        : name === "p50"
-                        ? "P50 (Median Expected)"
-                        : name === "p25"
-                        ? "P25 (Conservative)"
-                        : "P5 (Worst 5% Stress)",
-                    ]}
-                    labelFormatter={(lbl) => `Trade Step: ${lbl}`}
-                  />
-                  {/* Outer Bull Bound P95 */}
-                  <Area
-                    type="monotone"
-                    dataKey="p95"
-                    stroke="#10b981"
-                    strokeWidth={1.5}
-                    fillOpacity={1}
-                    fill="url(#mcBullGrad)"
-                  />
-                  {/* Median Expected P50 */}
-                  <Area
-                    type="monotone"
-                    dataKey="p50"
-                    stroke="#06b6d4"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#mcMedianGrad)"
-                  />
-                  {/* Bear Bound P5 */}
-                  <Area
-                    type="monotone"
-                    dataKey="p5"
-                    stroke="#f43f5e"
-                    strokeWidth={1.5}
-                    fillOpacity={1}
-                    fill="url(#mcBearGrad)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                <span>P95 Bull: ${mc.terminal_p95_balance?.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span>
-                <span>P50 Median: ${mc.terminal_median_balance?.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
-                <span>P5 Stress: ${mc.terminal_p5_balance?.toLocaleString()}</span>
-              </div>
-            </div>
+            <MonteCarloFan mc={mc} height={256} />
           </div>
 
           {/* Quick Metrics Summary Footer */}
@@ -326,7 +298,7 @@ export default function MonteCarloDrawer({
               Win Rate: <span className="font-mono text-emerald-400 font-bold">{node.win_rate_pct}%</span>
             </div>
             <div className="text-slate-400">
-              Profit Factor: <span className="font-mono text-cyan-400 font-bold">{node.profit_factor}</span>
+              Profit Factor: <span className="font-mono text-cyan-400 font-bold">{node.profit_factor ?? "n/a"}</span>
             </div>
             <div className="text-slate-400">
               Sharpe Ratio: <span className="font-mono text-purple-400 font-bold">{node.sharpe_ratio}</span>

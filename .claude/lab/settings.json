@@ -1,0 +1,83 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./sajim_quant/lab/**)",
+      "Read(./strategies/generated/**)",
+      "Read(./.claude/skills/lab-build/**)",
+      "Read(./.claude/skills/lab-review/**)",
+      "Read(./.claude/agents/strategy-critic.md)",
+      "Edit(./strategies/generated/**)",
+      "Bash(python -X utf8 -m sajim_quant.lab.cli *)",
+      "Skill(lab-build)",
+      "Skill(lab-review)"
+    ],
+    "deny": [
+      "Read(./data/**)",
+      "Read(**/.env*)",
+      "Read(./sim/**)",
+      "Read(~/.sajim/**)",
+      "Read(~/.claude/**)",
+      "Edit(./sajim_quant/**)",
+      "Edit(./.claude/**)",
+      "Edit(./sim/**)",
+      "Edit(./data/**)",
+      "Edit(./tests/**)",
+      "Edit(./docs/**)",
+      "Edit(./CLAUDE.md)",
+      "Edit(**/.env*)",
+      "Edit(~/.sajim/**)",
+      "Edit(~/.claude/**)",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "PowerShell",
+      "Skill(backtest)",
+      "Bash(modal *)",
+      "Bash(git *)",
+      "Bash(curl *)",
+      "Bash(powershell *)",
+      "Bash(pwsh *)",
+      "Bash(cmd *)",
+      "Bash(pip *)",
+      "Bash(python -m modal *)",
+      "Bash(python -X utf8 -m modal *)",
+      "Bash(python -X utf8 -m sajim_quant.cloud *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {"type": "command", "command": "python -X utf8 \"${CLAUDE_PROJECT_DIR}/.claude/lab/hooks/guard_paths.py\""}
+        ]
+      },
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {"type": "command", "command": "python -X utf8 \"${CLAUDE_PROJECT_DIR}/.claude/lab/hooks/guard_reads.py\""}
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {"type": "command", "command": "python -X utf8 \"${CLAUDE_PROJECT_DIR}/.claude/lab/hooks/guard_bash.py\""}
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {"type": "command", "command": "python -X utf8 \"${CLAUDE_PROJECT_DIR}/.claude/lab/hooks/guard_skill.py\""}
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {"type": "command", "command": "python -X utf8 \"${CLAUDE_PROJECT_DIR}/.claude/lab/hooks/lint_on_save.py\""}
+        ]
+      }
+    ]
+  }
+}

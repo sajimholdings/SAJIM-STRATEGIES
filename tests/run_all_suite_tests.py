@@ -20,10 +20,10 @@ TEST_SCRIPTS = [
     ("tests/test_pine_importer.py", global_python),
     ("tests/test_portfolio_analytics.py", global_python),
     ("tests/test_external_systems_ingest.py", global_python),
-    ("tests/test_deriv_updown.py", global_python),
-    ("tests/test_backtrader_sunrise.py", str(venv_python) if venv_python.exists() else global_python),
-    ("tests/test_smc_daemon_replay.py", global_python),
-    ("tests/test_gold_pullback_ai_replay.py", global_python),
+    ("tests/run_deriv_updown.py", global_python),
+    ("tests/run_backtrader_sunrise.py", str(venv_python) if venv_python.exists() else global_python),
+    ("tests/run_smc_daemon_replay.py", global_python),
+    ("tests/run_gold_pullback_ai_replay.py", global_python),
 ]
 
 def run_all():

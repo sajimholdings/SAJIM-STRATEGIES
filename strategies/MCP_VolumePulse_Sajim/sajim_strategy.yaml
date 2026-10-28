@@ -1,0 +1,31 @@
+name: MCP_VolumePulse_Sajim
+engine: mt5
+symbol: XAUUSD
+timeframe: M1
+description: "High-frequency micro-volume pulse scalper capturing tick velocity spikes on M1 that construct M5 expansion candles, with 0.10->0.07->0.03 diminishing pyramid and dynamic volume-exhaustion exit."
+author: SAJIM Quant Lab
+created: "2026-10-07"
+tags:
+  - scalper
+  - volume
+  - tick_velocity
+  - xauusd
+  - pyramiding
+  - orderflow
+parameters:
+  InpLot_Tier1: 0.10
+  InpLot_Tier2: 0.07
+  InpLot_Tier3: 0.03
+  InpMinAddonPoints: 10
+  InpMinAddonIntervalSec: 3
+  InpVelocityWindow_ms: 3000
+  InpVelocityTrigger: 20
+  InpVelocityContinuation: 14
+  InpDirectionThreshold: 0.70
+  InpDecelExitRatio: 0.35
+  InpStagnationSeconds: 10
+  InpRetracementExitPoints: 15
+  InpEmergencySL_Points: 35
+  InpUseM5CandleClock: true
+  InpMaxM5ElapsedSec: 180
+  InpMaxSpreadPoints: 30

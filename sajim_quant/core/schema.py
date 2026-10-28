@@ -25,6 +25,7 @@ class Direction(str, Enum):
 class ExitReason(str, Enum):
     TAKE_PROFIT = "TP"
     STOP_LOSS = "SL"
+    TRAILING_STOP = "TRAILING"
     SIGNAL = "SIGNAL"
     TIMEOUT = "TIMEOUT"
     STOP_OUT = "STOP_OUT"
@@ -38,6 +39,22 @@ class EngineType(str, Enum):
     PYTHON_CUSTOM = "python:custom"
     MT5_HEADLESS = "mt5:headless"
     PINE_IMPORTED = "pine:imported"
+
+
+def _coerce_direction(val: Any) -> Direction:
+    """Maps common direction spellings to the Direction enum.
+
+    Raises ValueError for unrecognized values (fail loud rather than silently
+    mislabel a trade).
+    """
+    if isinstance(val, Direction):
+        return val
+    s = str(val).strip().upper()
+    if s in ("LONG", "BUY", "B"):
+        return Direction.BUY
+    if s in ("SHORT", "SELL", "S"):
+        return Direction.SELL
+    return Direction(s)
 
 
 def _format_datetime(val: Union[datetime, str, None]) -> Optional[str]:
@@ -83,14 +100,38 @@ class Trade:
     def __post_init__(self):
         if not self.trade_id:
             self.trade_id = str(uuid.uuid4())[:8]
-        if isinstance(self.direction, str) and not isinstance(self.direction, Direction):
-            self.direction = Direction(self.direction.upper())
-        if isinstance(self.exit_reason, str) and not isinstance(self.exit_reason, ExitReason):
+        if not isinstance(self.direction, Direction):
+            self.direction = _coerce_direction(self.direction)
+        if not isinstance(self.exit_reason, ExitReason):
             try:
-                self.exit_reason = ExitReason(self.exit_reason)
+                self.exit_reason = ExitReason(str(self.exit_reason).strip().upper())
             except ValueError:
                 self.exit_reason = ExitReason.UNKNOWN
         
+        # Ensure native Python float types for JSON serialization
+        if self.entry_price is not None:
+            self.entry_price = float(self.entry_price)
+        if self.position_size is not None:
+            self.position_size = float(self.position_size)
+        if self.exit_price is not None:
+            self.exit_price = float(self.exit_price)
+        if self.gross_pnl is not None:
+            self.gross_pnl = float(self.gross_pnl)
+        if self.net_pnl is not None:
+            self.net_pnl = float(self.net_pnl)
+        if self.commission is not None:
+            self.commission = float(self.commission)
+        if self.swap_cost is not None:
+            self.swap_cost = float(self.swap_cost)
+        if self.return_pct is not None:
+            self.return_pct = float(self.return_pct)
+        if self.mae is not None:
+            self.mae = float(self.mae)
+        if self.mfe is not None:
+            self.mfe = float(self.mfe)
+        if self.duration_seconds is not None:
+            self.duration_seconds = float(self.duration_seconds)
+
         # Calculate duration if not provided
         if self.duration_seconds is None and self.entry_time and self.exit_time:
             try:
@@ -104,16 +145,20 @@ class Trade:
         d = asdict(self)
         d["direction"] = self.direction.value
         d["exit_reason"] = self.exit_reason.value
+        # Sanitize any numpy or non-primitive scalar types
+        for k, v in d.items():
+            if hasattr(v, "item"):
+                d[k] = v.item()
         return d
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> Trade:
         data_clean = dict(data)
         if "direction" in data_clean:
-            data_clean["direction"] = Direction(str(data_clean["direction"]).upper())
+            data_clean["direction"] = _coerce_direction(data_clean["direction"])
         if "exit_reason" in data_clean:
             try:
-                data_clean["exit_reason"] = ExitReason(str(data_clean["exit_reason"]))
+                data_clean["exit_reason"] = ExitReason(str(data_clean["exit_reason"]).strip().upper())
             except ValueError:
                 data_clean["exit_reason"] = ExitReason.UNKNOWN
         return cls(**data_clean)
@@ -217,13 +262,13 @@ class BacktestResult:
                     engine=row.get("engine", metadata.engine),
                     symbol=row.get("symbol", metadata.symbol),
                     timeframe=row.get("timeframe", metadata.timeframe),
-                    direction=Direction(row["direction"]),
+                    direction=row["direction"],
                     entry_time=row["entry_time"],
                     entry_price=float(row["entry_price"]),
                     position_size=float(row["position_size"]),
                     exit_time=row["exit_time"],
                     exit_price=float(row["exit_price"]),
-                    exit_reason=ExitReason(row.get("exit_reason", "UNKNOWN")),
+                    exit_reason=row.get("exit_reason", "UNKNOWN"),
                     gross_pnl=float(row.get("gross_pnl", 0.0)),
                     net_pnl=float(row["net_pnl"]),
                     commission=float(row.get("commission", 0.0)),

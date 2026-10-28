@@ -16,9 +16,9 @@ from sajim_quant.analytics.portfolio import PortfolioEngine
 def test_portfolio_analytics():
     print("Evaluating Multi-Strategy Portfolio and Correlation Matrix...")
     # Load 3 diverse benchmarked strategies
-    btc_csv = Path("BTC data collector/BTCUSDT_15M_trades.csv").resolve()
-    eur_csv = Path("BTC data collector/EURUSD_1H_trades.csv").resolve()
-    deriv_log = Path("Deriv trading/trades_v3_fully_tuned.log").resolve()
+    btc_csv = (Path(__file__).resolve().parent.parent / "strategies" / "BTC data collector" / "BTCUSDT_15M_trades.csv").resolve()
+    eur_csv = (Path(__file__).resolve().parent.parent / "strategies" / "BTC data collector" / "EURUSD_1H_trades.csv").resolve()
+    deriv_log = (Path(__file__).resolve().parent.parent / "strategies" / "Deriv trading" / "trades_v3_fully_tuned.log").resolve()
 
     res_btc = UniversalLogImporter.import_btc_breakout_csv(btc_csv, strategy_name="BTC_Breakout_15M")
     res_eur = UniversalLogImporter.import_btc_breakout_csv(eur_csv, strategy_name="EUR_Breakout_1H")

@@ -1,0 +1,48 @@
+# ====================================================================
+# SAJIM Quantitative Strategy Manifest
+# MCP_Scalper_Sajim: EMA Pullback Micro-Scalper
+# ====================================================================
+
+name: "MCP_Scalper_Sajim"
+version: "1.0.0"
+author: "SAJIM Quant Lab"
+description: "EMA Pullback Micro-Scalper for XAUUSD M5. Automated MT5 MCP pipeline verification."
+
+# Runtime Engine:
+engine: "mt5:headless"
+
+# Entrypoint script or compiled binary
+entrypoint: "MCP_Scalper_Sajim.mq5"
+
+# Baseline Instrument & Timeframe
+symbol: "XAUUSD"
+timeframe: "M5"
+
+# Risk & Execution Parameters
+parameters:
+  use_htf_filter: true
+  htf_timeframe: "H1"
+  htf_ema_period: 100
+  trend_ema: 50
+  signal_ema: 21
+  rsi_period: 14
+  rsi_lower: 40.0
+  rsi_upper: 60.0
+  lot_size: 0.10
+  sl_atr_mult: 1.0
+  tp_atr_mult: 3.0
+  breakeven_r: 1.5
+  atr_period: 14
+  trail_start_atr: 0.0
+  trail_step_atr: 1.0
+  max_trades_per_day: 0
+  max_spread_points: 50
+  session_start_hour: 0
+  session_end_hour: 24
+  magic_number: 20261006
+
+# Execution Assumptions
+assumptions:
+  spread_model: "floating"
+  slippage_pips: 0.5
+  commission_per_lot: 6.00

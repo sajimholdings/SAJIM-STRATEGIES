@@ -46,20 +46,26 @@ class BeepFilter:
         volume_z_threshold: float = 2.0,
         fakeout_window: int = 3,
         wick_ratio_threshold: float = 0.7,
+        allow_lookahead: bool = False,
     ):
         """
         Args:
             lookback: Rolling window for calculating statistics (default 20 candles)
             z_threshold: Z-score threshold for flagging price anomalies
             volume_z_threshold: Z-score threshold for flagging volume anomalies
-            fakeout_window: Number of candles to check for reversal after a breakout
+            fakeout_window: Number of candles over which a reversal must complete
             wick_ratio_threshold: Wick-to-body ratio above which a candle is suspicious
+            allow_lookahead: RESEARCH ONLY. When True, the fakeout layer attributes
+                a confirmed reversal back to the impulse candle, which means a
+                candle's noise flag depends on candles that had not printed yet.
+                Any backtest run with this enabled is contaminated. Default False.
         """
         self.lookback = lookback
         self.z_threshold = z_threshold
         self.volume_z_threshold = volume_z_threshold
         self.fakeout_window = fakeout_window
         self.wick_ratio_threshold = wick_ratio_threshold
+        self.allow_lookahead = allow_lookahead
 
     def apply(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -200,6 +206,16 @@ class BeepFilter:
         """
         Layer 3: Structural Anomaly Detection
         Detects fakeouts and wick rejections — the classic retail traps.
+
+        Causality note: a fakeout is only knowable once the reversal has printed,
+        so the flag is attached to the candle that COMPLETES the pattern, not to
+        the impulse candle that started it. Attributing it backwards to the
+        impulse — which earlier versions of this filter did — makes candle i's
+        noise flag depend on candles i+1..i+fakeout_window, i.e. on the future.
+        Measured on XAUUSD H1 that moved the flag on ~3% of candles and flipped
+        the sign of the downstream baseline slope (the traded signal) on roughly
+        1 candle in 24. Set allow_lookahead=True to restore the old behaviour for
+        research comparisons only.
         """
         # Wick rejection: candles where most of the range is wick (not body)
         # These are "test and reject" candles — price went there but didn't stay
@@ -207,25 +223,31 @@ class BeepFilter:
             df["wick_ratio"] > self.wick_ratio_threshold
         ).astype(int)
 
-        # Fakeout detection: a strong move followed by reversal within N candles
+        # Fakeout detection: a strong move reversed over the following N candles
         df["noise_fakeout"] = 0
         directions = df["direction"].values
         body_zscores = df["body_zscore"].values
+        flags = np.zeros(len(df), dtype=int)
+        window = self.fakeout_window
+        min_reversals = window * 0.6
 
-        for i in range(self.lookback, len(df) - self.fakeout_window):
-            # Check if this candle is a strong move
-            if abs(body_zscores[i]) > 1.5 and directions[i] != 0:
-                # Check if it reverses within the fakeout window
-                move_dir = directions[i]
-                reversed_count = 0
+        # Walk impulse candidates; `window` candles later the pattern is settled.
+        for impulse in range(self.lookback, len(df) - window):
+            if abs(body_zscores[impulse]) <= 1.5 or directions[impulse] == 0:
+                continue
 
-                for j in range(1, self.fakeout_window + 1):
-                    if i + j < len(directions) and directions[i + j] == -move_dir:
-                        reversed_count += 1
+            move_dir = directions[impulse]
+            reversed_count = 0
+            for j in range(1, window + 1):
+                if directions[impulse + j] == -move_dir:
+                    reversed_count += 1
 
-                # If most of the following candles reverse the move, it's a fakeout
-                if reversed_count >= self.fakeout_window * 0.6:
-                    df.iloc[i, df.columns.get_loc("noise_fakeout")] = 1
+            if reversed_count >= min_reversals:
+                # The reversal is confirmed at impulse+window. Flag the candle
+                # where that becomes true, so no flag depends on future data.
+                flags[impulse if self.allow_lookahead else impulse + window] = 1
+
+        df["noise_fakeout"] = flags
 
         # Combine structural signals
         df["noise_structural"] = (

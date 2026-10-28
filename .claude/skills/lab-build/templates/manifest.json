@@ -1,0 +1,19 @@
+{
+  "schema": "sajim.lab.manifest/1",
+  "id": "lab_example_xauusd",
+  "family": "lab_example_xauusd",
+  "name": "Short human name (SYMBOL TF)",
+  "description": "The verbatim description from request.json",
+  "origin": "ai_lab",
+  "run_adapter": "signal",
+  "engine": "python:signal",
+  "symbol": "XAUUSD",
+  "timeframe": "M15",
+  "supported_symbols": ["XAUUSD"],
+  "breadth_symbols": ["XAGUSD"],
+  "max_hold_bars": 96,
+  "allow_short": false,
+  "warmup_bars": 200,
+  "spec_sha256": "",
+  "code_sha256": ""
+}

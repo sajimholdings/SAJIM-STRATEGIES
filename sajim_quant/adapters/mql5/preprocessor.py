@@ -36,13 +36,56 @@ class Mql5Preprocessor:
         self.mt5_data_path = (
             Path(mt5_terminal_data_path)
             if mt5_terminal_data_path
-            else Path(os.path.expanduser(r"~\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075"))
+            else self._detect_terminal_data_path()
         )
         self.include_dir = self.mt5_data_path / "MQL5" / "Include"
         self.experts_dir = self.mt5_data_path / "MQL5" / "Experts" / "Sajim"
 
+    @staticmethod
+    def _detect_terminal_data_path() -> Path:
+        """Locates the active MT5 terminal data directory.
+
+        Order of preference:
+        1. $SAJIM_MT5_DATA_DIR env override
+        2. A terminal dir that already contains Experts/Sajim (previously used)
+        3. The first terminal dir containing an MQL5/Experts tree
+        """
+        env_override = os.getenv("SAJIM_MT5_DATA_DIR")
+        if env_override:
+            return Path(env_override)
+
+        terminals_root = Path(
+            os.path.expanduser(r"~\AppData\Roaming\MetaQuotes\Terminal")
+        )
+        if not terminals_root.exists():
+            raise FileNotFoundError(
+                f"No MT5 terminal data directory found under {terminals_root}. "
+                "Set SAJIM_MT5_DATA_DIR to the correct path."
+            )
+
+        candidate_dirs = [d for d in terminals_root.iterdir() if d.is_dir()]
+        for d in candidate_dirs:
+            if (d / "MQL5" / "Experts" / "Sajim").is_dir():
+                logger.info(f"Detected MT5 data dir (already instrumented): {d}")
+                return d
+        for d in candidate_dirs:
+            if (d / "MQL5" / "Experts").is_dir():
+                logger.info(f"Detected MT5 data dir: {d}")
+                return d
+        raise FileNotFoundError(
+            f"No usable MT5 terminal data directory under {terminals_root}. "
+            "Set SAJIM_MT5_DATA_DIR to the correct path."
+        )
+
     def ensure_include_installed(self) -> Path:
-        """Copies SajimLogger.mqh into MT5's MQL5/Include directory."""
+        """
+        Copies SajimLogger.mqh into MT5's MQL5/Include directory.
+
+        This is the only file this preprocessor writes to the global include
+        root; `SajimLogger.mqh` is our own name and collides with nothing in the
+        MetaTrader standard library. An EA's bundled headers go to a namespaced
+        subdirectory instead — see instrument_source().
+        """
         source_header = Path(__file__).resolve().parent / "SajimLogger.mqh"
         if not source_header.exists():
             raise FileNotFoundError(f"Source header not found at {source_header}")
@@ -64,19 +107,27 @@ class Mql5Preprocessor:
         self.ensure_include_installed()
         self.experts_dir.mkdir(parents=True, exist_ok=True)
 
-        # Copy local Include directory if present in the EA's source tree
+        # Copy the EA's own Include tree next to the instrumented source only.
+        #
+        # This used to also merge the tree into the terminal's global
+        # MQL5/Include with dirs_exist_ok=True. That overwrites MetaTrader's own
+        # standard library: GoldOrb ships Include/Math/Alglib/ (19 files) and MT5
+        # ships Include/Math/Alglib/ (18), so instrumenting one EA silently
+        # replaced the Alglib headers every other EA on the terminal compiles
+        # against — with no backup and no way back short of reinstalling.
         for candidate in [source_mq5.parent / "Include", source_mq5.parent.parent / "Include"]:
             if candidate.exists() and candidate.is_dir():
-                # Copy into MT5 global MQL5/Include for <Include/...> paths
-                for item in candidate.iterdir():
-                    if item.is_dir():
-                        shutil.copytree(item, self.include_dir / item.name, dirs_exist_ok=True)
-                    else:
-                        shutil.copy2(item, self.include_dir / item.name)
-                # Also copy into Experts/Sajim/Include for "Include/..." paths
                 target_local_include = self.experts_dir / "Include"
                 shutil.copytree(candidate, target_local_include, dirs_exist_ok=True)
-                logger.info(f"Synchronized Include tree from {candidate} -> {self.include_dir} and {target_local_include}")
+                logger.info(f"Synchronized Include tree from {candidate} -> {target_local_include}")
+
+                # Angle-bracket includes (<Foo.mqh>) resolve from the global
+                # include root, so mirror there too — but namespaced under
+                # Sajim/<EA>/ where nothing can collide with the stdlib.
+                namespaced = self.include_dir / "Sajim" / source_mq5.stem
+                shutil.copytree(candidate, namespaced, dirs_exist_ok=True)
+                logger.info(f"Mirrored Include tree -> {namespaced} (namespaced, stdlib untouched)")
+                break
 
         content = source_mq5.read_text(encoding="utf-8", errors="ignore")
 
@@ -150,7 +201,10 @@ double OnTester()
             cmd.extend([f"/compile:{str(mq5_path)}", f"/log:{str(log_path)}"])
 
         logger.info(f"Compiling: {' '.join(cmd)}")
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd=str(cwd))
+        try:
+            subprocess.run(cmd, capture_output=True, text=True, cwd=str(cwd), timeout=300)
+        except subprocess.TimeoutExpired:
+            return False, ex5_path, "Compile timed out after 300s (MetaEditor dialog blocking?)"
 
         log_content = ""
         if log_path.exists():

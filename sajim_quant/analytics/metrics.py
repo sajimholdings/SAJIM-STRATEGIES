@@ -17,6 +17,11 @@ import pandas as pd
 
 from sajim_quant.core.schema import BacktestResult, Trade
 
+#: Shortest run that may report a CAGR. Annualizing a 2-day sample produced
+#: figures like 127,061,215% in shipped results, because a 40% gain over
+#: 0.005 years compounds absurdly. Below this, CAGR and Calmar are None.
+MIN_CAGR_DAYS = 90
+
 
 @dataclass
 class PerformanceMetrics:
@@ -31,23 +36,26 @@ class PerformanceMetrics:
     final_balance: float
     net_profit: float
     return_pct: float
-    cagr_pct: float
+    cagr_pct: Optional[float]
     total_trades: int
     winning_trades: int
     losing_trades: int
     win_rate_pct: float
-    profit_factor: float
+    # Ratios are None (not 999.0) when their denominator is zero. A sentinel
+    # ranks a 3-trade strategy with no losses above every real one, so the
+    # leaderboard sorts on it and shows nonsense; None renders as "n/a".
+    profit_factor: Optional[float]
     expectancy: float
     avg_trade_pnl: float
     avg_win: float
     avg_loss: float
-    win_loss_ratio: float
+    win_loss_ratio: Optional[float]
     max_drawdown_amount: float
     max_drawdown_pct: float
-    recovery_factor: float
+    recovery_factor: Optional[float]
     sharpe_ratio: float
-    sortino_ratio: float
-    calmar_ratio: float
+    sortino_ratio: Optional[float]
+    calmar_ratio: Optional[float]
     max_consecutive_wins: int
     max_consecutive_losses: int
     avg_duration_minutes: float
@@ -55,43 +63,56 @@ class PerformanceMetrics:
     total_swap: float
     avg_mae: Optional[float] = None
     avg_mfe: Optional[float] = None
+    #: Drawdown measured only at trade closes — always a floor on the real figure.
+    max_drawdown_pct_closed: float = 0.0
+    #: True when trades carried MAE, so max_drawdown_* includes intra-trade excursion.
+    drawdown_includes_intratrade: bool = False
+    #: Days spanned by the run; CAGR is suppressed below MIN_CAGR_DAYS.
+    span_days: int = 0
     equity_series: List[Dict[str, Any]] = field(default_factory=list)
     monthly_returns: Dict[str, Dict[str, float]] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        def r(v: Optional[float], nd: int = 2) -> Optional[float]:
+            """Round, preserving None so 'not computable' survives serialization."""
+            return None if v is None else round(v, nd)
+
         return {
             "strategy_name": self.strategy_name,
             "engine": self.engine,
             "symbol": self.symbol,
             "timeframe": self.timeframe,
-            "initial_balance": round(self.initial_balance, 2),
-            "final_balance": round(self.final_balance, 2),
-            "net_profit": round(self.net_profit, 2),
-            "return_pct": round(self.return_pct, 2),
-            "cagr_pct": round(self.cagr_pct, 2),
+            "initial_balance": r(self.initial_balance),
+            "final_balance": r(self.final_balance),
+            "net_profit": r(self.net_profit),
+            "return_pct": r(self.return_pct),
+            "cagr_pct": r(self.cagr_pct),
             "total_trades": self.total_trades,
             "winning_trades": self.winning_trades,
             "losing_trades": self.losing_trades,
-            "win_rate_pct": round(self.win_rate_pct, 2),
-            "profit_factor": round(self.profit_factor, 2),
-            "expectancy": round(self.expectancy, 2),
-            "avg_trade_pnl": round(self.avg_trade_pnl, 2),
-            "avg_win": round(self.avg_win, 2),
-            "avg_loss": round(self.avg_loss, 2),
-            "win_loss_ratio": round(self.win_loss_ratio, 2),
-            "max_drawdown_amount": round(self.max_drawdown_amount, 2),
-            "max_drawdown_pct": round(self.max_drawdown_pct, 2),
-            "recovery_factor": round(self.recovery_factor, 2),
-            "sharpe_ratio": round(self.sharpe_ratio, 2),
-            "sortino_ratio": round(self.sortino_ratio, 2),
-            "calmar_ratio": round(self.calmar_ratio, 2),
+            "win_rate_pct": r(self.win_rate_pct),
+            "profit_factor": r(self.profit_factor),
+            "expectancy": r(self.expectancy),
+            "avg_trade_pnl": r(self.avg_trade_pnl),
+            "avg_win": r(self.avg_win),
+            "avg_loss": r(self.avg_loss),
+            "win_loss_ratio": r(self.win_loss_ratio),
+            "max_drawdown_amount": r(self.max_drawdown_amount),
+            "max_drawdown_pct": r(self.max_drawdown_pct),
+            "recovery_factor": r(self.recovery_factor),
+            "sharpe_ratio": r(self.sharpe_ratio),
+            "sortino_ratio": r(self.sortino_ratio),
+            "calmar_ratio": r(self.calmar_ratio),
             "max_consecutive_wins": self.max_consecutive_wins,
             "max_consecutive_losses": self.max_consecutive_losses,
-            "avg_duration_minutes": round(self.avg_duration_minutes, 1),
-            "total_commission": round(self.total_commission, 2),
-            "total_swap": round(self.total_swap, 2),
-            "avg_mae": round(self.avg_mae, 2) if self.avg_mae is not None else None,
-            "avg_mfe": round(self.avg_mfe, 2) if self.avg_mfe is not None else None,
+            "avg_duration_minutes": r(self.avg_duration_minutes, 1),
+            "total_commission": r(self.total_commission),
+            "total_swap": r(self.total_swap),
+            "avg_mae": r(self.avg_mae),
+            "avg_mfe": r(self.avg_mfe),
+            "max_drawdown_pct_closed": r(self.max_drawdown_pct_closed),
+            "drawdown_includes_intratrade": self.drawdown_includes_intratrade,
+            "span_days": self.span_days,
         }
 
 
@@ -113,23 +134,23 @@ def calculate_metrics(result: BacktestResult) -> PerformanceMetrics:
             final_balance=initial_balance,
             net_profit=0.0,
             return_pct=0.0,
-            cagr_pct=0.0,
+            cagr_pct=None,
             total_trades=0,
             winning_trades=0,
             losing_trades=0,
             win_rate_pct=0.0,
-            profit_factor=0.0,
+            profit_factor=None,
             expectancy=0.0,
             avg_trade_pnl=0.0,
             avg_win=0.0,
             avg_loss=0.0,
-            win_loss_ratio=0.0,
+            win_loss_ratio=None,
             max_drawdown_amount=0.0,
             max_drawdown_pct=0.0,
-            recovery_factor=0.0,
+            recovery_factor=None,
             sharpe_ratio=0.0,
-            sortino_ratio=0.0,
-            calmar_ratio=0.0,
+            sortino_ratio=None,
+            calmar_ratio=None,
             max_consecutive_wins=0,
             max_consecutive_losses=0,
             avg_duration_minutes=0.0,
@@ -155,12 +176,13 @@ def calculate_metrics(result: BacktestResult) -> PerformanceMetrics:
     final_balance = initial_balance + net_profit
     return_pct = (net_profit / initial_balance) * 100
 
-    profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (999.0 if gross_profit > 0 else 0.0)
+    # None when there are no losses to divide by: 'no losing trades yet', not 'infinitely good'.
+    profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else None
 
     avg_trade_pnl = net_profit / total_trades if total_trades > 0 else 0.0
     avg_win = (sum(wins) / winning_trades) if winning_trades > 0 else 0.0
     avg_loss = (abs(sum(losses)) / losing_trades) if losing_trades > 0 else 0.0
-    win_loss_ratio = (avg_win / avg_loss) if avg_loss > 0 else (999.0 if avg_win > 0 else 0.0)
+    win_loss_ratio = (avg_win / avg_loss) if avg_loss > 0 else None
 
     loss_rate = losing_trades / total_trades if total_trades > 0 else 0.0
     win_rate = winning_trades / total_trades if total_trades > 0 else 0.0
@@ -189,44 +211,73 @@ def calculate_metrics(result: BacktestResult) -> PerformanceMetrics:
     # Equity Curve & Drawdown calculation
     equity = initial_balance
     peak = initial_balance
+    peak_closed = initial_balance
     max_dd_amount = 0.0
     max_dd_pct = 0.0
     equity_series = [{"time": meta.start_date, "equity": round(equity, 2), "drawdown_pct": 0.0}]
 
-    for t in sorted_trades:
-        equity += t.net_pnl
-        if equity > peak:
-            peak = equity
-        dd_amt = peak - equity
-        dd_pct = (dd_amt / peak) * 100 if peak > 0 else 0.0
+    # Closed-trade drawdown is tracked alongside the intra-trade-aware figure so
+    # a consumer can see how much drawdown only shows up inside open trades.
+    max_dd_pct_closed = 0.0
+    has_mae = any(t.mae is not None for t in sorted_trades)
 
-        if dd_amt > max_dd_amount:
-            max_dd_amount = dd_amt
-        if dd_pct > max_dd_pct:
-            max_dd_pct = dd_pct
+    def _record(level: float) -> None:
+        """Fold one equity level into the running peak/drawdown extremes."""
+        nonlocal peak, max_dd_amount, max_dd_pct
+        if level > peak:
+            peak = level
+        amt = peak - level
+        if amt > max_dd_amount:
+            max_dd_amount = amt
+        pct = (amt / peak) * 100 if peak > 0 else 0.0
+        if pct > max_dd_pct:
+            max_dd_pct = pct
+
+    for t in sorted_trades:
+        # Trough reached while the trade was open. The MAE sign convention varies
+        # by producer (Backtrader emits it negative, the Pine importer positive),
+        # so take the magnitude — an adverse excursion is a loss by definition.
+        if t.mae is not None:
+            _record(equity - abs(t.mae))
+
+        equity += t.net_pnl
+        _record(equity)
+
+        if equity > peak_closed:
+            peak_closed = equity
+        dd_amt_closed = peak_closed - equity
+        dd_pct_closed = (dd_amt_closed / peak_closed) * 100 if peak_closed > 0 else 0.0
+        if dd_pct_closed > max_dd_pct_closed:
+            max_dd_pct_closed = dd_pct_closed
 
         equity_series.append({
             "time": t.exit_time,
             "equity": round(equity, 2),
-            "drawdown_pct": round(dd_pct, 2),
+            "drawdown_pct": round(dd_pct_closed, 2),
             "trade_id": t.trade_id,
         })
 
-    recovery_factor = (net_profit / max_dd_amount) if max_dd_amount > 0 else (999.0 if net_profit > 0 else 0.0)
+    recovery_factor = (net_profit / max_dd_amount) if max_dd_amount > 0 else None
 
-    # Time span & CAGR
-    cagr_pct = 0.0
+    # Time span & CAGR. The metadata dates come from the producer; CSV importers
+    # set them to the first and last trade, so a short export can span two days.
+    cagr_pct = None
+    total_days = 0
+    years = 1.0
     try:
         t_start = datetime.fromisoformat(meta.start_date.replace("Z", "+00:00"))
         t_end = datetime.fromisoformat(meta.end_date.replace("Z", "+00:00"))
-        total_days = max(1, (t_end - t_start).days)
-        years = total_days / 365.25
-        if years > 0 and final_balance > 0:
+        total_days = max(0, (t_end - t_start).days)
+        years = max(total_days, 1) / 365.25
+        if total_days >= MIN_CAGR_DAYS and final_balance > 0:
             cagr_pct = (((final_balance / initial_balance) ** (1 / years)) - 1) * 100
     except Exception:
+        total_days = 0
         years = 1.0
 
-    calmar_ratio = (cagr_pct / max_dd_pct) if max_dd_pct > 0 else (999.0 if cagr_pct > 0 else 0.0)
+    # Calmar inherits CAGR's gate: annualized return over drawdown is meaningless
+    # when the return itself could not be annualized.
+    calmar_ratio = (cagr_pct / max_dd_pct) if (cagr_pct is not None and max_dd_pct > 0) else None
 
     # Sharpe & Sortino (trade-level annualized assuming ~252 trading days / avg trade freq)
     if len(pnl_list) > 1:
@@ -244,10 +295,11 @@ def calculate_metrics(result: BacktestResult) -> PerformanceMetrics:
             downside_std = math.sqrt(np.mean(downside ** 2))
             sortino_ratio = (np.mean(pnl_arr) / downside_std * ann_factor) if downside_std > 0 else 0.0
         else:
-            sortino_ratio = 999.0 if np.mean(pnl_arr) > 0 else 0.0
+            # No losing trades: downside deviation is zero, so Sortino is undefined.
+            sortino_ratio = None
     else:
         sharpe_ratio = 0.0
-        sortino_ratio = 0.0
+        sortino_ratio = None
 
     # Trade Profile
     total_comm = sum(t.commission for t in sorted_trades)
@@ -306,6 +358,9 @@ def calculate_metrics(result: BacktestResult) -> PerformanceMetrics:
         total_swap=total_swap,
         avg_mae=avg_mae,
         avg_mfe=avg_mfe,
+        max_drawdown_pct_closed=max_dd_pct_closed,
+        drawdown_includes_intratrade=has_mae,
+        span_days=total_days,
         equity_series=equity_series,
         monthly_returns=monthly_returns,
     )

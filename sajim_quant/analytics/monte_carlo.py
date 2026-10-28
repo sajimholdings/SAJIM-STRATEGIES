@@ -66,8 +66,7 @@ class MonteCarloSimulator:
         """
         Runs Monte Carlo simulation on a list of trade dollar PnLs.
         """
-        if seed is not None:
-            np.random.seed(seed)
+        rng = np.random.default_rng(seed)
 
         pnls = np.array(trade_pnls, dtype=np.float64)
         n_trades = len(pnls)
@@ -103,7 +102,7 @@ class MonteCarloSimulator:
 
         # Draw random indices with replacement: shape (num_simulations, n_trades)
         # Bootstrap resampling captures both sequence variance and clustering
-        sim_indices = np.random.randint(0, n_trades, size=(num_simulations, n_trades))
+        sim_indices = rng.integers(0, n_trades, size=(num_simulations, n_trades))
         sim_pnls = pnls[sim_indices]  # shape: (num_simulations, n_trades)
 
         # Compute cumulative balance curves: shape (num_simulations, n_trades + 1)

@@ -16,31 +16,59 @@ import pandas as pd
 from data_loader import fetch_pair
 from beep_filter import BeepFilter
 
-def get_asymptotic_quality_score(df, max_passes=20):
-    """Dynamically calculates the exact number of passes by finding the variance asymptote."""
-    current_df = df.copy()
-    total_candles = len(df)
-    
+def resolve_asymptote_passes(df, max_passes=20, warmup_bars=500):
+    """
+    Decide how many filter passes reach the variance asymptote, using ONLY the
+    first `warmup_bars` candles.
+
+    The pass count is one parameter applied to the whole series, so deriving it
+    from the whole series lets the end of the sample influence the signal at its
+    start. Fitting it on a leading warm-up slice keeps the choice available
+    before any trading decision is made. Returns at least 1.
+    """
+    warmup = df.iloc[: max(warmup_bars, 120)].copy()
+    if len(warmup) < 60:
+        return 3  # too little history to fit on; fall back to the baseline default
+
+    total = len(warmup)
+    passes = 1
     for p in range(1, max_passes + 1):
         beep = BeepFilter(lookback=20, z_threshold=2.0, wick_ratio_threshold=0.7)
-        filtered = beep.apply(current_df)
-        
-        noise_idx = filtered[filtered["is_noise"]].index
-        noise_ratio = len(noise_idx) / total_candles
-        
-        if noise_ratio < 0.01 and p > 1:
-            # Asymptote reached: less than 1% noise detected. Stop filtering to preserve structure.
-            # print(f"    [Asymptote Reached at Pass {p}]")
+        is_noise_arr = beep.apply(warmup)["is_noise"].to_numpy()
+        passes = p
+        if int(np.sum(is_noise_arr)) / total < 0.01 and p > 1:
             break
-            
-        clean_close = current_df["Close"].copy()
-        for idx in noise_idx:
-            loc = current_df.index.get_loc(idx)
-            prev_val = clean_close.iloc[max(0, loc - 1)]
-            clean_close.iloc[loc] = prev_val
-            
+
+        clean_close = warmup["Close"].to_numpy().copy()
+        for loc in np.where(is_noise_arr)[0]:
+            clean_close[loc] = clean_close[max(0, loc - 1)]
+        warmup["Close"] = clean_close
+
+    return max(1, passes)
+
+
+def get_asymptotic_quality_score(df, max_passes=20, passes=None, warmup_bars=500):
+    """
+    Purify closes over `passes` filter passes and return the smoothed baseline.
+
+    `passes` defaults to the asymptote fitted on the leading warm-up slice (see
+    resolve_asymptote_passes); pass an int to pin it. Every pass runs the causal
+    BeepFilter, so baseline[i] depends only on candles <= i.
+    """
+    if passes is None:
+        passes = resolve_asymptote_passes(df, max_passes=max_passes, warmup_bars=warmup_bars)
+
+    current_df = df.copy()
+    for _ in range(passes):
+        beep = BeepFilter(lookback=20, z_threshold=2.0, wick_ratio_threshold=0.7)
+        is_noise_arr = beep.apply(current_df)["is_noise"].to_numpy()
+
+        clean_close = current_df["Close"].to_numpy().copy()
+        for loc in np.where(is_noise_arr)[0]:
+            clean_close[loc] = clean_close[max(0, loc - 1)]
+
         current_df["Close"] = clean_close
-        
+
     baseline = current_df["Close"].rolling(window=15, min_periods=1).mean()
     return baseline
 

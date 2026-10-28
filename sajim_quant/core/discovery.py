@@ -34,11 +34,29 @@ class StrategyDiscoveryScanner:
     Crawls workspaces to discover strategy files and manifests.
     """
 
+    #: Directory names pruned during the walk.
+    #:
+    #: A live scan used to return 222 entries of which roughly 24 were real
+    #: strategies: 169 came from a downloaded DBot bot library under
+    #: `Deriv accumulatorsbot/reference/`, and the rest from vendored MQL5
+    #: standard-library backups and strategy-local test fixtures. The catalog is
+    #: only useful if what it lists is actually ours to run.
     EXCLUDED_DIRS = {
         ".git", ".venv", "node_modules", ".next", "__pycache__",
         "python_env", ".tmp_session_catalogs", ".tmp_session_catalogs2",
-        "temp_reports", "logs", "data", "sim", "docs", "tests", "sajim_quant", "files"
+        "temp_reports", "logs", "data", "sim", "docs", "tests", "sajim_quant", "files",
+        "sajim_holdings_sandbox",   # a full MT5 install: stock example EAs, not strategies
+        "reference",               # third-party bot libraries downloaded for study
+        "_stdlib_backup",          # vendored copies of the MQL5 standard library
+        "Study Materials",         # third-party PDFs/videos
+        ".bmad",                   # workflow framework scaffolding
+        "Backtest", "Forward Testing",  # duplicate copies of the BTC collector
+        "build", "dist", "htmlcov", ".pytest_cache", ".idea", ".vscode",
     }
+
+    #: Path fragments that disqualify a discovered file even outside the pruned
+    #: directories (e.g. a strategy folder's own test fixtures).
+    EXCLUDED_PATH_PARTS = ("/test/", "/tests/", "/fixtures/", "/examples/", "/_archive/")
 
     def __init__(self, workspace_root: Path):
         self.workspace_root = Path(workspace_root).resolve()
@@ -51,6 +69,11 @@ class StrategyDiscoveryScanner:
             dirs[:] = [d for d in dirs if d not in self.EXCLUDED_DIRS]
             curr_dir = Path(root)
             rel_folder = str(curr_dir.relative_to(self.workspace_root))
+
+            # Skip strategy-local test/fixture trees that survived dir pruning.
+            rel_posix = f"/{rel_folder.replace(chr(92), '/')}/".lower()
+            if any(part in rel_posix for part in self.EXCLUDED_PATH_PARTS):
+                continue
 
             # 1. Check for sajim_strategy.yaml manifest
             manifest_path = curr_dir / "sajim_strategy.yaml"

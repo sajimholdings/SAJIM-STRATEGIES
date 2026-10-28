@@ -20,6 +20,7 @@ import {
   Clock,
   Sparkles,
   Zap,
+  Play,
 } from "lucide-react";
 import {
   LineChart,
@@ -31,8 +32,24 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  AreaChart,
+  Area,
 } from "recharts";
 import MonteCarloDrawer from "./components/MonteCarloDrawer";
+import AgentTab from "./components/AgentTab";
+import ResultTearSheet from "./components/ResultTearSheet";
+import TestingCockpit from "./components/TestingCockpit";
+import {
+  analyzeResult,
+  bestResultMatch,
+  computeDiversificationRatio,
+  type ResultEntry,
+} from "../lib/results";
+import type {
+  UniverseNode,
+  UniverseResponse,
+  UniverseStrategy,
+} from "../lib/universe";
 
 type Strategy = {
   id: string;
@@ -43,45 +60,52 @@ type Strategy = {
   timeframe: string;
   trades: number;
   win_rate_pct: number;
-  profit_factor: number;
+  /** null when the run had no losing trades — "n/a", not infinitely good. */
+  profit_factor: number | null;
   net_pnl: number;
   max_drawdown_pct: number;
+  max_drawdown_pct_closed?: number | null;
+  /** False means max_drawdown_pct counts trade closes only, so it is a floor. */
+  drawdown_includes_intratrade?: boolean;
   sharpe_ratio: number;
-  sortino_ratio?: number;
+  sortino_ratio?: number | null;
+  calmar_ratio?: number | null;
+  cagr_pct?: number | null;
+  span_days?: number | null;
   tier: string;
   description: string;
+  /** Execution assumptions the run was priced under (RunMetadata.notes). */
+  assumptions?: string;
+  /** The result JSON this row was derived from. Every row has one. */
+  result_file?: string;
+  source?: string;
   tear_sheet_path?: string;
 };
 
-type TimeframeItem = {
-  strategy_name: string;
-  symbol: string;
-  timeframe: string;
-  trades: number;
-  win_rate_pct: number;
-  profit_factor: number;
-  net_pnl: number;
-  max_drawdown_pct: number;
-  sharpe_ratio: number;
-  optimal: boolean;
-  status: string;
-  recommendation: string;
-};
+/** Render a possibly-null metric, so "no denominator" never prints as 0.00. */
+function fmt(value: number | null | undefined, digits = 2, suffix = ""): string {
+  return value === null || value === undefined ? "n/a" : `${value.toFixed(digits)}${suffix}`;
+}
+
 
 export default function QuantLeaderboard() {
   const [strategies, setStrategies] = useState<Strategy[]>([]);
-  const [correlationMatrix, setCorrelationMatrix] = useState<Record<string, Record<string, number>>>({});
-  const [timeframeMatrix, setTimeframeMatrix] = useState<TimeframeItem[]>([]);
+  const [correlationMatrix, setCorrelationMatrix] = useState<Record<string, Record<string, number | null>>>({});
+  const [correlationSource, setCorrelationSource] = useState<"real" | "insufficient" | null>(null);
+  const [correlationResultCount, setCorrelationResultCount] = useState(0);
+  const [resultEntries, setResultEntries] = useState<ResultEntry[]>([]);
+  const [leaderboardSource, setLeaderboardSource] = useState<string | null>(null);
+  const [leaderboardSkipped, setLeaderboardSkipped] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"universe" | "leaderboard" | "timeframes" | "correlations">("universe");
+  const [activeTab, setActiveTab] = useState<"testing" | "universe" | "leaderboard" | "correlations" | "agent">("testing");
 
   // Strategy Universe & Monte Carlo State
-  const [universeData, setUniverseData] = useState<any>(null);
+  const [universeData, setUniverseData] = useState<UniverseResponse | null>(null);
   const [selectedUniverseStratId, setSelectedUniverseStratId] = useState<string>("BEEP_VACUUM_HUNTER");
   const [universeAssetFilter, setUniverseAssetFilter] = useState<string>("ALL");
   const [universeTfFilter, setUniverseTfFilter] = useState<string>("ALL");
   const [universeSearchQuery, setUniverseSearchQuery] = useState<string>("");
-  const [selectedComboNode, setSelectedComboNode] = useState<any>(null);
+  const [selectedComboNode, setSelectedComboNode] = useState<UniverseNode | null>(null);
 
   // Leaderboard filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,23 +113,23 @@ export default function QuantLeaderboard() {
   const [tierFilter, setTierFilter] = useState("ALL");
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(null);
 
-  // Timeframe Matrix filters
-  const [tfFilter, setTfFilter] = useState("ALL");
-  const [tfStratFilter, setTfStratFilter] = useState("ALL");
-  const [optimalOnly, setOptimalOnly] = useState(false);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [res, uniRes] = await Promise.all([
+        const [res, uniRes, resultsRes] = await Promise.all([
           fetch("/api/leaderboard"),
           fetch("/api/strategy-universe"),
+          fetch("/api/results", { cache: "no-store" }),
         ]);
         const data = await res.json();
         if (data.success) {
           setStrategies(data.strategies || []);
           setCorrelationMatrix(data.correlationMatrix || {});
-          setTimeframeMatrix(data.timeframeMatrix || []);
+          setCorrelationSource(data.correlationSource ?? null);
+          setCorrelationResultCount(data.correlationResultCount ?? 0);
+          setLeaderboardSource(data.source ?? null);
+          setLeaderboardSkipped(data.skipped_files ?? []);
           if (data.strategies && data.strategies.length > 0) {
             setSelectedStrategy(data.strategies[0]);
           }
@@ -116,6 +140,10 @@ export default function QuantLeaderboard() {
           if (uniData.strategies && uniData.strategies.length > 0) {
             setSelectedUniverseStratId(uniData.strategies[0].id);
           }
+        }
+        const resultsData = await resultsRes.json();
+        if (resultsData.success) {
+          setResultEntries(resultsData.entries || []);
         }
       } catch (err) {
         console.error("Failed to load data:", err);
@@ -130,14 +158,14 @@ export default function QuantLeaderboard() {
   const selectedUniverseStrat = useMemo(() => {
     if (!universeData?.strategies) return null;
     return (
-      universeData.strategies.find((s: any) => s.id === selectedUniverseStratId) ||
+      universeData.strategies.find((s) => s.id === selectedUniverseStratId) ||
       universeData.strategies[0]
     );
   }, [universeData, selectedUniverseStratId]);
 
   const filteredCombos = useMemo(() => {
     if (!selectedUniverseStrat?.ranked_combinations) return [];
-    return selectedUniverseStrat.ranked_combinations.filter((c: any) => {
+    return selectedUniverseStrat.ranked_combinations.filter((c: UniverseNode) => {
       const matchAsset =
         universeAssetFilter === "ALL" ||
         c.asset_class?.toLowerCase().includes(universeAssetFilter.toLowerCase()) ||
@@ -183,47 +211,101 @@ export default function QuantLeaderboard() {
     });
   }, [strategies, searchQuery, engineFilter, tierFilter]);
 
-  // Filtered Timeframe Items
-  const filteredTimeframes = useMemo(() => {
-    return timeframeMatrix.filter((item) => {
-      const matchTf = tfFilter === "ALL" || item.timeframe.toUpperCase().includes(tfFilter);
-      const matchStrat = tfStratFilter === "ALL" || item.strategy_name === tfStratFilter;
-      const matchOpt = !optimalOnly || item.optimal;
-      return matchTf && matchStrat && matchOpt;
-    });
-  }, [timeframeMatrix, tfFilter, tfStratFilter, optimalOnly]);
+  // Real equity curve for the tear-sheet inspector: loaded from the actual
+  // backtest result JSON (sim/public/test_results/*.json), never simulated.
+  const [analysis, setAnalysis] = useState<ReturnType<typeof analyzeResult>>(null);
+  const [resultState, setResultState] = useState<
+    "idle" | "loading" | "loaded" | "unavailable"
+  >("idle");
+  const [tearSheetOpen, setTearSheetOpen] = useState(false);
+  const [resultRef, setResultRef] = useState<{ file: string; source: string } | null>(null);
 
-  // Unique strategy names for TF filter
-  const uniqueTfStrategies = useMemo(() => {
-    return Array.from(new Set(timeframeMatrix.map((t) => t.strategy_name)));
-  }, [timeframeMatrix]);
-
-  // Synthetic equity curve simulation for preview modal
-  const miniEquityData = useMemo(() => {
-    if (!selectedStrategy) return [];
-    const points = [];
-    const count = Math.min(Math.max(selectedStrategy.trades, 15), 40);
-    let equity = 50000;
-    const pnlPerTrade = selectedStrategy.net_pnl / count;
-    const noise = Math.abs(pnlPerTrade) * 1.5;
-
-    for (let i = 0; i < count; i++) {
-      const stepPnl =
-        pnlPerTrade +
-        (Math.random() > selectedStrategy.win_rate_pct / 100 ? -noise : noise);
-      equity += stepPnl;
-      points.push({
-        trade: i + 1,
-        equity: Math.round(equity),
+  useEffect(() => {
+    if (!selectedStrategy) return;
+    let cancelled = false;
+    (async () => {
+      if (cancelled) return;
+      setAnalysis(null);
+      setResultRef(null);
+      setResultState("loading");
+      // 1) Definitive path: the /api/results catalog maps this strategy to a
+      //    real result file via its metadata (strategy_name/symbol/timeframe).
+      const match = bestResultMatch(resultEntries, {
+        name: selectedStrategy.name,
+        symbol: selectedStrategy.symbol,
+        timeframe: selectedStrategy.timeframe,
+        engine: selectedStrategy.engine,
       });
-    }
-    return points;
-  }, [selectedStrategy]);
+      if (match) {
+        try {
+          const res = await fetch(
+            `/api/results?file=${encodeURIComponent(match.entry.file)}&source=${encodeURIComponent(match.entry.source)}`,
+            { cache: "no-store" }
+          );
+          if (res.ok) {
+            const parsed = analyzeResult(await res.json());
+            if (parsed && !cancelled) {
+              setAnalysis(parsed);
+              setResultRef({ file: match.entry.file, source: match.entry.source });
+              setResultState("loaded");
+              return;
+            }
+          }
+        } catch {
+          // fall through to filename heuristics
+        }
+      }
+      // 2) Fallback: candidate file names follow the CLI convention
+      //    <strategy>_<symbol>_<timeframe>_result.json (spaces -> underscores).
+      //    Multi-timeframe entries (e.g. "H1/M5") try each piece.
+      const safeName = selectedStrategy.name.replace(/ /g, "_");
+      const timeframes = selectedStrategy.timeframe
+        .split("/")
+        .map((t) => t.trim())
+        .filter(Boolean);
+      const candidates: string[] = [];
+      for (const tf of timeframes) {
+        candidates.push(`${safeName}_${selectedStrategy.symbol}_${tf}_result.json`);
+      }
+      for (const file of candidates) {
+        try {
+          const res = await fetch(`/test_results/${encodeURIComponent(file)}`, {
+            cache: "no-store",
+          });
+          if (!res.ok) continue;
+          const parsed = analyzeResult(await res.json());
+          if (parsed && !cancelled) {
+            setAnalysis(parsed);
+            setResultRef({ file, source: "test_results" });
+            setResultState("loaded");
+            return;
+          }
+        } catch {
+          // try the next candidate
+        }
+      }
+      if (!cancelled) setResultState("unavailable");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedStrategy, resultEntries]);
+
+  // Computed diversification ratio for the correlations tab (real math on the
+  // real correlation matrix — no hardcoded values).
+  const diversificationRatio = useMemo(
+    () => computeDiversificationRatio(correlationMatrix),
+    [correlationMatrix]
+  );
 
   // KPIs
   const totalTrades = strategies.reduce((a, b) => a + b.trades, 0);
   const profitableCount = strategies.filter((s) => s.net_pnl > 0).length;
-  const topSharpe = strategies.length > 0 ? Math.max(...strategies.map((s) => s.sharpe_ratio)) : 0;
+  const topStrategy =
+    strategies.length > 0
+      ? strategies.reduce((best, s) => (s.sharpe_ratio > best.sharpe_ratio ? s : best))
+      : null;
+  const topSharpe = topStrategy?.sharpe_ratio ?? 0;
 
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 p-4 md:p-8 font-sans selection:bg-cyan-500 selection:text-black">
@@ -258,6 +340,16 @@ export default function QuantLeaderboard() {
         {/* Navigation Tabs */}
         <div className="flex items-center gap-2 mt-6 border-b border-slate-800 overflow-x-auto">
           <button
+            onClick={() => setActiveTab("testing")}
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
+              activeTab === "testing"
+                ? "border-blue-400 text-blue-400 bg-blue-500/10 shadow-sm"
+                : "border-transparent text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Play className="w-3.5 h-3.5 text-blue-400 fill-current" /> Strategy Testing Cockpit
+          </button>
+          <button
             onClick={() => setActiveTab("universe")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition whitespace-nowrap ${
               activeTab === "universe"
@@ -265,7 +357,10 @@ export default function QuantLeaderboard() {
                 : "border-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
-            <Sparkles className="w-4 h-4 text-purple-400" /> Strategy Universe & Monte Carlo (20x6)
+            <Sparkles className="w-4 h-4 text-purple-400" /> Strategy Universe & Monte Carlo{" "}
+            {universeData?.symbols?.length != null && universeData?.timeframes?.length != null
+              ? `(${universeData.symbols.length}×${universeData.timeframes.length})`
+              : ""}
           </button>
           <button
             onClick={() => setActiveTab("leaderboard")}
@@ -278,16 +373,6 @@ export default function QuantLeaderboard() {
             <Award className="w-4 h-4" /> Strategy Leaderboard ({strategies.length})
           </button>
           <button
-            onClick={() => setActiveTab("timeframes")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition whitespace-nowrap ${
-              activeTab === "timeframes"
-                ? "border-amber-400 text-amber-400 bg-amber-500/5"
-                : "border-transparent text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Clock className="w-4 h-4" /> Legacy TF Matrix ({timeframeMatrix.length})
-          </button>
-          <button
             onClick={() => setActiveTab("correlations")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition whitespace-nowrap ${
               activeTab === "correlations"
@@ -296,6 +381,16 @@ export default function QuantLeaderboard() {
             }`}
           >
             <Activity className="w-4 h-4" /> Pairwise Correlation Heatmap
+          </button>
+          <button
+            onClick={() => setActiveTab("agent")}
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition whitespace-nowrap ${
+              activeTab === "agent"
+                ? "border-emerald-400 text-emerald-400 bg-emerald-500/10"
+                : "border-transparent text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Cpu className="w-4 h-4 text-emerald-500" /> DeepSeek Agent
           </button>
         </div>
 
@@ -316,7 +411,9 @@ export default function QuantLeaderboard() {
               <Award className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-2xl font-bold text-emerald-400">{topSharpe.toFixed(2)}</div>
-            <div className="text-xs text-slate-500 mt-1">SMC Fractal Daemon (EURUSD)</div>
+            <div className="text-xs text-slate-500 mt-1">
+              {topStrategy ? `${topStrategy.name} (${topStrategy.symbol} ${topStrategy.timeframe})` : "no results yet"}
+            </div>
           </div>
 
           <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
@@ -330,20 +427,71 @@ export default function QuantLeaderboard() {
 
           <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
             <div className="flex items-center justify-between text-slate-400 mb-1">
-              <span className="text-xs font-medium uppercase tracking-wider">Timeframe Combos</span>
+              <span className="text-xs font-medium uppercase tracking-wider">Measured Runs</span>
               <Clock className="w-4 h-4 text-amber-400" />
             </div>
-            <div className="text-2xl font-bold text-amber-400">{timeframeMatrix.length} Analyzed</div>
-            <div className="text-xs text-slate-500 mt-1">M1 to H4 Cross-Tested</div>
+            <div className="text-2xl font-bold text-amber-400">{strategies.length} On Record</div>
+            <div className="text-xs text-slate-500 mt-1">
+              {leaderboardSource ? `from ${leaderboardSource}` : "awaiting results"}
+              {leaderboardSkipped.length > 0 ? ` · ${leaderboardSkipped.length} unreadable` : ""}
+            </div>
           </div>
         </div>
       </header>
+
+      {/* VIEW 0: TESTING COCKPIT */}
+      {activeTab === "testing" && (
+        <div className="w-full pt-4">
+          <TestingCockpit />
+        </div>
+      )}
+
+      {/* VIEW 5: AGENT TAB */}
+      {activeTab === "agent" && (
+        <div className="max-w-5xl mx-auto pt-4">
+          <AgentTab />
+        </div>
+      )}
 
       {/* VIEW 1: LEADERBOARD TAB */}
       {activeTab === "leaderboard" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left 2 Cols: Search, Filters & Leaderboard Table */}
           <div className="lg:col-span-2 space-y-4">
+            {/* Provenance: every row below is derived from a result JSON on
+                disk. The board used to be served from a hand-maintained
+                data/leaderboard.json that disagreed with the engine, so state
+                the source rather than letting the reader assume. */}
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 bg-slate-900/50 px-3 py-2 rounded-xl border border-slate-800/80">
+              <span
+                className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border ${
+                  strategies.length > 0
+                    ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+                    : "bg-slate-500/10 text-slate-400 border-slate-500/30"
+                }`}
+              >
+                {strategies.length > 0 ? "MEASURED" : "NO RESULTS"}
+              </span>
+              {strategies.length > 0 ? (
+                <span>
+                  {strategies.length} run{strategies.length === 1 ? "" : "s"} read from{" "}
+                  <span className="font-mono text-slate-300">{leaderboardSource ?? "disk"}</span>
+                  {" — "}each row traces to its own result file.
+                </span>
+              ) : (
+                <span>
+                  No backtest results on disk yet. Run one from the Testing Cockpit; strategies
+                  without a result are deliberately not listed.
+                </span>
+              )}
+              {leaderboardSkipped.length > 0 && (
+                <span className="text-amber-300">
+                  {leaderboardSkipped.length} file
+                  {leaderboardSkipped.length === 1 ? "" : "s"} skipped (unparseable)
+                </span>
+              )}
+            </div>
+
             {/* Filter Bar */}
             <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80">
               <div className="relative flex-1">
@@ -449,14 +597,14 @@ export default function QuantLeaderboard() {
                           <td className="py-3 px-3 text-right font-mono font-bold">
                             <span
                               className={
-                                s.profit_factor >= 1.5
+                                (s.profit_factor ?? 0) >= 1.5
                                   ? "text-emerald-400"
-                                  : s.profit_factor >= 1.0
+                                  : (s.profit_factor ?? 0) >= 1.0
                                   ? "text-blue-400"
                                   : "text-rose-400"
                               }
                             >
-                              {s.profit_factor.toFixed(2)}
+                              {fmt(s.profit_factor)}
                             </span>
                           </td>
                           <td className="py-3 px-3 text-right font-mono font-bold">
@@ -532,7 +680,7 @@ export default function QuantLeaderboard() {
                   </div>
                 </div>
 
-                {/* Mini Equity Curve */}
+                {/* Mini Equity Curve — REAL data from the backtest result JSON */}
                 <div className="border border-slate-800/80 rounded-xl p-3 bg-slate-950/60">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold text-slate-300">Equity Trajectory</span>
@@ -544,30 +692,113 @@ export default function QuantLeaderboard() {
                       ${selectedStrategy.net_pnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </div>
-                  <div className="h-32 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={miniEquityData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="trade" hide />
-                        <YAxis domain={["auto", "auto"]} hide />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#0f172a",
-                            borderColor: "#334155",
-                            borderRadius: "8px",
-                            fontSize: "11px",
-                          }}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="equity"
-                          stroke={selectedStrategy.net_pnl >= 0 ? "#10b981" : "#f43f5e"}
-                          strokeWidth={2}
-                          dot={false}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
+
+                  {resultState === "loading" && (
+                    <div className="h-24 w-full flex items-center justify-center">
+                      <span className="animate-pulse text-[11px] font-mono text-slate-500">
+                        Loading trade-level data…
+                      </span>
+                    </div>
+                  )}
+
+                  {resultState === "unavailable" && (
+                    <div className="h-24 w-full flex items-center justify-center text-center px-4">
+                      <span className="text-[11px] text-slate-500 leading-relaxed">
+                        No trade-level result JSON for this strategy yet.
+                        Run <span className="font-mono text-cyan-400">python -m sajim_quant test</span> to
+                        generate the real equity curve.
+                      </span>
+                    </div>
+                  )}
+
+                  {resultState === "loaded" && analysis && (
+                    <div className="space-y-2">
+                      <div className="h-24 w-full">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                          <LineChart data={analysis.equity}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                            <XAxis dataKey="index" hide />
+                            <YAxis domain={["auto", "auto"]} hide />
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#0f172a",
+                                borderColor: "#334155",
+                                borderRadius: "8px",
+                                fontSize: "11px",
+                              }}
+                              formatter={(val) => [
+                                `$${Number(val).toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}`,
+                                "Equity",
+                              ]}
+                              labelFormatter={(lbl) => `Trade #${lbl}`}
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="equity"
+                              stroke={selectedStrategy.net_pnl >= 0 ? "#10b981" : "#f43f5e"}
+                              strokeWidth={2}
+                              dot={false}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      <div className="h-16 w-full">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                          <AreaChart data={analysis.drawdown} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                            <defs>
+                              <linearGradient id="miniDdGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.4} />
+                                <stop offset="100%" stopColor="#f43f5e" stopOpacity={0.05} />
+                              </linearGradient>
+                            </defs>
+                            <XAxis dataKey="index" hide />
+                            <YAxis hide domain={[0, "auto"]} />
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#0f172a",
+                                borderColor: "#334155",
+                                borderRadius: "8px",
+                                fontSize: "11px",
+                              }}
+                              formatter={(val) => [`${Number(val).toFixed(2)}%`, "Drawdown"]}
+                              labelFormatter={(lbl) => `Trade #${lbl}`}
+                            />
+                            <Area
+                              type="monotone"
+                              dataKey="ddPct"
+                              stroke="#f43f5e"
+                              strokeWidth={1.5}
+                              fill="url(#miniDdGrad)"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                        <span>
+                          {analysis.result.trades.length} real trades ·{" "}
+                          {analysis.monthly.length} months
+                        </span>
+                        <span>
+                          max DD{" "}
+                          <span className="text-rose-400 font-bold">
+                            {Math.max(...analysis.drawdown.map((d) => d.ddPct), 0).toFixed(2)}%
+                          </span>
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => setTearSheetOpen(true)}
+                        className="w-full mt-1 px-3 py-2 text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/20 transition"
+                      >
+                        Open Full Tear Sheet →
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Metrics Grid */}
@@ -582,7 +813,7 @@ export default function QuantLeaderboard() {
                   <div className="bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
                     <span className="text-slate-500 block text-[10px]">Profit Factor</span>
                     <span className="font-mono font-bold text-white text-sm">
-                      {selectedStrategy.profit_factor.toFixed(2)}
+                      {fmt(selectedStrategy.profit_factor)}
                     </span>
                   </div>
 
@@ -616,212 +847,6 @@ export default function QuantLeaderboard() {
         </div>
       )}
 
-      {/* VIEW 2: MULTI-TIMEFRAME PERFORMANCE MATRIX TAB */}
-      {activeTab === "timeframes" && (
-        <div className="space-y-6">
-          {/* Timeframe Insights Banner */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-amber-500/10 via-slate-900/60 to-slate-900 border border-amber-500/20 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-amber-400 mb-1">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-wider">Top Timeframe Synergy</span>
-              </div>
-              <div className="text-lg font-bold text-white">H1 Anchor / M5 Execution</div>
-              <p className="text-xs text-slate-400 mt-1">
-                SMC Daemon achieves <strong>Sharpe 3.38</strong> with <strong>0.76% DD</strong> by pairing H1 institutional sweeps with M5 precision entries.
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-cyan-500/10 via-slate-900/60 to-slate-900 border border-cyan-500/20 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-cyan-400 mb-1">
-                <TrendingUp className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-wider">Largest Timeframe Upgrade</span>
-              </div>
-              <div className="text-lg font-bold text-white">15M → 4H Volatility Breakout</div>
-              <p className="text-xs text-slate-400 mt-1">
-                Shifting from 15M to 4H converts negative chop (Sharpe -1.45) into an elite trend vehicle (Sharpe +1.45, Win Rate 55.6%).
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-rose-500/10 via-slate-900/60 to-slate-900 border border-rose-500/20 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-rose-400 mb-1">
-                <ShieldAlert className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-wider">The "M5 Spread Trap"</span>
-              </div>
-              <div className="text-lg font-bold text-white">Friction Erodes Lower TFs</div>
-              <p className="text-xs text-slate-400 mt-1">
-                M5 Gold scalpers execute 1,173 trades losing -$20.9k due to adverse spread-to-target ratios. M15 cuts drawdown by 55%.
-              </p>
-            </div>
-          </div>
-
-          {/* Timeframe Filter Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-slate-900/50 p-3 rounded-xl border border-slate-800/80">
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-              <span className="text-xs font-semibold text-slate-400 mr-2 flex items-center gap-1">
-                <Filter className="w-3.5 h-3.5" /> Timeframe:
-              </span>
-              {["ALL", "M1", "M5", "M15", "M30", "H1", "H4"].map((tf) => (
-                <button
-                  key={tf}
-                  onClick={() => setTfFilter(tf)}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
-                    tfFilter === tf
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                      : "bg-slate-950 text-slate-400 border border-slate-800 hover:text-slate-200"
-                  }`}
-                >
-                  {tf}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <select
-                value={tfStratFilter}
-                onChange={(e) => setTfStratFilter(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-slate-300 focus:outline-none focus:border-amber-500"
-              >
-                <option value="ALL">All Strategies ({uniqueTfStrategies.length})</option>
-                {uniqueTfStrategies.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                onClick={() => setOptimalOnly(!optimalOnly)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold border transition ${
-                  optimalOnly
-                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                    : "bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200"
-                }`}
-              >
-                ⭐ Optimal Only
-              </button>
-            </div>
-          </div>
-
-          {/* Master Timeframe Table */}
-          <div className="bg-slate-900/40 border border-slate-800/80 rounded-xl overflow-hidden shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-semibold uppercase tracking-wider">
-                    <th className="py-3 px-3">Strategy</th>
-                    <th className="py-3 px-3 text-center">Symbol</th>
-                    <th className="py-3 px-3 text-center">Timeframe</th>
-                    <th className="py-3 px-3 text-right">Trades</th>
-                    <th className="py-3 px-3 text-right">Win %</th>
-                    <th className="py-3 px-3 text-right">Profit Factor</th>
-                    <th className="py-3 px-3 text-right">Net PnL ($)</th>
-                    <th className="py-3 px-3 text-right">Max DD</th>
-                    <th className="py-3 px-3 text-right">Sharpe</th>
-                    <th className="py-3 px-3 text-center">Verdict</th>
-                    <th className="py-3 px-3">Actionable Recommendation</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/50">
-                  {filteredTimeframes.map((item, idx) => {
-                    const isPositive = item.net_pnl >= 0;
-                    return (
-                      <tr
-                        key={idx}
-                        className={`transition hover:bg-slate-800/40 ${
-                          item.optimal ? "bg-amber-500/5 border-l-2 border-l-amber-400" : ""
-                        }`}
-                      >
-                        <td className="py-3 px-3 font-semibold text-white">
-                          <div className="flex items-center gap-1.5">
-                            {item.optimal && <span className="text-amber-400 font-bold text-xs">⭐</span>}
-                            <span>{item.strategy_name}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-3 text-center font-mono text-slate-300">
-                          {item.symbol}
-                        </td>
-                        <td className="py-3 px-3 text-center">
-                          <span
-                            className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${
-                              item.optimal
-                                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                                : "bg-slate-800 text-slate-300"
-                            }`}
-                          >
-                            {item.timeframe}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono text-slate-300">
-                          {item.trades.toLocaleString()}
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono font-medium">
-                          <span className={item.win_rate_pct >= 50 ? "text-emerald-400" : "text-slate-400"}>
-                            {item.win_rate_pct.toFixed(1)}%
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono font-bold">
-                          <span
-                            className={
-                              item.profit_factor >= 1.5
-                                ? "text-emerald-400"
-                                : item.profit_factor >= 1.0
-                                ? "text-blue-400"
-                                : "text-rose-400"
-                            }
-                          >
-                            {item.profit_factor.toFixed(2)}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono font-bold">
-                          <span className={isPositive ? "text-emerald-400" : "text-rose-400"}>
-                            {isPositive ? "+" : ""}${item.net_pnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono text-slate-400">
-                          <span className={item.max_drawdown_pct > 15 ? "text-rose-400 font-bold" : "text-slate-300"}>
-                            {item.max_drawdown_pct.toFixed(2)}%
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono font-bold">
-                          <span
-                            className={
-                              item.sharpe_ratio >= 2.0
-                                ? "text-emerald-400"
-                                : item.sharpe_ratio >= 0
-                                ? "text-blue-400"
-                                : "text-rose-400"
-                            }
-                          >
-                            {item.sharpe_ratio.toFixed(2)}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-center">
-                          <span
-                            className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${
-                              item.status.includes("OPTIMAL") || item.status.includes("ELITE")
-                                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                                : item.status.includes("TOXIC")
-                                ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                                : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
-                            }`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-3 text-slate-400 text-[11px] leading-relaxed max-w-[320px]">
-                          {item.recommendation}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* VIEW 3: CORRELATION MATRIX TAB */}
       {activeTab === "correlations" && (
         <div className="space-y-6">
@@ -836,7 +861,26 @@ export default function QuantLeaderboard() {
                 </p>
               </div>
               <div className="text-xs text-slate-400">
-                Diversification Ratio: <span className="font-mono font-bold text-emerald-400">0.42 (Healthy Decorrelation)</span>
+                Diversification Ratio:{" "}
+                {diversificationRatio !== null ? (
+                  <span className="font-mono font-bold text-emerald-400">
+                    {diversificationRatio.toFixed(2)}
+                  </span>
+                ) : (
+                  <span className="font-mono text-slate-500">no correlation data yet</span>
+                )}
+                <span className="text-slate-500"> · higher = more decorrelated</span>
+                <span
+                  className={`ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border ${
+                    correlationSource === "real"
+                      ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+                      : "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                  }`}
+                >
+                  {correlationSource === "real"
+                    ? `REAL — computed from ${correlationResultCount} result files`
+                    : "NOT YET COMPUTABLE — needs 2+ results with overlapping months"}
+                </span>
               </div>
             </div>
 
@@ -860,6 +904,16 @@ export default function QuantLeaderboard() {
                       </td>
                       {Object.entries(cols).map(([colKey, val]) => {
                         const isDiag = rowKey === colKey;
+                        if (typeof val !== "number" || !Number.isFinite(val)) {
+                          // No real overlap between these two result files
+                          // (fewer than 3 shared months) — shown as unknown,
+                          // never as a fabricated number.
+                          return (
+                            <td key={colKey} className="py-2 px-3 font-mono text-xs text-slate-600">
+                              —
+                            </td>
+                          );
+                        }
                         const bgCol = isDiag
                           ? "bg-slate-800/80 text-white font-bold"
                           : val > 0.2
@@ -882,7 +936,7 @@ export default function QuantLeaderboard() {
         </div>
       )}
 
-      {/* VIEW 4: STRATEGY UNIVERSE & MONTE CARLO TAB (20 SYMBOLS X 6 TIMEFRAMES) */}
+      {/* VIEW 4: STRATEGY UNIVERSE & MONTE CARLO TAB */}
       {activeTab === "universe" && (
         <div className="space-y-6">
           {/* Section Hero Banner */}
@@ -891,17 +945,17 @@ export default function QuantLeaderboard() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                    20 DUKASCOPY SYMBOLS × 6 TIMEFRAMES
+                    {universeData?.build_mode ?? "MATRIX"} · {universeData?.symbols?.length ?? 0} SYMBOLS × {universeData?.timeframes?.length ?? 0} TIMEFRAMES
                   </span>
                   <span className="text-xs text-slate-400">
-                    120 Combinations per Engine · 1,000 Monte Carlo Iterations
+                    {universeData?.total_nodes ?? 0} total combinations · {universeData?.completed_nodes ?? 0} completed
                   </span>
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                   Strategy Universality & Probabilistic Stress Testing
                 </h2>
                 <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
-                  Select a strategy below to explore its performance across all Forex Majors, Crosses, Precious Metals, Cryptos, and Equity Indices. Click any combination cell or table row to inspect its <strong>probabilistic Monte Carlo fan chart</strong> and <strong>tactical behavioral rationale ("Why It Behaves This Way")</strong>.
+                  Select a strategy below to explore its performance across the symbol/timeframe grid completed by the real matrix builder (<span className="font-mono">python -m sajim_quant matrix</span>). Click any completed cell or table row to inspect its <strong>behavioral rationale</strong> and <strong>stress-test telemetry where available</strong>.
                 </p>
               </div>
 
@@ -909,7 +963,11 @@ export default function QuantLeaderboard() {
                 <div className="text-right">
                   <div className="text-xs text-slate-400 uppercase tracking-wider">Total Grid Nodes</div>
                   <div className="text-2xl font-bold font-mono text-purple-400">
-                    {(universeData?.strategies?.length || 6) * 120}
+                    {universeData?.total_nodes ?? universeData?.strategies?.reduce(
+                      (acc: number, s: { ranked_combinations?: unknown[] }) =>
+                        acc + (s.ranked_combinations?.length ?? 0),
+                      0
+                    ) ?? 0}
                   </div>
                 </div>
               </div>
@@ -922,7 +980,7 @@ export default function QuantLeaderboard() {
               <Sparkles className="w-3.5 h-3.5 text-purple-400" /> Select Strategy Engine to Inspect:
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {universeData?.strategies?.map((s: any) => {
+              {universeData?.strategies?.map((s: UniverseStrategy) => {
                 const isSelected = s.id === selectedUniverseStratId;
                 return (
                   <div
@@ -943,9 +1001,9 @@ export default function QuantLeaderboard() {
                       </div>
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                          s.universality_pct >= 70
+                          (s.universality_pct ?? 0) >= 70
                             ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                            : s.universality_pct >= 40
+                            : (s.universality_pct ?? 0) >= 40
                             ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
                             : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
                         }`}
@@ -1040,16 +1098,21 @@ export default function QuantLeaderboard() {
                 </div>
               </div>
 
-              {/* 20x6 Interactive Heatmap Matrix */}
+              {/* Interactive Heatmap Matrix — dimensions from the real matrix file */}
               <div className="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 shadow-2xl">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-purple-400" />
-                      Cross-Universe Sharpe Ratio Heatmap (20 Symbols × 6 Timeframes)
+                      Cross-Universe Sharpe Ratio Heatmap
+                      {universeData?.symbols?.length != null &&
+                      universeData?.timeframes?.length != null
+                        ? ` (${universeData.symbols.length} Symbols × ${universeData.timeframes.length} Timeframes)`
+                        : ""}
                     </h3>
                     <p className="text-xs text-slate-400 mt-0.5">
-                      Click any cell to open its 1,000-iteration Monte Carlo Stress Fan and Behavioral Diagnostic.
+                      Cells without a completed backtest are shown as &quot;—&quot; (unrated). Click any
+                      completed cell to inspect stress-test and behavioral diagnostics.
                     </p>
                   </div>
                   <div className="flex items-center gap-3 text-[11px] text-slate-400">
@@ -1074,7 +1137,7 @@ export default function QuantLeaderboard() {
                       <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-semibold font-mono">
                         <th className="py-2.5 px-3 text-left">Symbol</th>
                         <th className="py-2.5 px-2 text-left">Asset Class</th>
-                        {["M1", "M5", "M15", "M30", "H1", "H4"].map((tf) => (
+                        {(universeData?.timeframes ?? ["M1", "M5", "M15", "M30", "H1", "H4"]).map((tf: string) => (
                           <th key={tf} className="py-2.5 px-3">
                             {tf}
                           </th>
@@ -1082,14 +1145,18 @@ export default function QuantLeaderboard() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/40">
-                      {Object.keys(selectedUniverseStrat.heatmap || {}).map((sym) => {
+                      {(universeData?.symbols ?? Object.keys(selectedUniverseStrat.heatmap || {})).map((sym: string) => {
                         // Find node in ranked combinations
                         const getComboNode = (tf: string) =>
-                          selectedUniverseStrat.ranked_combinations.find(
-                            (c: any) => c.symbol === sym && c.timeframe === tf
+                          (selectedUniverseStrat.ranked_combinations ?? []).find(
+                            (c: UniverseNode) => c.symbol === sym && c.timeframe === tf
                           );
-                        const firstCombo = getComboNode("H1") || getComboNode("M15") || {};
-                        const assetClass = firstCombo.asset_class || "Forex";
+                        const firstCombo: UniverseNode | undefined = (
+                          universeData?.timeframes ?? ["H1", "M15"]
+                        )
+                          .map(getComboNode)
+                          .find(Boolean);
+                        const assetClass = firstCombo?.asset_class || "Forex";
 
                         return (
                           <tr key={sym} className="hover:bg-slate-800/20 transition">
@@ -1101,9 +1168,21 @@ export default function QuantLeaderboard() {
                                 {assetClass}
                               </span>
                             </td>
-                            {["M1", "M5", "M15", "M30", "H1", "H4"].map((tf) => {
-                              const sharpe = selectedUniverseStrat.heatmap[sym]?.[tf] ?? 0;
+                            {(universeData?.timeframes ?? ["M1", "M5", "M15", "M30", "H1", "H4"]).map((tf: string) => {
+                              const sharpe = selectedUniverseStrat.heatmap?.[sym]?.[tf];
                               const node = getComboNode(tf);
+
+                              if (typeof sharpe !== "number" || !Number.isFinite(sharpe) || !node) {
+                                // No completed backtest for this cell — shown as
+                                // unrated, never as a fabricated zero Sharpe.
+                                return (
+                                  <td key={tf} className="py-1.5 px-2">
+                                    <span className="w-full py-1 px-1.5 rounded text-xs font-mono text-slate-600 bg-slate-900/40 border border-slate-800/40 inline-block text-center">
+                                      —
+                                    </span>
+                                  </td>
+                                );
+                              }
 
                               let cellBg = "bg-slate-800/40 text-slate-400 border border-slate-800/60";
                               if (sharpe >= 2.0) {
@@ -1119,9 +1198,9 @@ export default function QuantLeaderboard() {
                               return (
                                 <td key={tf} className="py-1.5 px-2">
                                   <button
-                                    onClick={() => node && setSelectedComboNode(node)}
+                                    onClick={() => setSelectedComboNode(node)}
                                     className={`w-full py-1 px-1.5 rounded text-xs font-mono transition-all hover:scale-105 ${cellBg}`}
-                                    title={`Click to view Monte Carlo & Diagnostics for ${sym} ${tf} (Sharpe: ${sharpe})`}
+                                    title={`Click to view Monte Carlo & Diagnostics for ${sym} ${tf} (Sharpe: ${sharpe.toFixed(2)})`}
                                   >
                                     {sharpe.toFixed(2)}
                                   </button>
@@ -1171,10 +1250,15 @@ export default function QuantLeaderboard() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/50">
-                      {filteredCombos.map((combo: any, idx: number) => {
-                        const isPositive = combo.net_pnl >= 0;
+                      {filteredCombos.map((combo: UniverseNode, idx: number) => {
+                        const netPnl = combo.net_pnl ?? 0;
+                        const winRate = combo.win_rate_pct ?? 0;
+                        const maxDd = combo.max_drawdown_pct ?? 0;
+                        const sharpe = combo.sharpe_ratio ?? 0;
+                        const pf = combo.profit_factor;
+                        const isPositive = netPnl >= 0;
                         const diag = combo.diagnosis;
-                        const edgeRating = diag?.edge_rating || "SOLID_VIABLE";
+                        const edgeRating = diag?.edge_rating || "UNRATED";
 
                         return (
                           <tr
@@ -1202,49 +1286,49 @@ export default function QuantLeaderboard() {
                               {combo.trades}
                             </td>
                             <td className="py-3 px-3 text-right font-mono font-medium">
-                              <span className={combo.win_rate_pct >= 50 ? "text-emerald-400" : "text-slate-400"}>
-                                {combo.win_rate_pct.toFixed(1)}%
+                              <span className={winRate >= 50 ? "text-emerald-400" : "text-slate-400"}>
+                                {winRate.toFixed(1)}%
                               </span>
                             </td>
                             <td className="py-3 px-3 text-right font-mono font-bold">
                               <span
                                 className={
-                                  combo.profit_factor >= 1.5
+                                  (pf ?? 0) >= 1.5
                                     ? "text-emerald-400"
-                                    : combo.profit_factor >= 1.0
+                                    : (pf ?? 0) >= 1.0
                                     ? "text-cyan-400"
                                     : "text-rose-400"
                                 }
                               >
-                                {combo.profit_factor.toFixed(2)}
+                                {fmt(pf)}
                               </span>
                             </td>
                             <td className="py-3 px-3 text-right font-mono font-bold">
                               <span className={isPositive ? "text-emerald-400" : "text-rose-400"}>
-                                {isPositive ? "+" : ""}${combo.net_pnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                {isPositive ? "+" : ""}${netPnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                               </span>
                             </td>
                             <td className="py-3 px-3 text-right font-mono text-slate-400">
-                              <span className={combo.max_drawdown_pct > 20 ? "text-rose-400 font-bold" : "text-slate-300"}>
-                                {combo.max_drawdown_pct.toFixed(2)}%
+                              <span className={maxDd > 20 ? "text-rose-400 font-bold" : "text-slate-300"}>
+                                {maxDd.toFixed(2)}%
                               </span>
                             </td>
                             <td className="py-3 px-3 text-right font-mono font-bold">
                               <span
                                 className={
-                                  combo.sharpe_ratio >= 2.0
+                                  sharpe >= 2.0
                                     ? "text-emerald-400"
-                                    : combo.sharpe_ratio >= 0
+                                    : sharpe >= 0
                                     ? "text-cyan-400"
                                     : "text-rose-400"
                                 }
                               >
-                                {combo.sharpe_ratio.toFixed(2)}
+                                {sharpe.toFixed(2)}
                               </span>
                             </td>
                             <td className="py-3 px-3 max-w-sm">
                               <div className="text-xs font-semibold text-purple-300 font-mono">
-                                "{diag?.headline}"
+                                &ldquo;{diag?.headline}&rdquo;
                               </div>
                               <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
                                 {diag?.structural_cause}
@@ -1294,6 +1378,19 @@ export default function QuantLeaderboard() {
           node={selectedComboNode}
           strategyName={selectedUniverseStrat?.name || "Strategy"}
           onClose={() => setSelectedComboNode(null)}
+        />
+      )}
+
+      {/* Full Tear Sheet Modal — real backtest result JSON, zero synthesis */}
+      {tearSheetOpen && analysis && selectedStrategy && (
+        <ResultTearSheet
+          strategyName={selectedStrategy.name}
+          engine={selectedStrategy.engine}
+          symbol={selectedStrategy.symbol}
+          timeframe={selectedStrategy.timeframe}
+          analysis={analysis}
+          resultRef={resultRef}
+          onClose={() => setTearSheetOpen(false)}
         />
       )}
     </div>

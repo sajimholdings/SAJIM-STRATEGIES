@@ -56,20 +56,20 @@ class UniversalLogImporter:
         df = pd.read_csv(file_path)
         trades: List[Trade] = []
 
-        for i, row in df.iterrows():
-            entry_t = pd.to_datetime(row['entry_time'])
+        for row in df.itertuples(index=True):
+            entry_t = pd.to_datetime(row.entry_time)
             if entry_t.tzinfo is None:
                 entry_t = entry_t.replace(tzinfo=timezone.utc)
 
-            exit_t = pd.to_datetime(row['exit_time'])
+            exit_t = pd.to_datetime(row.exit_time)
             if exit_t.tzinfo is None:
                 exit_t = exit_t.replace(tzinfo=timezone.utc)
 
-            dir_str = str(row['direction']).strip().upper()
+            dir_str = str(row.direction).strip().upper()
             direction = Direction.BUY if dir_str in ("LONG", "BUY") else Direction.SELL
 
             # Map exit reason
-            reason_raw = str(row.get('exit_reason', '')).strip().upper()
+            reason_raw = str(getattr(row, 'exit_reason', '')).strip().upper()
             if "TP" in reason_raw:
                 exit_reason = ExitReason.TAKE_PROFIT
             elif "SL" in reason_raw:
@@ -79,13 +79,13 @@ class UniversalLogImporter:
             else:
                 exit_reason = ExitReason.MANUAL
 
-            pnl = float(row['pnl_usd'])
-            size = float(row.get('size_usd', 1000.0))
-            entry_p = float(row['entry_price'])
-            exit_p = float(row['exit_price'])
+            pnl = float(row.pnl_usd)
+            size = float(getattr(row, 'size_usd', 1000.0))
+            entry_p = float(row.entry_price)
+            exit_p = float(row.exit_price)
 
             trade = Trade(
-                trade_id=f"BTC_{i+1}",
+                trade_id=f"BTC_{row.Index+1}",
                 strategy_name=strategy_name,
                 engine="python:breakout_system",
                 symbol=detected_sym,
@@ -101,10 +101,10 @@ class UniversalLogImporter:
                 net_pnl=pnl,
                 duration_seconds=(exit_t - entry_t).total_seconds(),
                 custom_fields={
-                    "sl_price": float(row.get('sl_price', 0.0)),
-                    "tp_price": float(row.get('tp_price', 0.0)),
-                    "pnl_r": float(row.get('pnl_r', 0.0)),
-                    "bars_held": int(row.get('bars_held', 0)),
+                    "sl_price": float(getattr(row, 'sl_price', 0.0)),
+                    "tp_price": float(getattr(row, 'tp_price', 0.0)),
+                    "pnl_r": float(getattr(row, 'pnl_r', 0.0)),
+                    "bars_held": int(getattr(row, 'bars_held', 0)),
                 }
             )
             trades.append(trade)
@@ -184,7 +184,10 @@ class UniversalLogImporter:
                             entry_price=entry_info["entry_price"],
                             position_size=1.0,  # Deriv contract stake
                             exit_time=t_close,
-                            exit_price=entry_info["entry_price"] + pnl,
+                            # Binary options settle at the entry price: the PnL is a
+                            # contract payout, not a price move, so do not fabricate
+                            # an exit price from the PnL.
+                            exit_price=entry_info["entry_price"],
                             exit_reason=ExitReason.TAKE_PROFIT if pnl > 0 else ExitReason.STOP_LOSS,
                             gross_pnl=pnl,
                             net_pnl=pnl,
@@ -235,9 +238,9 @@ class UniversalLogImporter:
 
         trades: List[Trade] = []
 
-        for i, row in df.iterrows():
-            entry_epoch = int(row["epoch"])
-            ahead_val = int(row.get("ahead", 1))
+        for row in df.itertuples(index=True):
+            entry_epoch = int(row.epoch)
+            ahead_val = int(getattr(row, 'ahead', 1))
             # 5m candles = 300s per candle
             dur = ahead_val * 300
             exit_epoch = entry_epoch + dur
@@ -245,32 +248,32 @@ class UniversalLogImporter:
             entry_t = datetime.fromtimestamp(entry_epoch, tz=timezone.utc).isoformat()
             exit_t = datetime.fromtimestamp(exit_epoch, tz=timezone.utc).isoformat()
 
-            call_put = str(row["type"]).strip().upper()
+            call_put = str(row.type).strip().upper()
             direction = Direction.BUY if call_put == "CALL" else Direction.SELL
-            is_win = int(row["win"]) == 1
+            is_win = int(row.win) == 1
 
             pnl = (stake * payout_rate) if is_win else -stake
 
             trade = Trade(
-                trade_id=f"DERIV_UD_{i+1:05d}",
+                trade_id=f"DERIV_UD_{row.Index+1:05d}",
                 strategy_name=strategy_name,
                 engine="deriv:binary_options",
                 symbol=symbol,
                 timeframe=timeframe,
                 direction=direction,
                 entry_time=entry_t,
-                entry_price=float(row["entry"]),
+                entry_price=float(row.entry),
                 position_size=stake,
                 exit_time=exit_t,
-                exit_price=float(row["exitPrice"]),
+                exit_price=float(row.exitPrice),
                 exit_reason=ExitReason.TAKE_PROFIT if is_win else ExitReason.STOP_LOSS,
                 gross_pnl=pnl,
                 net_pnl=pnl,
                 duration_seconds=float(dur),
                 custom_fields={
-                    "ema10": float(row.get("ema10", 0.0)),
-                    "ema30": float(row.get("ema30", 0.0)),
-                    "rsi": float(row.get("rsi", 0.0)),
+                    "ema10": float(getattr(row, 'ema10', 0.0)),
+                    "ema30": float(getattr(row, 'ema30', 0.0)),
+                    "rsi": float(getattr(row, 'rsi', 0.0)),
                     "ahead": ahead_val,
                 },
             )

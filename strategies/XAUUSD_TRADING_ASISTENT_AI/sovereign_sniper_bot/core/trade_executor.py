@@ -35,11 +35,28 @@ class TradeExecutor:
             tp_points = 1.5 * raw_market_data.get("atr_value", 1.0)
             
             base_risk = self.risk_mgr.calculate_safe_lot(
-                symbol, 
+                symbol,
                 risk_percent=1.0 * verdict.get("risk_multiplier", 1.0),
-                sl_pips=sl_points
+                # sl_points is an ATR-derived PRICE distance, not pips.
+                sl_price_distance=sl_points
             )
-            
+
+            # A size of 0.0 means the risk manager could not size this trade
+            # safely (terminal unreachable, stop too tight for the broker
+            # minimum, equity too small). Submitting anyway would either send a
+            # 0-lot order or fall back to a default that ignores the risk
+            # budget, so stand down instead.
+            if base_risk <= 0:
+                reason = (
+                    f"Risk manager declined to size {symbol}: a {sl_points:.2f}-point stop "
+                    f"at {1.0 * verdict.get('risk_multiplier', 1.0):.2f}% risk is not tradable "
+                    f"on this account. No order sent."
+                )
+                self.risk_mgr.log_system_state(
+                    "RISK_BLOCKED", "HOLD", reason, raw_market_data, risk_metrics
+                )
+                return {"action": "HOLD", "target_phase": "SCANNING", "reason": reason}
+
             if action == "EXECUTE_LONG":
                 self.mt5.submit_order(
                     symbol=symbol,

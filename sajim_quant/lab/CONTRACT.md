@@ -184,7 +184,10 @@ security boundary (that is the no-network, no-secret, no-volume `lab_signals` fu
   unseeded randomness anywhere.
 - **PARAMS:** a dict literal obeying section 3.
 - **Size/runtime:** source ≤ `gates.MAX_SOURCE_BYTES`; `generate_signals` on DEV M5
-  under `gates.MAX_SIGNAL_RUNTIME_S`; whole untrusted call under `gates.LAB_SIGNALS_TIMEOUT_S`.
+  under `gates.MAX_SIGNAL_RUNTIME_S` as the outer cap, but the sandbox enforces the stricter
+  `interfaces.PER_RUN_TIMEOUT_S` (14 s per run, process start-up included, so aim for well under
+  10 s on ~105k M5 bars: vectorised pandas/numpy, no Python loops over bars); whole untrusted
+  call under `gates.LAB_SIGNALS_TIMEOUT_S`.
 
 ## 7. Integrity checks (server, `POST /lab/check`; free, never a trial)
 

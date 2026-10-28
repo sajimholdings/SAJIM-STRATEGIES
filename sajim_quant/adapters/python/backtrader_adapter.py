@@ -55,10 +55,35 @@ class SajimTradeHarvester(bt.Analyzer):
             # Determine direction from initial order
             direction = Direction.BUY if trade.history and trade.history[0].event.size > 0 else Direction.SELL
 
-            # Determine exit price
-            exit_price = trade.history[-1].event.price if trade.history else trade.price
+            # Entry/exit fills: trade.price at close time holds the LAST execution
+            # price (the exit fill), so pull both fills from the history events.
+            first_event = trade.history[0].event if trade.history else None
+            last_event = trade.history[-1].event if trade.history else None
+            entry_price = first_event.price if first_event is not None else trade.price
+            exit_price = last_event.price if last_event is not None else trade.price
 
-            # Excursion metrics
+            # Infer exit reason from the closing order type (heuristic)
+            exit_reason = ExitReason.SIGNAL
+            if last_event is not None and getattr(last_event, "order", None) is not None:
+                order_name = last_event.order.getordername().lower()
+                if "trail" in order_name:
+                    exit_reason = ExitReason.TRAILING_STOP
+                elif "stop" in order_name:
+                    exit_reason = ExitReason.STOP_LOSS
+                elif "limit" in order_name:
+                    exit_reason = ExitReason.TAKE_PROFIT
+
+            # Simple price return (no leverage applied)
+            if entry_price:
+                if direction == Direction.BUY:
+                    return_pct = (exit_price - entry_price) / entry_price
+                else:
+                    return_pct = (entry_price - exit_price) / entry_price
+            else:
+                return_pct = 0.0
+
+            # Excursion metrics (backtrader 1.x Trade does not track pnl min/max;
+            # strategies that maintain their own can expose them via these attrs)
             mae = getattr(trade, "pnl_min", None)
             mfe = getattr(trade, "pnl_max", None)
 
@@ -70,14 +95,15 @@ class SajimTradeHarvester(bt.Analyzer):
                 timeframe=getattr(self.strategy, "_sajim_timeframe", "H1"),
                 direction=direction,
                 entry_time=entry_dt.isoformat(),
-                entry_price=round(float(trade.price), 5),
+                entry_price=round(float(entry_price), 5),
                 position_size=abs(float(trade.history[0].event.size)) if trade.history else 1.0,
                 exit_time=exit_dt.isoformat(),
                 exit_price=round(float(exit_price), 5),
-                exit_reason=ExitReason.SIGNAL,
+                exit_reason=exit_reason,
                 gross_pnl=round(float(trade.pnl), 2),
                 net_pnl=round(float(trade.pnlcomm), 2),
                 commission=round(float(trade.commission), 2),
+                return_pct=round(float(return_pct), 6),
                 mae=round(float(mae), 2) if mae is not None else None,
                 mfe=round(float(mfe), 2) if mfe is not None else None,
             )

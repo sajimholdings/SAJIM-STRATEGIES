@@ -10,37 +10,49 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+python_env/
+*env*/
 
 # Node
 node_modules/
 dist/
 build/
+.next/
+tsconfig.tsbuildinfo
 
 # IDEs
 .vscode/
 .idea/
 
-# Testing
+# Testing & Coverage
 .pytest_cache/
 htmlcov/
 .coverage
 .tox/
 
-# Logs
+# Logs & Event Streams
 *.log
+logs/
+*.jsonl
 
-# Data
-# data/ # Commented out to ensure data is included if needed by Claude
-
-python_env/
-*env*/
-
-
-*.exe
-
-
+# Temporary files & reports
 *.tmp
-*.csv
-*.parquet
-data/
+*.bak
+temp_reports/
+*.zip
+**/MT5_Sajim/temp/
 
+# Binaries
+*.exe
+*.ex5
+*.dll
+
+# Data & CSVs
+data/
+# ...but the loader package is code, not data
+!sajim_quant/data/
+sajim_quant/data/__pycache__/
+*.parquet
+*.csv
+!tests/*.csv
+!sajim_quant/adapters/mql5/SajimLogger.mqh
